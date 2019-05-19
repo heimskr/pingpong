@@ -3,8 +3,8 @@ CFLAGS			:= -std=c++17 -g -O3 -Wall -Wextra
 CC				 = $(COMPILER) $(CFLAGS)
 MKBUILD			:= mkdir -p build
 
-.PHONY: first depend clean all builddir
-first: all
+.PHONY: all test clean depend
+all:
 
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
 MODULES			:= core test
@@ -18,12 +18,10 @@ include $(patsubst %,%/module.mk,$(MODULES))
 SRC				+= $(COMMONSRC)
 
 all: $(COMMONOBJ)
+	
 
 test: build/tests
 	./build/tests
-
-builddir:
-	mkdir -p build
 
 clean:
 	rm -rf build
