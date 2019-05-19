@@ -7,16 +7,26 @@
 #include <thread>
 #include <vector>
 
+#include "Poco/Net/SocketAddress.h"
+#include "Poco/Net/StreamSocket.h"
+#include "Poco/Net/SocketStream.h"
+
 #include "channel.h"
 #include "irc.h"
+
+using Poco::Net::SocketAddress, Poco::Net::StreamSocket, Poco::Net::SocketStream;
 
 namespace pingpong {
 	using serv_ptr = std::shared_ptr<server>;
 
 	class server {
 		private:
+			StreamSocket socket;
+			std::shared_ptr<SocketStream> stream;
+
 			void cleanup(std::unique_lock<std::mutex> &);
 			void cleanup();
+			void work();
 
 		public:
 			enum stage {
@@ -29,7 +39,7 @@ namespace pingpong {
 			};
 
 			std::string hostname;
-			int port = irc::default_port;
+			uint16_t port = irc::default_port;
 			std::vector<channel> channels {};
 
 			std::shared_ptr<std::thread> server_thread;
