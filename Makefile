@@ -30,7 +30,7 @@ clean:
 	rm -f core/*.o
 
 %.o: %.cpp
-	$(CC) -c $^g
+	$(CC) -c $^
 
 DEPFILE  = .dep
 
