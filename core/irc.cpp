@@ -1,6 +1,7 @@
 #include <string>
 
 #include "irc.h"
+#include "responses/response.h"
 
 namespace pingpong {
 	line::line(std::string in) {

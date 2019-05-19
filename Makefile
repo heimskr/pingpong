@@ -21,6 +21,7 @@ all:
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
 MODULES			:= core test commands
 COMMONSRC		:=
+CFLAGS			+= -I.
 LIBS			:=
 SRC				:=
 include $(patsubst %,%/module.mk,$(MODULES))

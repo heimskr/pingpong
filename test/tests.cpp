@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "../core/all.h"
-#include "../commands/all.h"
+#include "core/all.h"
+#include "commands/all.h"
 
 using namespace std;
 

@@ -13,6 +13,7 @@
 
 #include "channel.h"
 #include "irc.h"
+#include "responses/response.h"
 
 using Poco::Net::SocketAddress, Poco::Net::StreamSocket, Poco::Net::SocketStream;
 

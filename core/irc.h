@@ -3,15 +3,9 @@
 
 namespace pingpong { class server; }
 
-#include <string>
 #include <vector>
 
 namespace pingpong {
-	struct line {
-		std::string tags, source, command, parameters;
-		line(std::string in);
-	};
-
 	class irc {
 		private:
 			std::vector<server> servers;

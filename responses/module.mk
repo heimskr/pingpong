@@ -1,0 +1,1 @@
+COMMONSRC += responses/response.cpp

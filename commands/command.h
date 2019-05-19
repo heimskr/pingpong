@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "../core/server.h"
+#include "core/server.h"
 
 namespace pingpong {
 	class command {
