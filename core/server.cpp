@@ -30,20 +30,14 @@ namespace pingpong {
 	}
 
 	void server::work() {
-		// Poco::StreamCopier::copyStream(*stream, std::cout);
-		std::string e;
-		while (std::getline(*stream, e)) {
+		std::string line;
+		while (std::getline(*stream, line)) {
+			if (line.back() == '\r') {
+				// Remove the carriage return. Thanks, Microsoft.
+				line.pop_back();
+			}
 
-		// stream->copyfmt
-		// while (*stream >> e) {
-			// std::cout << "[" << std::endl << e << "]" << std::endl;
-			cout << e;
-			cout.flush();
-			cout << "(((";
-			cout.flush();
-			cout << ")))";
-			cout.flush();
-			cout << endl << endl;
+			cout << "[" << line << "]" << endl;
 		}
 	}
 
