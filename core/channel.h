@@ -8,7 +8,7 @@ namespace pingpong {
 		public:
 			std::string name;
 
-			channel(std::string name_): name(name_) { }
+			channel(std::string name_);
 			bool is_user();
 	};
 }
