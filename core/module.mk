@@ -1,1 +1,1 @@
-COMMONSRC += core/channel.cpp
+COMMONSRC += core/channel.cpp core/server.cpp
