@@ -29,7 +29,7 @@ namespace pingpong {
 			server(string hostname): hostname(hostname), port(irc::default_port) {}
 			server(string hostname, int port): hostname(hostname), port(port) {}
 
-			void quote(string raw);
+			void quote(const string &raw);
 
 			string to_string() const;
 			operator string() const { return to_string(); }

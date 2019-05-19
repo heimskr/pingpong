@@ -6,7 +6,7 @@
 using namespace std;
 
 namespace pingpong {
-	void server::quote(string raw) {
+	void server::quote(const string &raw) {
 		cout << "Quote(\"" << raw << "\")" << endl;
 	}
 }
@@ -24,14 +24,11 @@ namespace tests {
 	}
 
 	void test_commands() {
-		user_command usercmd(serv, "some_user", "Some Name");
-		usercmd.send();
-
-		nick_command nickcmd(serv, "somenick");
-		nickcmd.send();
-
-		privmsg_command privmsgcmd(serv, "#channel", "Hello, world!");
-		privmsgcmd.send();
+		user_command(serv, "some_user", "Some Name").send();
+		nick_command(serv, "somenick").send();
+		privmsg_command(serv, "#channel", "Hello, world!").send();
+		join_command(serv, vector<join_pair>({{"#foo", ""}, {"#bar", "B4R"}})).send();
+		join_command(serv, vector<join_pair>({{"#baz", ""}, {"#quux", ""}})).send();
 	}
 }
 

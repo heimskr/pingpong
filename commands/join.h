@@ -10,7 +10,7 @@
 namespace pingpong {
 	using std::string;
 
-	using join_pair = std::pair<channel, string>;
+	using join_pair = std::pair<string, string>;
 
 	class join_command: public command {
 		public:
