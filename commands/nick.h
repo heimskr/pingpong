@@ -4,14 +4,12 @@
 #include "command.h"
 
 namespace pingpong {
-	using std::string;
-
 	class nick_command: public command {
 		public:
-			string nickname;
+			std::string nickname;
 
-			nick_command(std::shared_ptr<server> serv_, string nickname_): command(serv_), nickname(nickname_) {}
-			virtual string to_string() const;
+			nick_command(std::shared_ptr<server> serv_, std::string nickname_): command(serv_), nickname(nickname_) {}
+			virtual std::string to_string() const;
 	};
 }
 

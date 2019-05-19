@@ -4,19 +4,18 @@
 #include <string>
 
 namespace pingpong {
-	using std::string;
 	class server;
 
 	class channel {
 		public:
-			string name;
+			std::string name;
 			std::shared_ptr<server> serv;
 
-			channel(string, std::shared_ptr<server>);
-			channel(string);
+			channel(std::string, std::shared_ptr<server>);
+			channel(std::string);
 			bool is_user();
 
-			operator string() const { return name; }
+			operator std::string() const { return name; }
 	};
 }
 

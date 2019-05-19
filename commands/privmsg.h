@@ -6,17 +6,15 @@
 #include "command.h"
 
 namespace pingpong {
-	using std::string;
-
 	class privmsg_command: public command {
 		public:
 			channel destination;
-			string message;
+			std::string message;
 
-			privmsg_command(channel, string);
-			privmsg_command(serv_ptr, string, string);
+			privmsg_command(channel, std::string);
+			privmsg_command(serv_ptr, std::string, std::string);
 
-			virtual string to_string() const;
+			virtual std::string to_string() const;
 	};
 }
 

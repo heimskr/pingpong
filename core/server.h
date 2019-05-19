@@ -9,7 +9,6 @@
 #include "irc.h"
 
 namespace pingpong {
-	using std::string;
 	using serv_ptr = std::shared_ptr<server>;
 
 	class server {
@@ -22,17 +21,17 @@ namespace pingpong {
 				registered   // After the nickname has been successfully declared, the connection is ready.
 			};
 
-			string hostname;
+			std::string hostname;
 			int port;
 			std::vector<channel> channels {};
 
-			server(string hostname): hostname(hostname), port(irc::default_port) {}
-			server(string hostname, int port): hostname(hostname), port(port) {}
+			server(std::string hostname): hostname(hostname), port(irc::default_port) {}
+			server(std::string hostname, int port): hostname(hostname), port(port) {}
 
-			void quote(const string &raw);
+			void quote(const std::string &raw);
 
-			string to_string() const;
-			operator string() const { return to_string(); }
+			std::string to_string() const;
+			operator std::string() const { return to_string(); }
 	};
 }
 
