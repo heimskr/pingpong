@@ -1,5 +1,6 @@
 COMPILER		:= clang++
 CFLAGS			:= -std=c++17 -g -O3 -Wall -Wextra -fdiagnostics-color=always
+LDFLAGS			:=
 CC				 = $(COMPILER) $(CFLAGS)
 MKBUILD			:= mkdir -p build
 
