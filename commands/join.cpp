@@ -1,7 +1,6 @@
 #include <stdexcept>
 #include <string>
 
-#include "channel.h"
 #include "join.h"
 
 namespace pingpong {

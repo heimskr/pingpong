@@ -10,7 +10,6 @@ all:
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
 MODULES			:= core test commands
 COMMONSRC		:=
-CFLAGS			+= $(patsubst %,-I%,$(MODULES))
 LIBS			:=
 SRC				:=
 include $(patsubst %,%/module.mk,$(MODULES))
@@ -18,6 +17,8 @@ SRC				+= $(COMMONSRC)
 COMMONOBJ		:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(COMMONSRC)))
 OBJ				:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(SRC)))
 include $(patsubst %,%/targets.mk,$(MODULES))
+
+include conan.mk
 
 all: $(COMMONOBJ)
 	
@@ -30,7 +31,7 @@ clean:
 	rm -f *.o **/*.o
 
 %.o: %.cpp
-	$(CC) -c $^ -o $@
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $^ -o $@
 
 DEPFILE  = .dep
 
