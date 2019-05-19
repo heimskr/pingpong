@@ -14,7 +14,7 @@ namespace pingpong {
 namespace tests {
 	using namespace pingpong;
 
-	const serv_ptr serv = make_shared<server>("irc.subluminal.net");
+	const serv_ptr serv = make_shared<server>("localhost");
 
 	void test_channel() {
 		channel chan("#programming");
@@ -30,9 +30,14 @@ namespace tests {
 		join_command(serv, vector<join_pair>({{"#foo", ""}, {"#bar", "B4R"}})).send();
 		join_command(serv, vector<join_pair>({{"#baz", ""}, {"#quux", ""}})).send();
 	}
+
+	void test_network() {
+		serv->start();
+		serv->server_thread->join();
+	}
 }
 
 int main(int, char **) {
-	tests::test_commands();
+	tests::test_network();
 	return 0;
 }
