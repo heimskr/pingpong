@@ -2,6 +2,11 @@
 .dep
 build
 
+conanbuildinfo.mak
+conanbuildinfo.txt
+graph_info.json
+conaninfo.txt
+
 # Prerequisites
 *.d
 
