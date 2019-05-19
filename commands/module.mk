@@ -1,1 +1,1 @@
-COMMONSRC += commands/user.cpp
+COMMONSRC += commands/user.cpp commands/nick.cpp

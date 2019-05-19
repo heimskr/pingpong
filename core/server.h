@@ -21,8 +21,8 @@ namespace pingpong {
 			string hostname;
 			int port;
 
-			server(string hostname): hostname(hostname), port(irc::default_port) { }
-			server(string hostname, int port): hostname(hostname), port(port) { }
+			server(string hostname): hostname(hostname), port(irc::default_port) {}
+			server(string hostname, int port): hostname(hostname), port(port) {}
 			bool is_user();
 
 			void quote(string raw);

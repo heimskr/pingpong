@@ -11,9 +11,9 @@ namespace pingpong {
 			serv_ptr serv;
 
 		public:
-			command(serv_ptr serv_): serv(serv_) { }
+			command(serv_ptr serv_): serv(serv_) {}
 			virtual std::string to_string() const = 0;
-			
+
 			void send() {
 				serv->quote(to_string());
 			}
