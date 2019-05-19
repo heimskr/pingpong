@@ -1,1 +1,1 @@
-COMMONSRC += commands/user.cpp commands/nick.cpp commands/privmsg.cpp
+COMMONSRC += commands/user.cpp commands/nick.cpp commands/privmsg.cpp commands/join.cpp
