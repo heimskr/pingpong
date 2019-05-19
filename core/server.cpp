@@ -47,22 +47,17 @@ namespace pingpong {
 
 		if (line.at(index) == '@') {
 			for (; line.at(index) != ' ' && index < length; ++index);
-			tags = line.substr(1, index - 1);
-			++index;
+			tags = line.substr(1, index++ - 1);
 		}
 
 		if (line.at(index) == ':') {
-			old_index = index;
-			for (; line.at(index) != ' ' && index < length; ++index);
-			source = line.substr(old_index + 1, index - old_index - 1);
-			++index;
+			for (old_index = index; line.at(index) != ' ' && index < length; ++index);
+			source = line.substr(old_index + 1, index++ - old_index - 1);
 		}
 
-		old_index = index;
-		for (; line.at(index) != ' ' && index < length; ++index);
-		command = line.substr(old_index, index - old_index);
-		++index;
-		parameters = line.substr(index);
+		for (old_index = index; line.at(index) != ' ' && index < length; ++index);
+		command    = line.substr(old_index, index - old_index);
+		parameters = line.substr(index + 1);
 
 		cout << "tags(\"" << tags << "\"), source(\"" << source << "\"), command(\"" << command << "\"), "
 		     << "parameters(\"" << parameters << "\")" << endl;
