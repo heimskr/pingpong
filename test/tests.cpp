@@ -21,7 +21,6 @@ namespace tests {
 		channel user("NickServ");
 		cout << "chan.is_user(): " << chan.is_user() << endl;
 		cout << "user.is_user(): " << user.is_user() << endl;
-
 	}
 
 	void test_commands() {
@@ -30,6 +29,9 @@ namespace tests {
 
 		nick_command nickcmd(serv, "somenick");
 		nickcmd.send();
+
+		privmsg_command privmsgcmd(serv, "#channel", "Hello, world!");
+		privmsgcmd.send();
 	}
 }
 

@@ -5,5 +5,6 @@
 
 #include "nick.h"
 #include "user.h"
+#include "privmsg.h"
 
 #endif

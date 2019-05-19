@@ -10,7 +10,7 @@ namespace pingpong {
 		public:
 			string nickname;
 
-			nick_command(serv_ptr serv_, string nickname_): command(serv_), nickname(nickname_) {}
+			nick_command(std::shared_ptr<server> serv_, string nickname_): command(serv_), nickname(nickname_) {}
 			virtual string to_string() const;
 	};
 }
