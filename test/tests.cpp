@@ -4,6 +4,7 @@
 #include "../core/server.h"
 #include "../core/irc.h"
 #include "../commands/user.h"
+#include "../commands/nick.h"
 
 using namespace std;
 
@@ -23,8 +24,11 @@ namespace tests {
 		cout << "user.is_user(): " << user.is_user() << endl;
 
 		serv_ptr serv = make_shared<server>("irc.subluminal.net");
-		user_command cmd(serv, "someuser", "Some Name");
-		cmd.send();
+		user_command usercmd(serv, "some_user", "Some Name");
+		usercmd.send();
+
+		nick_command nickcmd(serv, "somenick");
+		nickcmd.send();
 	}
 }
 
