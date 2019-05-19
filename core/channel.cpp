@@ -4,6 +4,6 @@
 
 namespace pingpong {
 	bool channel::is_user() {
-		return name.at(0) == '#';
+		return name.at(0) != '#';
 	}
 }

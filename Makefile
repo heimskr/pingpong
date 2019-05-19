@@ -12,10 +12,10 @@ COMMONSRC		:=
 CFLAGS			+= $(patsubst %,-I%,$(MODULES))
 LIBS			:=
 SRC				:=
+COMMONOBJ		 = $(patsubst %.cpp,%.o, $(filter %.cpp,$(COMMONSRC)))
+OBJ				 = $(patsubst %.cpp,%.o, $(filter %.cpp,$(SRC)))
 include $(patsubst %,%/module.mk,$(MODULES))
 SRC				+= $(COMMONSRC)
-COMMONOBJ		:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(COMMONSRC)))
-OBJ				:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(SRC)))
 
 all: $(COMMONOBJ)
 

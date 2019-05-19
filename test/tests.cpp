@@ -6,7 +6,10 @@ using namespace std;
 
 namespace tests {
 	void test_channel() {
-		cout << "hi" << endl;
+		pingpong::channel chan("#programming");
+		pingpong::channel user("NickServ");
+		cout << "chan.is_user(): " << chan.is_user() << endl;
+		cout << "user.is_user(): " << user.is_user() << endl;
 	}
 }
 
