@@ -8,7 +8,7 @@
 namespace pingpong {
 	using std::string;
 
-	class user_command: command {
+	class user_command: public command {
 		public:
 			string username;
 			string realname;

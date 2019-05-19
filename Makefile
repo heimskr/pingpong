@@ -1,5 +1,5 @@
 COMPILER		:= clang++
-CFLAGS			:= -std=c++17 -g -O3 -Wall -Wextra
+CFLAGS			:= -std=c++17 -g -O3 -Wall -Wextra -fdiagnostics-color=always
 CC				 = $(COMPILER) $(CFLAGS)
 MKBUILD			:= mkdir -p build
 
@@ -16,6 +16,7 @@ COMMONOBJ		 = $(patsubst %.cpp,%.o, $(filter %.cpp,$(COMMONSRC)))
 OBJ				 = $(patsubst %.cpp,%.o, $(filter %.cpp,$(SRC)))
 include $(patsubst %,%/module.mk,$(MODULES))
 SRC				+= $(COMMONSRC)
+include $(patsubst %,%/targets.mk,$(MODULES))
 
 all: $(COMMONOBJ)
 	

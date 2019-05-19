@@ -1,15 +1,30 @@
 #include <iostream>
 
 #include "../core/channel.h"
+#include "../core/server.h"
+#include "../core/irc.h"
+#include "../commands/user.h"
 
 using namespace std;
 
+namespace pingpong {
+	void server::quote(string raw) {
+		cout << "Quote(\"" << raw << "\")" << endl;
+	}
+}
+
 namespace tests {
+	using namespace pingpong;
+
 	void test_channel() {
-		pingpong::channel chan("#programming");
-		pingpong::channel user("NickServ");
+		channel chan("#programming");
+		channel user("NickServ");
 		cout << "chan.is_user(): " << chan.is_user() << endl;
 		cout << "user.is_user(): " << user.is_user() << endl;
+
+		serv_ptr serv = make_shared<server>("irc.subluminal.net");
+		user_command cmd(serv, "someuser", "Some Name");
+		cmd.send();
 	}
 }
 
