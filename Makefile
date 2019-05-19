@@ -19,7 +19,7 @@ endif
 all:
 
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
-MODULES			:= core test commands
+MODULES			:= core test commands responses
 COMMONSRC		:=
 CFLAGS			+= -I.
 LIBS			:=
