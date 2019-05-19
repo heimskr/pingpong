@@ -2,6 +2,9 @@
 #define CORE_SERVER_H_
 
 #include <string>
+#include <vector>
+
+#include "channel.h"
 #include "irc.h"
 
 namespace pingpong {
@@ -20,6 +23,7 @@ namespace pingpong {
 
 			string hostname;
 			int port;
+			std::vector<channel> channels {};
 
 			server(string hostname): hostname(hostname), port(irc::default_port) {}
 			server(string hostname, int port): hostname(hostname), port(port) {}

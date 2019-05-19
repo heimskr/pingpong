@@ -1,8 +1,9 @@
 #ifndef CORE_IRC_H_
 #define CORE_IRC_H_
 
+namespace pingpong { class server; }
+
 #include <vector>
-#include "core.h"
 
 namespace pingpong {
 	class irc {
