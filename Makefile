@@ -1,8 +1,19 @@
 COMPILER		:= clang++
 CFLAGS			:= -std=c++17 -g -O3 -Wall -Wextra -fdiagnostics-color=always
 LDFLAGS			:=
-CC				 = $(COMPILER) $(CFLAGS)
+CC				 = $(COMPILER) $(CFLAGS) $(CHECKFLAGS)
+CHECKFLAGS		:=
 MKBUILD			:= mkdir -p build
+
+CHECK			:= none
+
+ifeq ($(CHECK), asan)
+	CHECKFLAGS += -fsanitize=address -fno-common
+else ifeq ($(CHECK), msan)
+	CHECKFLAGS += -fsanitize=memory -fno-common
+else
+	CHECKFLAGS +=
+endif
 
 .PHONY: all test clean depend
 all:
@@ -25,6 +36,9 @@ all: $(COMMONOBJ)
 
 test: build/tests
 	./build/tests
+
+grind: build/tests
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-reachable=yes ./build/tests
 
 clean:
 	rm -rf build
