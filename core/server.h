@@ -27,6 +27,7 @@ namespace pingpong {
 			void cleanup(std::unique_lock<std::mutex> &);
 			void cleanup();
 			void work();
+			void process_line(const std::string &);
 
 		public:
 			enum stage {
@@ -49,7 +50,7 @@ namespace pingpong {
 			server(std::string hostname): hostname(hostname) {}
 			server(std::string hostname, int port): hostname(hostname), port(port) {}
 
-			void quote(const std::string &raw);
+			void quote(const std::string &);
 
 			std::string to_string() const;
 			operator std::string() const { return to_string(); }
