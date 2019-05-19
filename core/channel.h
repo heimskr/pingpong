@@ -4,11 +4,13 @@
 #include <string>
 
 namespace pingpong {
+	using std::string;
+
 	class channel {
 		public:
-			std::string name;
+			string name;
 
-			channel(std::string name_);
+			channel(string name_);
 			bool is_user();
 	};
 }
