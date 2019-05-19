@@ -15,6 +15,8 @@ namespace pingpong {
 			channel(string, std::shared_ptr<server>);
 			channel(string);
 			bool is_user();
+
+			operator string() const { return name; }
 	};
 }
 

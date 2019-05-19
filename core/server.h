@@ -1,6 +1,7 @@
 #ifndef CORE_SERVER_H_
 #define CORE_SERVER_H_
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -27,9 +28,11 @@ namespace pingpong {
 
 			server(string hostname): hostname(hostname), port(irc::default_port) {}
 			server(string hostname, int port): hostname(hostname), port(port) {}
-			bool is_user();
 
 			void quote(string raw);
+
+			string to_string() const;
+			operator string() const { return to_string(); }
 	};
 }
 
