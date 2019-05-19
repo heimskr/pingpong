@@ -6,9 +6,13 @@
 
 namespace pingpong {
 	class irc {
+		private:
+			std::vector<server> servers;
+
 		public:
 			static constexpr int default_port = 6667;
-			std::vector<pingpong::server> servers;
+
+			
 	};
 }
 

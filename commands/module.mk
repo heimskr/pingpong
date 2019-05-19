@@ -1,0 +1,1 @@
+COMMONSRC += commands/user.cpp

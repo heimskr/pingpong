@@ -7,7 +7,7 @@ MKBUILD			:= mkdir -p build
 all:
 
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
-MODULES			:= core test
+MODULES			:= core test commands
 COMMONSRC		:=
 CFLAGS			+= $(patsubst %,-I%,$(MODULES))
 LIBS			:=

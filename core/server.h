@@ -5,8 +5,18 @@
 #include "irc.h"
 
 namespace pingpong {
+	using serv_ptr = std::shared_ptr<server>;
+
 	class server {
 		public:
+			enum stage {
+				// Connecting to an IRC server occurs in multiple stages.
+				unconnected, // At first, a socket hasn't even been connected yet.
+				user,        // Once the socket is connected, you need to send a USER message.
+				nick,        // After the USER message is sent, you need to declare your nickname.
+				registered   // After the nickname has been successfully declared, the connection is ready.
+			};
+
 			std::string hostname;
 			int port;
 
