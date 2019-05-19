@@ -14,8 +14,8 @@ LIBS			:=
 SRC				:=
 include $(patsubst %,%/module.mk,$(MODULES))
 SRC				+= $(COMMONSRC)
-OBJ				:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(SRC)))
 COMMONOBJ		:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(COMMONSRC)))
+OBJ				:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(SRC)))
 
 all: $(COMMONOBJ)
 
@@ -27,10 +27,10 @@ builddir:
 
 clean:
 	rm -rf build
-	rm -f core/*.o
+	rm -f *.o **/*.o
 
 %.o: %.cpp
-	$(CC) -c $^
+	$(CC) -c $^ -o $@
 
 DEPFILE  = .dep
 
