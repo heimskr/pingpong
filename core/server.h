@@ -27,7 +27,7 @@ namespace pingpong {
 			void cleanup(std::unique_lock<std::mutex> &);
 			void cleanup();
 			void work();
-			void process_line(const std::string &);
+			void process_line(const pingpong::line &);
 
 		public:
 			enum stage {

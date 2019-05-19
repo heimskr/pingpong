@@ -37,30 +37,13 @@ namespace pingpong {
 				line.pop_back();
 			}
 
-			process_line(line);
+			process_line(pingpong::line(line));
 		}
 	}
 
-	void server::process_line(const std::string &line) {
-		std::string tags, source, command, parameters;
-		size_t length = line.size(), index = 0, old_index;
-
-		if (line.at(index) == '@') {
-			for (; line.at(index) != ' ' && index < length; ++index);
-			tags = line.substr(1, index++ - 1);
-		}
-
-		if (line.at(index) == ':') {
-			for (old_index = index; line.at(index) != ' ' && index < length; ++index);
-			source = line.substr(old_index + 1, index++ - old_index - 1);
-		}
-
-		for (old_index = index; line.at(index) != ' ' && index < length; ++index);
-		command    = line.substr(old_index, index - old_index);
-		parameters = line.substr(index + 1);
-
-		cout << "tags(\"" << tags << "\"), source(\"" << source << "\"), command(\"" << command << "\"), "
-		     << "parameters(\"" << parameters << "\")" << endl;
+	void server::process_line(const pingpong::line &line) {
+		cout << "tags[" << line.tags << "], source[" << line.source << "], command[" << line.command
+		     << "], parameters [" << line.parameters << "]" << endl;
 	}
 
 
