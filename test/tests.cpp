@@ -1,10 +1,7 @@
 #include <iostream>
 
-#include "../core/channel.h"
-#include "../core/server.h"
-#include "../core/irc.h"
-#include "../commands/user.h"
-#include "../commands/nick.h"
+#include "../core/all.h"
+#include "../commands/all.h"
 
 using namespace std;
 
