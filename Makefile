@@ -27,7 +27,7 @@ include $(patsubst %,%/module.mk,$(MODULES))
 SRC				+= $(COMMONSRC)
 COMMONOBJ		:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(COMMONSRC)))
 OBJ				:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(SRC)))
-include $(patsubst %,%/targets.mk,$(MODULES))
+sinclude $(patsubst %,%/targets.mk,$(MODULES))
 
 include conan.mk
 
@@ -50,6 +50,6 @@ clean:
 DEPFILE  = .dep
 
 depend:
-	$(CC) -MM $(SRC) > $(DEPFILE)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -MM $(SRC) > $(DEPFILE)
 
 sinclude $(DEPFILE)
