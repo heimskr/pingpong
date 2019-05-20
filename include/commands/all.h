@@ -8,5 +8,6 @@
 #include "privmsg.h"
 #include "join.h"
 #include "pong.h"
+#include "quit.h"
 
 #endif
