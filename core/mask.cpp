@@ -35,10 +35,8 @@ namespace pingpong {
 	}
 
 	mask::operator std::string() const {
-		if (is_full()) {
+		if (is_full())
 			return nick + "!" + user + "@" + host;
-		}
-
 		return nick;
 	}
 }

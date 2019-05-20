@@ -7,7 +7,9 @@
 
 namespace pingpong {
 	message_ptr message::parse(const pingpong::line &line) {
-		if (line.command == "NOTICE") {
+		if (numeric_message::is_numeric(line.command.c_str())) {
+			return std::make_unique<pingpong::numeric_message>(numeric_message(line));
+		} else if (line.command == "NOTICE") {
 			return std::make_unique<pingpong::notice_message>(notice_message(line));
 		} else if (line.command == "PING") {
 			return std::make_unique<pingpong::ping_message>(ping_message(line));

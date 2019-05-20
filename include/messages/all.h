@@ -5,6 +5,7 @@
 #include "message.h"
 
 #include "notice.h"
+#include "numeric.h"
 #include "ping.h"
 #include "privmsg.h"
 

@@ -64,7 +64,8 @@ namespace pingpong {
 			return;
 		}
 
-		parent.dbgout() << std::string(*msg) << std::endl;
+		if (msg->get_command() != "_NUMERIC") 
+			parent.dbgout() << std::string(*msg) << std::endl;
 	}
 
 	void server::quote(const std::string &str) {
