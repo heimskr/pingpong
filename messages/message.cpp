@@ -12,8 +12,7 @@ namespace pingpong {
 		} else if (line.command == "PING") {
 			return std::make_unique<pingpong::ping_message>(ping_message(line));
 		} else {
-			YIKES(line.original);
-			throw std::runtime_error("Unknown message");
+			throw std::invalid_argument("Unknown message");
 		}
 	}
 

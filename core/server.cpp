@@ -12,6 +12,7 @@
 #include "messages/all.h"
 #include "commands/user.h"
 #include "commands/nick.h"
+#include "commands/pong.h"
 
 namespace pingpong {
 	using std::endl, std::cout;
@@ -49,8 +50,21 @@ namespace pingpong {
 	}
 
 	void server::handle_line(const pingpong::line &line) {
-		message_ptr resp = pingpong::message::parse(line);
-		parent.dbgout() << std::string(*resp) << std::endl;
+		message_ptr msg;
+		try {
+			msg = pingpong::message::parse(line);
+		} catch (std::invalid_argument &err) {
+			parent << ansi::red << " >> " << ansi::reset << line.original << std::endl;
+			return;
+		}
+
+		if (msg->get_command() == "PING") {
+			auto &ping = dynamic_cast<ping_message &>(*msg);
+			pong_command(this, ping.text).send();
+			return;
+		}
+
+		parent.dbgout() << std::string(*msg) << std::endl;
 	}
 
 	void server::quote(const std::string &str) {
