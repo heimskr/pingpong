@@ -4,7 +4,7 @@
 #include "all.h"
 
 namespace pingpong {
-	pingpong::sourced_response::sourced_response(pingpong::line line_, std::string combined): response(line_) {
+	sourced_response::sourced_response(pingpong::line line_, std::string combined): response(line_) {
 		size_t i, length = combined.size();
 		for (i = 0; combined[i] != ' ' && i < length; ++i)
 			source += combined[i];

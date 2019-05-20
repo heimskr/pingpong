@@ -5,7 +5,7 @@
 #include "all.h"
 
 namespace pingpong {
-	response_ptr pingpong::response::parse(const pingpong::line &line) {
+	response_ptr response::parse(const pingpong::line &line) {
 		if (line.command == "NOTICE") {
 			return std::make_unique<pingpong::notice_response>(notice_response(line));
 		} else {
@@ -13,13 +13,13 @@ namespace pingpong {
 		}
 	}
 
-	response_ptr pingpong::response::parse(const std::string &text) {
+	response_ptr response::parse(const std::string &text) {
 		return parse(pingpong::line(text));
 	}
 
-	pingpong::response::~response() {}
+	response::~response() {}
 
-	std::string pingpong::response::to_string() const {
+	std::string response::to_string() const {
 		return "T[" + line.tags + "], S[" + line.source + "], C[" + line.command + "], P[" + line.parameters   + "]";
 	}
 }
