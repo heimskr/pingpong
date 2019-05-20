@@ -7,6 +7,7 @@
 #include "Poco/StreamCopier.h"
 
 #include "lib/ansi.h"
+#include "debug.h"
 #include "server.h"
 #include "responses/all.h"
 #include "commands/user.h"
@@ -39,7 +40,7 @@ namespace pingpong {
 		std::string line;
 		while (std::getline(*stream, line)) {
 			if (line.back() == '\r') {
-				// Remove the carriage return.
+				// Remove the carriage return. It's part of the spec, but std::getline removes only the newline.
 				line.pop_back();
 			}
 
@@ -53,7 +54,10 @@ namespace pingpong {
 	}
 
 	void server::quote(const std::string &str) {
-		if (stream == nullptr) throw std::runtime_error("Stream not ready");
+		if (stream == nullptr) {
+			YIKES("server::quote" >> ansi::bold << ": Stream not ready");
+			throw std::runtime_error("Stream not ready");
+		}
 
 		auto l = parent.lock_console();
 		parent.dbgin() << str << std::endl;

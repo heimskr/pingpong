@@ -7,5 +7,6 @@
 #include "user.h"
 #include "privmsg.h"
 #include "join.h"
+#include "pong.h"
 
 #endif
