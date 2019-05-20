@@ -4,6 +4,6 @@
 #include "lib/ansi.h"
 
 #define YIKES(x) \
-	(ansi::ansistream() << ansi::red << "!! " << ansi::reset << ansi::bold << x << ansi::reset << std::endl)
+	(ansi::ansistream() << ansi::red << "!! " << ansi::reset << x << std::endl)
 
 #endif
