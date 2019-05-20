@@ -3,12 +3,15 @@
 
 #include <string>
 
+#include "core/mask.h"
+
 namespace pingpong {
 	struct line {
 		const std::string original;
-		std::string tags, source, command, parameters;
+		std::string tags, command, parameters;
+		mask source;
 
-		line(const std::string &in);
+		line(std::string in);
 
 		operator std::string() const;
 	};

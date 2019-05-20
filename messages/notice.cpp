@@ -8,6 +8,6 @@ namespace pingpong {
 	}
 
 	notice_message::operator std::string() const {
-		return "-" + source + "- " + content;
+		return "[" + source + "] -" + line.source.nick + "- " + content;
 	}
 }

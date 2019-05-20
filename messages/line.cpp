@@ -1,27 +1,30 @@
 #include <string>
 
 #include "messages/line.h"
+#include "core/mask.h"
 
 namespace pingpong {
-	line::line(const std::string &in): original(in) {
-		size_t length = in.size(), index = 0, old_index;
+	line::line(std::string in): original(in), source(mask("", "", "")) {
+		size_t index = 0;
 
-		if (in[index] == '@') {
-			for (; in[index] != ' ' && index < length; ++index);
-			tags = in.substr(1, index++ - 1);
+		if (in[0] == '@') {
+			index = in.find(' ');
+			tags = in.substr(1, index - 1);
+			in.erase(0, index + 1);
 		}
 
 		if (in[index] == ':') {
-			for (old_index = index; in[index] != ' ' && index < length; ++index);
-			source = in.substr(old_index + 1, index++ - old_index - 1);
+			index = in.find(' ');
+			source = mask(in.substr(1, index - 1));
+			in.erase(0, index + 1);
 		}
 
-		for (old_index = index; in[index] != ' ' && index < length; ++index);
-		command    = in.substr(old_index, index - old_index);
+		index = in.find(' ');
+		command    = in.substr(0, index);
 		parameters = in.substr(index + 1);
 	}
 	
 	line::operator std::string() const {
-		return "T[" + tags + "], S[" + source + "], C[" + command + "], P[" + parameters + "]";
+		return "T[" + tags + "], S[" + std::string(source) + "], C[" + command + "], P[" + parameters + "]";
 	}
 }

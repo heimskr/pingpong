@@ -11,6 +11,8 @@ namespace pingpong {
 			return std::make_unique<pingpong::notice_message>(notice_message(line));
 		} else if (line.command == "PING") {
 			return std::make_unique<pingpong::ping_message>(ping_message(line));
+		} else if (line.command == "PRIVMSG") {
+			return std::make_unique<pingpong::privmsg_message>(privmsg_message(line));
 		} else {
 			throw std::invalid_argument("Unknown message");
 		}

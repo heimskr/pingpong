@@ -9,10 +9,7 @@
 namespace pingpong {
 	class notice_message: public sourced_message {
 		public:
-			notice_message(pingpong::line line_, std::string source_, std::string content):
-				sourced_message(line_, source_, content) {}
-			notice_message(pingpong::line line_, std::string combined): sourced_message(line_, combined) {}
-			notice_message(pingpong::line line_): sourced_message(line_) {}
+			using sourced_message::sourced_message;
 
 			virtual std::string get_command() const override;
 			operator std::string() const override;

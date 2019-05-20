@@ -10,6 +10,11 @@ namespace pingpong {
 
 			mask(std::string nick_, std::string user_, std::string host_): nick(nick_), user(user_), host(host_) {}
 			mask(std::string combined);
+
+			bool is_full() const;
+			bool is_empty() const;
+
+			operator std::string() const;
 	};
 }
 

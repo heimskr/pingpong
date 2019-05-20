@@ -11,7 +11,7 @@ namespace pingpong {
 	using message_ptr = std::unique_ptr<pingpong::message>;
 
 	class message {
-		private:
+		protected:
 			line line;
 
 		public:

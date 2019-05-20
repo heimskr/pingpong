@@ -6,5 +6,6 @@
 
 #include "notice.h"
 #include "ping.h"
+#include "privmsg.h"
 
 #endif
