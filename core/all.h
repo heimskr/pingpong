@@ -5,6 +5,7 @@
 
 #include "channel.h"
 #include "irc.h"
+#include "mask.h"
 #include "server.h"
 
 #endif

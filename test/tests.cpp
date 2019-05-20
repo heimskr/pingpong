@@ -27,12 +27,19 @@ namespace tests {
 		serv.set_nick("pingpong");
 		serv.server_thread->join();
 	}
+
+	void test_mask() {
+		string mstr = "nick!user@host";
+		mask m(mstr);
+		cout << "Nick[" << m.nick << "], User[" << m.user << "], Host[" << m.host << "]" << endl;
+	}
 }
 
 int main(int, char **) {
 	irc instance;
 	server serv(instance, "localhost");
 
+	tests::test_mask();
 	tests::test_network(serv);
 	return 0;
 }
