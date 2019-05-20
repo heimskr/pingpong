@@ -9,7 +9,7 @@ namespace pingpong {
 		if (line.command == "NOTICE") {
 			return std::make_unique<pingpong::notice_response>(notice_response(line));
 		} else {
-			throw std::runtime_error("Unknown response: " + std::string(line));
+			throw std::runtime_error("Unknown response: \"" + line.original + "\"");
 		}
 	}
 

@@ -1,7 +1,7 @@
 #include "line.h"
 
 namespace pingpong {
-	line::line(std::string in) {
+	line::line(const std::string &in): original(in) {
 		size_t length = in.size(), index = 0, old_index;
 
 		if (in[index] == '@') {

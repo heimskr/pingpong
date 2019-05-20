@@ -1,0 +1,1 @@
+COMMONSRC += lib/ansi.cpp

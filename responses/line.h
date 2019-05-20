@@ -5,8 +5,10 @@
 
 namespace pingpong {
 	struct line {
+		const std::string original;
 		std::string tags, source, command, parameters;
-		line(std::string in);
+
+		line(const std::string &in);
 
 		operator std::string() const;
 	};

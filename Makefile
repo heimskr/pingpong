@@ -19,7 +19,7 @@ endif
 all: Makefile
 
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
-MODULES			:= core test commands responses
+MODULES			:= core test commands responses lib
 COMMONSRC		:=
 CFLAGS			+= -I.
 LIBS			:=
@@ -33,7 +33,6 @@ sinclude $(patsubst %,%/targets.mk,$(MODULES))
 include conan.mk
 
 all: $(COMMONOBJ)
-	
 
 test: build/tests
 	./build/tests
