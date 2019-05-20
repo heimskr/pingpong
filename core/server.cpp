@@ -6,6 +6,7 @@
 
 #include "Poco/StreamCopier.h"
 
+#include "lib/ansi.h"
 #include "server.h"
 #include "responses/all.h"
 #include "commands/user.h"
@@ -48,14 +49,15 @@ namespace pingpong {
 
 	void server::handle_line(const pingpong::line &line) {
 		response_ptr resp = pingpong::response::parse(line);
-		std::cout << "Response: " << std::string(*resp) << std::endl;
+		parent << "<< "_d << std::string(*resp) << std::endl;
 	}
 
 	void server::quote(const std::string &str) {
 		if (stream == nullptr) throw std::runtime_error("Stream not ready");
 
 		auto l = parent.lock_console();
-		std::cout << "Sending [" << str << "]" << std::endl;
+		// parent << "Sending ["_d << ansi::bold << str >> ansi::bold << "]"_d << std::endl;
+		parent << ">> "_d << str << std::endl;
 
 		*stream << str << "\r\n";
 		stream->flush();
@@ -75,7 +77,7 @@ namespace pingpong {
 	}
 
 	void server::cleanup(std::unique_lock<std::mutex> &) {
-		std::cerr << "[" << std::string(*this) << ": cleanup]" << std::endl;
+		parent << "["_d << std::string(*this) << ": cleanup]"_d << std::endl;
 		status = unconnected;
 
 		if (server_thread)

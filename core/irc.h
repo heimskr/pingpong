@@ -4,6 +4,7 @@
 #include <mutex>
 #include <vector>
 
+#include "lib/ansi.h"
 #include "defs.h"
 
 namespace pingpong {
@@ -11,6 +12,7 @@ namespace pingpong {
 		private:
 			std::vector<server_ptr> servers;
 			std::mutex console_mux = std::mutex();
+			ansi::ansistream dbg;
 
 		public:
 			static constexpr int default_port = 6667;
@@ -20,6 +22,9 @@ namespace pingpong {
 			irc(): irc("pingpong", "PingPong IRC") {}
 			
 			std::unique_lock<std::mutex> lock_console() { return std::unique_lock(console_mux); }
+		
+			template <typename T>
+			ansi::ansistream & operator<<(const T &value) { return dbg << value; }
 	};
 }
 

@@ -3,13 +3,15 @@
 #include <string>
 
 #include "all.h"
+#include "core/debug.h"
 
 namespace pingpong {
 	response_ptr response::parse(const pingpong::line &line) {
 		if (line.command == "NOTICE") {
 			return std::make_unique<pingpong::notice_response>(notice_response(line));
 		} else {
-			throw std::runtime_error("Unknown response: \"" + line.original + "\"");
+			YIKES(line.original);
+			throw std::runtime_error("Unknown response");
 		}
 	}
 
