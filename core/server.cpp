@@ -49,15 +49,14 @@ namespace pingpong {
 
 	void server::handle_line(const pingpong::line &line) {
 		response_ptr resp = pingpong::response::parse(line);
-		parent << "<< "_d << std::string(*resp) << std::endl;
+		parent.dbgout() << std::string(*resp) << std::endl;
 	}
 
 	void server::quote(const std::string &str) {
 		if (stream == nullptr) throw std::runtime_error("Stream not ready");
 
 		auto l = parent.lock_console();
-		// parent << "Sending ["_d << ansi::bold << str >> ansi::bold << "]"_d << std::endl;
-		parent << ">> "_d << str << std::endl;
+		parent.dbgin() << str << std::endl;
 
 		*stream << str << "\r\n";
 		stream->flush();
