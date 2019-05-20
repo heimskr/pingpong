@@ -9,7 +9,7 @@
 #include "lib/ansi.h"
 #include "debug.h"
 #include "server.h"
-#include "responses/all.h"
+#include "messages/all.h"
 #include "commands/user.h"
 #include "commands/nick.h"
 
@@ -49,7 +49,7 @@ namespace pingpong {
 	}
 
 	void server::handle_line(const pingpong::line &line) {
-		response_ptr resp = pingpong::response::parse(line);
+		message_ptr resp = pingpong::message::parse(line);
 		parent.dbgout() << std::string(*resp) << std::endl;
 	}
 

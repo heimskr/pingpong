@@ -4,7 +4,7 @@
 #include "all.h"
 
 namespace pingpong {
-	sourced_response::sourced_response(pingpong::line line_, std::string combined): response(line_) {
+	sourced_message::sourced_message(pingpong::line line_, std::string combined): message(line_) {
 		size_t i, length = combined.size();
 		for (i = 0; combined[i] != ' ' && i < length; ++i)
 			source += combined[i];
@@ -12,8 +12,8 @@ namespace pingpong {
 		for (; combined[i] == ' '; ++i);
 
 		if (i == length || combined[i] != ':')
-			throw std::runtime_error("Couldn't parse sourced_response");
+			throw std::runtime_error("Couldn't parse sourced_message");
 
-		message = combined.substr(i + 1);
+		content = combined.substr(i + 1);
 	}
 }

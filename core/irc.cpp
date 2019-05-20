@@ -1,7 +1,7 @@
 #include <string>
 
 #include "irc.h"
-#include "responses/response.h"
+#include "messages/message.h"
 
 namespace pingpong {
 	

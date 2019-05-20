@@ -14,7 +14,7 @@
 #include "defs.h"
 #include "channel.h"
 #include "irc.h"
-#include "responses/response.h"
+#include "messages/line.h"
 
 using Poco::Net::SocketAddress, Poco::Net::StreamSocket, Poco::Net::SocketStream;
 

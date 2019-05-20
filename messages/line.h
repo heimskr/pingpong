@@ -1,5 +1,5 @@
-#ifndef RESPONSES_LINE_H_
-#define RESPONSES_LINE_H_
+#ifndef MESSAGES_LINE_H_
+#define MESSAGES_LINE_H_
 
 #include <string>
 
