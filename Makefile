@@ -46,11 +46,15 @@ clean:
 	rm -f *.o **/*.o
 
 %.o: %.cpp
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $^ -o $@
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 DEPFILE  = .dep
+DEPTOKEN = "\# MAKEDEPENDS"
+DEPFLAGS = -f $(DEPFILE) -s $(DEPTOKEN)
 
 depend:
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -MM $(SRC) > $(DEPFILE)
+	@ echo $(DEPTOKEN) > $(DEPFILE)
+	makedepend $(DEPFLAGS) -- $(CC) -- $(SRC)
+	@ rm $(DEPFILE).bak
 
 sinclude $(DEPFILE)
