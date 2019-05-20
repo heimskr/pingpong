@@ -7,6 +7,7 @@ conanbuildinfo.mak
 conanbuildinfo.txt
 graph_info.json
 conaninfo.txt
+*.pc
 
 # Prerequisites
 *.d
