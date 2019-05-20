@@ -6,10 +6,9 @@
 namespace pingpong {
 	class user_command: public command {
 		public:
-			std::string username;
-			std::string realname;
+			std::string username, realname;
 
-			user_command(serv_ptr serv_, std::string username_, std::string realname_):
+			user_command(server_ptr serv_, std::string username_, std::string realname_):
 				command(serv_), username(username_), realname(realname_) {}
 
 			operator std::string() const override;

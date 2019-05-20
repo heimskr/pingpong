@@ -3,15 +3,16 @@
 
 #include <string>
 
-namespace pingpong {
-	class server;
+#include "defs.h"
+#include "server.h"
 
+namespace pingpong {
 	class channel {
 		public:
 			std::string name;
-			std::shared_ptr<server> serv;
+			server_ptr serv;
 
-			channel(std::string, std::shared_ptr<server>);
+			channel(std::string, server_ptr);
 			channel(std::string);
 			bool is_user();
 

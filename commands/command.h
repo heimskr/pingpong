@@ -8,10 +8,10 @@
 namespace pingpong {
 	class command {
 		protected:
-			serv_ptr serv;
+			server_ptr serv;
 
 		public:
-			command(serv_ptr serv_): serv(serv_) {}
+			command(server_ptr serv_): serv(serv_) {}
 			virtual operator std::string() const = 0;
 
 			void send() {

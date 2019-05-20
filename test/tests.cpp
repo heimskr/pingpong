@@ -14,7 +14,7 @@ namespace pingpong {
 namespace tests {
 	using namespace pingpong;
 
-	const serv_ptr serv = make_shared<server>("localhost");
+	const server_ptr serv = make_shared<server>("localhost");
 
 	void test_channel() {
 		channel chan("#programming");

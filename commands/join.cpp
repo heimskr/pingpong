@@ -5,15 +5,15 @@
 
 namespace pingpong {
 	join_command::join_command(channel chan): command(chan.serv), pairs({{chan, ""}}) {}
-	join_command::join_command(serv_ptr ptr, std::string chan): command(ptr), pairs({{channel(chan, ptr), ""}}) {}
-	join_command::join_command(serv_ptr ptr, std::vector<join_pair> pairs_): command(ptr), pairs(pairs_) {}
+	join_command::join_command(server_ptr ptr, std::string chan): command(ptr), pairs({{channel(chan, ptr), ""}}) {}
+	join_command::join_command(server_ptr ptr, std::vector<join_pair> pairs_): command(ptr), pairs(pairs_) {}
 
-	join_command::join_command(serv_ptr ptr, std::vector<std::string> chans): command(ptr) {
+	join_command::join_command(server_ptr ptr, std::vector<std::string> chans): command(ptr) {
 		for (const std::string &chan: chans)
 			pairs.push_back({chan, ""});
 	}
 
-	join_command::join_command(serv_ptr ptr, std::vector<channel> chans): command(ptr) {
+	join_command::join_command(server_ptr ptr, std::vector<channel> chans): command(ptr) {
 		for (const channel &chan: chans) {
 			if (chan.serv != ptr) {
 				throw std::runtime_error("Can't join channels on multiple servers simultaneously");

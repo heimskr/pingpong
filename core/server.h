@@ -11,6 +11,7 @@
 #include "Poco/Net/StreamSocket.h"
 #include "Poco/Net/SocketStream.h"
 
+#include "defs.h"
 #include "channel.h"
 #include "irc.h"
 #include "responses/response.h"
@@ -18,8 +19,6 @@
 using Poco::Net::SocketAddress, Poco::Net::StreamSocket, Poco::Net::SocketStream;
 
 namespace pingpong {
-	using serv_ptr = std::shared_ptr<server>;
-
 	class server {
 		private:
 			StreamSocket socket;
