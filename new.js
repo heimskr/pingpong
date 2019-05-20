@@ -14,7 +14,7 @@ if (!name.match(/^[\w_\d]+$/i)) {
 	yikes("Invalid name:", name);
 }
 
-let sourcepath, headerpath, sourcetext, headertext;
+let allDir, sourcepath, headerpath, sourcetext, headertext;
 
 if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	sourcepath = `commands/${name}.cpp`;
@@ -54,6 +54,8 @@ namespace pingpong {
 }
 `.substr(1);
 
+	fs.writeFileSync("commands/module.mk", fs.readFileSync("commands/module.mk", "utf8").replace(/\s+$/, ` commands/${name}.cpp\n`));
+	allDir = "commands";
 } else if (type.match(/^(mes(sages?)?|msg|m)(-\w+)?$/i)) {
 	const base = type.match(/-/)? type.replace(/^.+-/, "") : null;
 	const parent = base? `${base}_message` : "message";
@@ -99,6 +101,8 @@ namespace pingpong {
 }
 `.substr(1);
 
+	fs.writeFileSync("messages/module.mk", fs.readFileSync("messages/module.mk", "utf8").replace(/\s+$/, ` messages/${name}.cpp\n`));
+	allDir = "messages";
 } else if (type.match(/^l(ib(rary)?)?$/i)) {
 	sourcepath = `lib/${name}.cpp`;
 	headerpath = `include/lib/${name}.h`;
@@ -122,6 +126,7 @@ namespace pingpong {
 }
 `.substr(1);
 
+	fs.writeFileSync("lib/module.mk", fs.readFileSync("lib/module.mk", "utf8").replace(/\s+$/, ` lib/${name}.cpp\n`));
 } else if (type.match(/^core$/i)) {
 	sourcepath = `core/${name}.cpp`;
 	headerpath = `include/core/${name}.h`;
@@ -141,10 +146,12 @@ namespace pingpong {
 #include "core/${name}.h"
 
 namespace pingpong {
-	
+
 }
 `.substr(1);
 
+	fs.writeFileSync("core/module.mk", fs.readFileSync("core/module.mk", "utf8").replace(/\s+$/, ` core/${name}.cpp\n`));
+	allDir = "core";
 } else {
 	console.error("Unknown type:", type);
 	yikes(`Expected "command" | "core" | "lib" | "message"`);
@@ -152,3 +159,7 @@ namespace pingpong {
 
 fs.writeFileSync(sourcepath, sourcetext);
 fs.writeFileSync(headerpath, headertext);
+
+if (allDir) {
+	fs.writeFileSync(`include/${allDir}/all.h`, fs.readFileSync(`include/${allDir}/all.h`, "utf8").replace(/(\n#endif)$/, `#include "${name}.h"\n$1`));
+}
