@@ -14,7 +14,7 @@ namespace pingpong {
 			command(server_ptr serv_): serv(serv_) {}
 			virtual operator std::string() const = 0;
 
-			void send() {
+			virtual void send() {
 				serv->quote(std::string(*this));
 			}
 	};

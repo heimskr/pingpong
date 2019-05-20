@@ -9,6 +9,7 @@
 #include "server.h"
 #include "responses/all.h"
 #include "commands/user.h"
+#include "commands/nick.h"
 
 namespace pingpong {
 	using std::endl, std::cout;
@@ -18,7 +19,7 @@ namespace pingpong {
 	}
 
 	bool server::start() {
-		std::unique_lock<std::mutex> ulock(status_mutex);
+		std::unique_lock<std::mutex> ulock(status_mux);
 
 		if (status == dead)        cleanup(ulock);
 		if (status != unconnected) throw std::runtime_error("Can't connect: server not unconnected");
@@ -32,7 +33,7 @@ namespace pingpong {
 	}
 
 	void server::work() {
-		user_command(this, parent.username, parent.realname);
+		user_command(this, parent.username, parent.realname).send();
 
 		std::string line;
 		while (std::getline(*stream, line)) {
@@ -41,11 +42,11 @@ namespace pingpong {
 				line.pop_back();
 			}
 
-			process_line(pingpong::line(line));
+			handle_line(pingpong::line(line));
 		}
 	}
 
-	void server::process_line(const pingpong::line &line) {
+	void server::handle_line(const pingpong::line &line) {
 		response_ptr resp = pingpong::response::parse(line);
 		std::cout << "Response: " << std::string(*resp) << std::endl;
 	}
@@ -53,13 +54,23 @@ namespace pingpong {
 	void server::quote(const std::string &str) {
 		if (stream == nullptr) throw std::runtime_error("Stream not ready");
 
+		auto l = parent.lock_console();
+		std::cout << "Sending [" << str << "]" << std::endl;
+
 		*stream << str << "\r\n";
 		stream->flush();
 	}
 
+	void server::set_nick(const std::string &new_nick) {
+		nick_command(this, new_nick).send();
+	}
+
+	const std::string & server::get_nick() const {
+		return nick;
+	}
 
 	void server::cleanup() {
-		std::unique_lock ulock(status_mutex);
+		std::unique_lock ulock(status_mux);
 		cleanup(ulock);
 	}
 

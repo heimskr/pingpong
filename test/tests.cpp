@@ -6,14 +6,7 @@
 using namespace std;
 using namespace pingpong;
 
-// namespace pingpong {
-// 	void server::quote(const string &raw) {
-// 		cout << "Quote(\"" << raw << "\")" << endl;
-// 	}
-// }
-
 namespace tests {
-
 	void test_channel() {
 		channel chan("#programming");
 		channel user("NickServ");
@@ -31,6 +24,7 @@ namespace tests {
 
 	void test_network(server &serv) {
 		serv.start();
+		serv.set_nick("pingpong");
 		serv.server_thread->join();
 	}
 }
