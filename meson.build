@@ -1,0 +1,1 @@
+project('pingpong', 'cpp')

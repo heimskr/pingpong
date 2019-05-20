@@ -1,6 +1,7 @@
 .vscode
 .dep
 build
+builddir
 
 conanbuildinfo.mak
 conanbuildinfo.txt
