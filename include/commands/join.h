@@ -2,7 +2,6 @@
 #define COMMANDS_JOIN_H_
 
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "command.h"
