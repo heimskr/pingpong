@@ -15,7 +15,6 @@ namespace pingpong {
 			notice_response(pingpong::line line_): sourced_response(line_) {}
 
 			virtual std::string get_command() const override;
-
 			operator std::string() const override;
 	};
 }

@@ -5,5 +5,6 @@
 #include "response.h"
 
 #include "notice.h"
+#include "ping.h"
 
 #endif
