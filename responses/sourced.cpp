@@ -11,9 +11,9 @@ namespace pingpong {
 
 		for (; combined[i] == ' '; ++i);
 
-		if (i == length)
+		if (i == length || combined[i] != ':')
 			throw std::runtime_error("Couldn't parse sourced_response");
 
-		message = combined.substr(i);
+		message = combined.substr(i + 1);
 	}
 }

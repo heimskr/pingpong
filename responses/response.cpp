@@ -2,8 +2,6 @@
 #include <stdexcept>
 #include <string>
 
-#include <iostream>
-
 #include "all.h"
 
 namespace pingpong {
@@ -20,4 +18,8 @@ namespace pingpong {
 	}
 
 	pingpong::response::~response() {}
+
+	std::string pingpong::response::to_string() const {
+		return "T[" + line.tags + "], S[" + line.source + "], C[" + line.command + "], P[" + line.parameters   + "]";
+	}
 }

@@ -19,7 +19,7 @@ namespace pingpong {
 			virtual ~response() = 0;
 
 			virtual std::string get_command() const = 0;
-			virtual std::string to_string() const { return get_command(); }
+			virtual std::string to_string() const;
 			operator std::string() { return to_string(); }
 
 			static response_ptr parse(const std::string &);

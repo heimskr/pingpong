@@ -14,7 +14,8 @@ namespace pingpong {
 			notice_response(pingpong::line line_, std::string combined): sourced_response(line_, combined) {}
 			notice_response(pingpong::line line_): sourced_response(line_) {}
 
-			virtual std::string get_command() const override { return "NOTICE"; }
+			virtual std::string get_command() const override;
+			virtual std::string to_string() const override;
 	};
 }
 
