@@ -7,51 +7,54 @@ MKBUILD			:= mkdir -p build
 
 CHECK			:= asan
 
-ifeq ($(CHECK), asan)
-	CHECKFLAGS += -fsanitize=address -fno-common
-else ifeq ($(CHECK), msan)
-	CHECKFLAGS += -fsanitize=memory -fno-common
-endif
+# ifeq ($(CHECK), asan)
+# 	CHECKFLAGS += -fsanitize=address -fno-common
+# else ifeq ($(CHECK), msan)
+# 	CHECKFLAGS += -fsanitize=memory -fno-common
+# endif
 
-.PHONY: all test clean depend
-all: Makefile
+# .PHONY: all test clean depend
+all: meson
 
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
-MODULES			:= core test commands messages lib
-COMMONSRC		:=
-CFLAGS			+= -Iinclude
-LIBS			:=
-SRC				:=
-include $(patsubst %,%/module.mk,$(MODULES))
-SRC				+= $(COMMONSRC)
-COMMONOBJ		:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(COMMONSRC)))
-OBJ				:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(SRC)))
-sinclude $(patsubst %,%/targets.mk,$(MODULES))
+# MODULES			:= core test commands messages lib
+# COMMONSRC		:=
+# CFLAGS			+= -Iinclude
+# LIBS			:=
+# SRC				:=
+# include $(patsubst %,%/module.mk,$(MODULES))
+# SRC				+= $(COMMONSRC)
+# COMMONOBJ		:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(COMMONSRC)))
+# OBJ				:= $(patsubst %.cpp,%.o, $(filter %.cpp,$(SRC)))
+# sinclude $(patsubst %,%/targets.mk,$(MODULES))
 
 include conan.mk
 
-all: $(COMMONOBJ)
+meson:
+	PKG_CONFIG_PATH=$(shell pwd) meson builddir
 
-test: build/tests
-	./build/tests
+# all: $(COMMONOBJ)
 
-grind: build/tests
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-reachable=yes ./build/tests
+# test: build/tests
+# 	./build/tests
 
-clean:
-	rm -rf build
-	rm -f *.o **/*.o
+# grind: build/tests
+# 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-reachable=yes ./build/tests
 
-%.o: %.cpp
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+# clean:
+# 	rm -rf build
+# 	rm -f *.o **/*.o
 
-DEPFILE  = .dep
-DEPTOKEN = "\# MAKEDEPENDS"
-DEPFLAGS = -f $(DEPFILE) -s $(DEPTOKEN)
+# %.o: %.cpp
+# 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
-depend:
-	@ echo $(DEPTOKEN) > $(DEPFILE)
-	makedepend $(DEPFLAGS) -- $(CC) -- $(SRC)
-	@ rm $(DEPFILE).bak
+# DEPFILE  = .dep
+# DEPTOKEN = "\# MAKEDEPENDS"
+# DEPFLAGS = -f $(DEPFILE) -s $(DEPTOKEN)
 
-sinclude $(DEPFILE)
+# depend:
+# 	@ echo $(DEPTOKEN) > $(DEPFILE)
+# 	makedepend $(DEPFLAGS) -- $(CC) -- $(SRC)
+# 	@ rm $(DEPFILE).bak
+
+# sinclude $(DEPFILE)
