@@ -12,7 +12,7 @@
 namespace pingpong {
 	using std::endl, std::cout;
 
-	std::string server::to_string() const {
+	server::operator std::string() const {
 		return port != irc::default_port? hostname + ":" + std::to_string(port) : hostname;
 	}
 
@@ -54,7 +54,7 @@ namespace pingpong {
 	}
 
 	void server::cleanup(std::unique_lock<std::mutex> &) {
-		std::cerr << "[" << to_string() << ": cleanup]" << std::endl;
+		std::cerr << "[" << std::string(*this) << ": cleanup]" << std::endl;
 		status = unconnected;
 
 		if (server_thread) {

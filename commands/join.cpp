@@ -23,7 +23,7 @@ namespace pingpong {
 		}
 	}
 
-	std::string join_command::to_string() const {
+	join_command::operator std::string() const {
 		if (pairs.size() > 0) {
 			std::string chans = pairs.at(0).first;
 			std::string keys = pairs.at(0).second;

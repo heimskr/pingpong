@@ -7,7 +7,7 @@ namespace pingpong {
 		return "NOTICE";
 	}
 
-	std::string notice_response::to_string() const {
+	notice_response::operator std::string() const {
 		return "-" + source + "- " + message;
 	}
 }

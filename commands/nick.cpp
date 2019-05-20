@@ -1,7 +1,7 @@
 #include "nick.h"
 
 namespace pingpong {
-	std::string nick_command::to_string() const {
+	nick_command::operator std::string() const {
 		return "NICK :" + nickname;
 	}
 }

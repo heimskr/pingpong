@@ -18,4 +18,8 @@ namespace pingpong {
 		command    = in.substr(old_index, index - old_index);
 		parameters = in.substr(index + 1);
 	}
+	
+	line::operator std::string() const {
+		return "T[" + tags + "], S[" + source + "], C[" + command + "], P[" + parameters + "]";
+	}
 }

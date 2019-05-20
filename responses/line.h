@@ -7,6 +7,8 @@ namespace pingpong {
 	struct line {
 		std::string tags, source, command, parameters;
 		line(std::string in);
+
+		operator std::string() const;
 	};
 }
 

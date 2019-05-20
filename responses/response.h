@@ -12,15 +12,14 @@ namespace pingpong {
 
 	class response {
 		private:
-			pingpong::line line;
+			line line;
 
 		public:
 			response(pingpong::line line_): line(line_) {}
 			virtual ~response() = 0;
 
 			virtual std::string get_command() const = 0;
-			virtual std::string to_string() const;
-			operator std::string() { return to_string(); }
+			virtual operator std::string() const;
 
 			static response_ptr parse(const std::string &);
 			static response_ptr parse(const pingpong::line &);

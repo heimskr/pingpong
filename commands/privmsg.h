@@ -14,7 +14,7 @@ namespace pingpong {
 			privmsg_command(channel, std::string);
 			privmsg_command(serv_ptr, std::string, std::string);
 
-			virtual std::string to_string() const;
+			operator std::string() const override;
 	};
 }
 

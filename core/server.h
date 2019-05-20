@@ -53,8 +53,7 @@ namespace pingpong {
 
 			void quote(const std::string &);
 
-			std::string to_string() const;
-			operator std::string() const { return to_string(); }
+			operator std::string() const;
 			bool start();
 	};
 }

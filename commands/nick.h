@@ -9,7 +9,7 @@ namespace pingpong {
 			std::string nickname;
 
 			nick_command(std::shared_ptr<server> serv_, std::string nickname_): command(serv_), nickname(nickname_) {}
-			virtual std::string to_string() const;
+			operator std::string() const override;
 	};
 }
 

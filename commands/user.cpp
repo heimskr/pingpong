@@ -3,7 +3,7 @@
 #include "user.h"
 
 namespace pingpong {
-	std::string user_command::to_string() const {
+	user_command::operator std::string() const {
 		return "USER " + username + " 0 * :" + realname;
 	}
 }
