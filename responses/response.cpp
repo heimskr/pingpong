@@ -1,21 +1,23 @@
-#include "response.h"
+#include <memory>
+#include <stdexcept>
+#include <string>
+
+#include <iostream>
+
+#include "all.h"
 
 namespace pingpong {
-	line::line(std::string in) {
-		size_t length = in.size(), index = 0, old_index;
-
-		if (in.at(index) == '@') {
-			for (; in.at(index) != ' ' && index < length; ++index);
-			tags = in.substr(1, index++ - 1);
+	response_ptr pingpong::response::parse(const pingpong::line &line) {
+		if (line.command == "NOTICE") {
+			return std::make_unique<pingpong::notice_response>(notice_response(line));
+		} else {
+			throw std::runtime_error("Unknown command");
 		}
-
-		if (in.at(index) == ':') {
-			for (old_index = index; in.at(index) != ' ' && index < length; ++index);
-			source = in.substr(old_index + 1, index++ - old_index - 1);
-		}
-
-		for (old_index = index; in.at(index) != ' ' && index < length; ++index);
-		command    = in.substr(old_index, index - old_index);
-		parameters = in.substr(index + 1);
 	}
+
+	response_ptr pingpong::response::parse(const std::string &text) {
+		return parse(pingpong::line(text));
+	}
+
+	pingpong::response::~response() {}
 }

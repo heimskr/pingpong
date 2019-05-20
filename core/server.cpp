@@ -7,6 +7,7 @@
 #include "Poco/StreamCopier.h"
 
 #include "server.h"
+#include "responses/all.h"
 
 namespace pingpong {
 	using std::endl, std::cout;
@@ -42,8 +43,8 @@ namespace pingpong {
 	}
 
 	void server::process_line(const pingpong::line &line) {
-		cout << "tags[" << line.tags << "], source[" << line.source << "], command[" << line.command
-		     << "], parameters [" << line.parameters << "]" << endl;
+		response_ptr resp = pingpong::response::parse(line);
+		std::cout << "Response: " << std::string(*resp) << std::endl;
 	}
 
 
