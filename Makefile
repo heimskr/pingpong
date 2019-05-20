@@ -11,8 +11,6 @@ ifeq ($(CHECK), asan)
 	CHECKFLAGS += -fsanitize=address -fno-common
 else ifeq ($(CHECK), msan)
 	CHECKFLAGS += -fsanitize=memory -fno-common
-else
-	CHECKFLAGS +=
 endif
 
 .PHONY: all test clean depend
