@@ -5,7 +5,7 @@ CC				 = $(COMPILER) $(CFLAGS) $(CHECKFLAGS)
 CHECKFLAGS		:=
 MKBUILD			:= mkdir -p build
 
-CHECK			:= none
+CHECK			:= asan
 
 ifeq ($(CHECK), asan)
 	CHECKFLAGS += -fsanitize=address -fno-common
@@ -16,7 +16,7 @@ else
 endif
 
 .PHONY: all test clean depend
-all:
+all: Makefile
 
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
 MODULES			:= core test commands responses

@@ -8,6 +8,7 @@
 
 #include "server.h"
 #include "responses/all.h"
+#include "commands/user.h"
 
 namespace pingpong {
 	using std::endl, std::cout;
@@ -31,6 +32,8 @@ namespace pingpong {
 	}
 
 	void server::work() {
+		user_command(this, parent.username, parent.realname);
+
 		std::string line;
 		while (std::getline(*stream, line)) {
 			if (line.back() == '\r') {
@@ -47,6 +50,13 @@ namespace pingpong {
 		std::cout << "Response: " << std::string(*resp) << std::endl;
 	}
 
+	void server::quote(const std::string &str) {
+		if (stream == nullptr) throw std::runtime_error("Stream not ready");
+
+		*stream << str << "\r\n";
+		stream->flush();
+	}
+
 
 	void server::cleanup() {
 		std::unique_lock ulock(status_mutex);
@@ -57,8 +67,9 @@ namespace pingpong {
 		std::cerr << "[" << std::string(*this) << ": cleanup]" << std::endl;
 		status = unconnected;
 
-		if (server_thread) {
+		if (server_thread)
 			server_thread->join();
-		}
 	}
+
+
 }

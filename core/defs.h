@@ -8,7 +8,7 @@ namespace pingpong {
 	class server;
 	class irc;
 
-	using server_ptr = std::shared_ptr<pingpong::server>;
+	using server_ptr = pingpong::server *;
 }
 
 #endif

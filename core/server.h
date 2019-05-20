@@ -23,6 +23,7 @@ namespace pingpong {
 		private:
 			StreamSocket socket;
 			std::shared_ptr<SocketStream> stream;
+			irc &parent;
 
 			void cleanup(std::unique_lock<std::mutex> &);
 			void cleanup();
@@ -40,15 +41,15 @@ namespace pingpong {
 			};
 
 			std::string hostname;
-			uint16_t port = irc::default_port;
+			uint16_t port;
 			std::vector<channel> channels {};
 
 			std::shared_ptr<std::thread> server_thread;
 			std::mutex status_mutex;
 			stage status = unconnected;
 
-			server(std::string hostname): hostname(hostname) {}
-			server(std::string hostname, int port): hostname(hostname), port(port) {}
+			server(irc &parent, std::string hostname, int port): parent(parent), hostname(hostname), port(port) {}
+			server(irc &parent, std::string hostname): server(parent, hostname, irc::default_port) {}
 
 			void quote(const std::string &);
 

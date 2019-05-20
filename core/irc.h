@@ -8,10 +8,13 @@
 namespace pingpong {
 	class irc {
 		private:
-			std::vector<server> servers;
+			std::vector<server_ptr> servers;
 
 		public:
 			static constexpr int default_port = 6667;
+			std::string username, realname;
+			irc(): irc("pingpong", "PingPong IRC") {}
+			irc(std::string user, std::string real): username(user), realname(real) {}
 	};
 }
 

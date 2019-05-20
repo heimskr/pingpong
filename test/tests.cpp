@@ -4,17 +4,15 @@
 #include "commands/all.h"
 
 using namespace std;
+using namespace pingpong;
 
-namespace pingpong {
-	void server::quote(const string &raw) {
-		cout << "Quote(\"" << raw << "\")" << endl;
-	}
-}
+// namespace pingpong {
+// 	void server::quote(const string &raw) {
+// 		cout << "Quote(\"" << raw << "\")" << endl;
+// 	}
+// }
 
 namespace tests {
-	using namespace pingpong;
-
-	const server_ptr serv = make_shared<server>("localhost");
 
 	void test_channel() {
 		channel chan("#programming");
@@ -23,7 +21,7 @@ namespace tests {
 		cout << "user.is_user(): " << user.is_user() << endl;
 	}
 
-	void test_commands() {
+	void test_commands(server_ptr serv) {
 		user_command(serv, "some_user", "Some Name").send();
 		nick_command(serv, "somenick").send();
 		privmsg_command(serv, "#channel", "Hello, world!").send();
@@ -31,13 +29,16 @@ namespace tests {
 		join_command(serv, vector<join_pair>({{"#baz", ""}, {"#quux", ""}})).send();
 	}
 
-	void test_network() {
-		serv->start();
-		serv->server_thread->join();
+	void test_network(server &serv) {
+		serv.start();
+		serv.server_thread->join();
 	}
 }
 
 int main(int, char **) {
-	tests::test_network();
+	irc instance;
+	server serv(instance, "localhost");
+
+	tests::test_network(serv);
 	return 0;
 }
