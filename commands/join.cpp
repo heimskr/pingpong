@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "join.h"
+#include "commands/join.h"
 
 namespace pingpong {
 	join_command::join_command(server_ptr serv_, std::vector<join_pair> pairs_): command(serv_), pairs(pairs_) {}

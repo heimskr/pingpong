@@ -1,6 +1,6 @@
 #include <string>
 
-#include "user.h"
+#include "commands/user.h"
 #include "core/server.h"
 
 namespace pingpong {

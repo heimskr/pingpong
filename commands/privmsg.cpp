@@ -1,6 +1,6 @@
 #include <string>
 
-#include "privmsg.h"
+#include "commands/privmsg.h"
 
 namespace pingpong {
 	privmsg_command::operator std::string() const {

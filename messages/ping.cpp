@@ -1,6 +1,6 @@
 #include <string>
 
-#include "ping.h"
+#include "messages/ping.h"
 
 namespace pingpong {
 	std::string ping_message::get_command() const {

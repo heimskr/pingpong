@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "all.h"
+#include "messages/all.h"
 #include "core/debug.h"
 
 namespace pingpong {

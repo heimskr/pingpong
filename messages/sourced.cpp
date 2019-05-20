@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "all.h"
+#include "messages/all.h"
 
 namespace pingpong {
 	sourced_message::sourced_message(pingpong::line line_, std::string combined): message(line_) {

@@ -1,4 +1,6 @@
-#include "nick.h"
+#include <string>
+
+#include "commands/nick.h"
 
 namespace pingpong {
 	nick_command::operator std::string() const {

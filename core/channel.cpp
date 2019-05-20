@@ -1,9 +1,9 @@
 #include <stdexcept>
 #include <string>
 
-#include "defs.h"
-#include "channel.h"
-#include "server.h"
+#include "core/defs.h"
+#include "core/channel.h"
+#include "core/server.h"
 
 namespace pingpong {
 	channel::channel(std::string name_, server_ptr serv_): name(name_), serv(serv_) {

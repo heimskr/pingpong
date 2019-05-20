@@ -1,6 +1,6 @@
 #include <string>
 
-#include "notice.h"
+#include "messages/notice.h"
 
 namespace pingpong {
 	std::string notice_message::get_command() const {

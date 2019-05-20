@@ -21,7 +21,7 @@ all: Makefile
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
 MODULES			:= core test commands messages lib
 COMMONSRC		:=
-CFLAGS			+= -I.
+CFLAGS			+= -Iinclude
 LIBS			:=
 SRC				:=
 include $(patsubst %,%/module.mk,$(MODULES))

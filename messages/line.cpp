@@ -1,4 +1,6 @@
-#include "line.h"
+#include <string>
+
+#include "messages/line.h"
 
 namespace pingpong {
 	line::line(const std::string &in): original(in) {

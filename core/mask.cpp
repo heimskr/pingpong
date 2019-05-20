@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "mask.h"
+#include "core/mask.h"
 
 namespace pingpong {
 	mask::mask(std::string combined) {

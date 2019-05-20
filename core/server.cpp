@@ -7,8 +7,8 @@
 #include "Poco/StreamCopier.h"
 
 #include "lib/ansi.h"
-#include "debug.h"
-#include "server.h"
+#include "core/debug.h"
+#include "core/server.h"
 #include "messages/all.h"
 #include "commands/user.h"
 #include "commands/nick.h"
