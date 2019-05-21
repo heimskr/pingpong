@@ -6,29 +6,24 @@
 #include "core/debug.h"
 
 namespace pingpong {
+	std::map<std::string, message_ctor> message::ctors;
+
 	message_ptr message::parse(const pingpong::line &line) {
-		if (numeric_message::is_numeric(line.command.c_str())) {
+		if (numeric_message::is_numeric(line.command.c_str()))
 			return std::make_unique<pingpong::numeric_message>(numeric_message(line));
-		} else if (line.command == "NOTICE") {
-			return std::make_unique<pingpong::notice_message>(notice_message(line));
-		} else if (line.command == "PING") {
-			return std::make_unique<pingpong::ping_message>(ping_message(line));
-		} else if (line.command == "PRIVMSG") {
-			return std::make_unique<pingpong::privmsg_message>(privmsg_message(line));
-		} else if (line.command == "JOIN") {
-			return std::make_unique<pingpong::join_message>(join_message(line));
-		} else if (line.command == "PART") {
-			return std::make_unique<pingpong::part_message>(part_message(line));
-		} else {
+
+		auto ctor = message::ctors.find(line.command);
+		if (ctor == message::ctors.end())
 			throw std::invalid_argument("Unknown message");
-		}
+
+		return ctor->second(line);
 	}
 
 	message_ptr message::parse(const std::string &text) {
 		return parse(pingpong::line(text));
 	}
 
-	message::~message() {}
+	message::~message() = default;
 
 	message::operator std::string() const {
 		return std::string(line);

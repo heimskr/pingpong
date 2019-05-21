@@ -9,9 +9,10 @@
 namespace pingpong {
 	class ping_message: public basic_message {
 		public:
+			static constexpr auto get_name = []() -> std::string { return "PING"; };
+
 			ping_message(pingpong::line line_): basic_message(line_) {}
 
-			virtual std::string get_command() const override;
 			operator std::string() const override;
 	};
 }

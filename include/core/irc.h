@@ -22,6 +22,7 @@ namespace pingpong {
 			irc(): irc("pingpong", "PingPong IRC") {}
 			
 			std::unique_lock<std::mutex> lock_console() { return std::unique_lock(console_mux); }
+			void init_messages();
 		
 			template <typename T>
 			ansi::ansistream & operator<<(const T &value) { return dbg << value; }

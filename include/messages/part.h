@@ -10,11 +10,11 @@
 namespace pingpong {
 	class part_message: public message {
 		public:
+			static constexpr auto get_name = []() -> std::string { return "PART"; };
 			std::string chan, reason;
 
 			part_message(pingpong::line line_);
 
-			virtual std::string get_command() const override;
 			operator std::string() const override;
 	};
 }

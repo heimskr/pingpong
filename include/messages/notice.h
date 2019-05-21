@@ -10,8 +10,8 @@ namespace pingpong {
 	class notice_message: public sourced_message {
 		public:
 			using sourced_message::sourced_message;
+			static constexpr auto get_name = []() -> std::string { return "NOTICE"; };
 
-			virtual std::string get_command() const override;
 			operator std::string() const override;
 	};
 }

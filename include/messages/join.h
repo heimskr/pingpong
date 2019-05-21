@@ -10,8 +10,8 @@ namespace pingpong {
 	class join_message: public basic_message {
 		public:
 			using basic_message::basic_message;
+			static constexpr auto get_name = []() -> std::string { return "JOIN"; };
 
-			virtual std::string get_command() const override;
 			operator std::string() const override;
 	};
 }

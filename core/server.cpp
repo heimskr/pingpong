@@ -58,13 +58,13 @@ namespace pingpong {
 			return;
 		}
 
-		if (msg->get_command() == "PING") {
+		if (message::is<ping_message>(msg)) {
 			auto &ping = dynamic_cast<ping_message &>(*msg);
 			pong_command(this, ping.text).send();
 			return;
 		}
 
-		if (msg->get_command() != "_NUMERIC") 
+		if (!message::is<numeric_message>(msg))
 			parent.dbgout() << std::string(*msg) << std::endl;
 	}
 
@@ -101,6 +101,4 @@ namespace pingpong {
 		if (server_thread)
 			server_thread->join();
 	}
-
-
 }

@@ -20,10 +20,6 @@ namespace pingpong {
 		return true;
 	}
 
-	std::string numeric_message::get_command() const {
-		return "_NUMERIC";
-	}
-
 	numeric_message::operator std::string() const {
 		return "[" + std::to_string(number) + "] " + line.original;
 	}

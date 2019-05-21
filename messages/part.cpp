@@ -16,10 +16,6 @@ namespace pingpong {
 		}
 	}
 
-	std::string part_message::get_command() const {
-		return "PART";
-	}
-
 	part_message::operator std::string() const {
 		std::string start = line.source.nick + " left " + chan;
 		if (reason.empty()) {

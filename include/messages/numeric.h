@@ -10,6 +10,7 @@
 namespace pingpong {
 	class numeric_message: public message {
 		public:
+			static constexpr auto get_name = []() -> std::string { return "_NUMERIC"; };
 			static bool is_numeric(const char *);
 			static bool is_numeric(const char *, long &);
 
@@ -20,7 +21,6 @@ namespace pingpong {
 					throw std::invalid_argument("Expected a numeric command");
 			}
 
-			virtual std::string get_command() const override;
 			operator std::string() const override;
 
 	};
