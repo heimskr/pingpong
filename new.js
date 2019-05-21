@@ -4,7 +4,7 @@ const fs = require("fs");
 const yikes = (...a) => { console.error(...a); process.exit(1); };
 
 const [,, ...args] = process.argv;
-if (args.length != 2 || !args[1]) {
+if (args.length < 2 || !args[1]) {
 	yikes("Usage: new.js [type] [name]");
 }
 
@@ -76,7 +76,7 @@ namespace pingpong {
 	class ${cls}: public ${parent} {
 		public:
 			using ${parent}::${parent};
-			static constexpr auto get_name = []() -> std::string { return "${args[2] || "___"}"; };
+			static constexpr auto get_name = []() -> std::string { return "${args[2] || name.toUpperCase()}"; };
 
 			operator std::string() const override;
 	};
