@@ -161,5 +161,5 @@ fs.writeFileSync(sourcepath, sourcetext);
 fs.writeFileSync(headerpath, headertext);
 
 if (allDir) {
-	fs.writeFileSync(`include/${allDir}/all.h`, fs.readFileSync(`include/${allDir}/all.h`, "utf8").replace(/(\n#endif)$/, `#include "${name}.h"\n$1`));
+	fs.writeFileSync(`include/${allDir}/all.h`, fs.readFileSync(`include/${allDir}/all.h`, "utf8").replace(/(\n#endif)/, `#include "${name}.h"\n$1`));
 }
