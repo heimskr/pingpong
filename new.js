@@ -76,8 +76,8 @@ namespace pingpong {
 	class ${cls}: public ${parent} {
 		public:
 			using ${parent}::${parent};
+			static constexpr auto get_name = []() -> std::string { return "${args[2] || "___"}"; };
 
-			virtual std::string get_command() const override;
 			operator std::string() const override;
 	};
 }
@@ -91,10 +91,6 @@ namespace pingpong {
 #include "messages/${name}.h"
 
 namespace pingpong {
-	std::string ${cls}::get_command() const {
-		return "${name.toUpperCase()}";
-	}
-
 	${cls}::operator std::string() const {
 		
 	}
