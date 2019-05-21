@@ -9,5 +9,6 @@
 #include "join.h"
 #include "pong.h"
 #include "quit.h"
+#include "msg.h"
 
 #endif
