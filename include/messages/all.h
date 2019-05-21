@@ -10,5 +10,6 @@
 #include "ping.h"
 #include "privmsg.h"
 #include "part.h"
+#include "quit.h"
 
 #endif
