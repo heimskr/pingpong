@@ -17,6 +17,8 @@ namespace pingpong {
 			return std::make_unique<pingpong::privmsg_message>(privmsg_message(line));
 		} else if (line.command == "JOIN") {
 			return std::make_unique<pingpong::join_message>(join_message(line));
+		} else if (line.command == "PART") {
+			return std::make_unique<pingpong::part_message>(part_message(line));
 		} else {
 			throw std::invalid_argument("Unknown message");
 		}

@@ -9,5 +9,6 @@
 #include "numeric.h"
 #include "ping.h"
 #include "privmsg.h"
+#include "part.h"
 
 #endif
