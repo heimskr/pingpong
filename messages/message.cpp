@@ -19,10 +19,6 @@ namespace pingpong {
 		return ctor->second(line);
 	}
 
-	message_ptr message::parse(const std::string &text) {
-		return parse(pingpong::line(text));
-	}
-
 	message::~message() = default;
 
 	message::operator std::string() const {

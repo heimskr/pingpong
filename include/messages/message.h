@@ -25,7 +25,6 @@ namespace pingpong {
 
 			virtual operator std::string() const;
 
-			static message_ptr parse(const std::string &);
 			static message_ptr parse(const pingpong::line &);
 
 			template <class T>
