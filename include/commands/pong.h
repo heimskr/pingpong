@@ -10,6 +10,7 @@ namespace pingpong {
 
 			pong_command(server_ptr serv_, std::string token_): command(serv_), token(token_) {}
 			operator std::string() const override;
+			bool is_silent() const override { return true; }
 	};
 }
 

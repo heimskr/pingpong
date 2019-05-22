@@ -17,6 +17,8 @@ namespace pingpong {
 			virtual void send() {
 				serv->quote(std::string(*this));
 			}
+
+			virtual bool is_silent() const { return false; }
 	};
 }
 
