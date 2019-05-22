@@ -14,11 +14,13 @@ if (!name.match(/^[\w_\d]+$/i)) {
 	yikes("Invalid name:", name);
 }
 
-let allDir, sourcepath, headerpath, sourcetext, headertext;
+let allDir, sourcename, headername, sourcetext, headertext;
+
+const sourcebase = "src", headerbase = "include";
 
 if (type.match(/^(com(mands?)?|cmd)$/i)) {
-	sourcepath = `commands/${name}.cpp`;
-	headerpath = `include/commands/${name}.h`;
+	sourcename = `commands/${name}.cpp`;
+	headername = `commands/${name}.h`;
 	const cls = `${name}_command`;
 
 	headertext = `
@@ -59,8 +61,8 @@ namespace pingpong {
 	const base = type.match(/-/)? type.replace(/^.+-/, "") : null;
 	const parent = base? `${base}_message` : "message";
 
-	sourcepath = `messages/${name}.cpp`;
-	headerpath = `include/messages/${name}.h`;
+	sourcename = `messages/${name}.cpp`;
+	headername = `messages/${name}.h`;
 	const cls = `${name}_message`;
 
 	headertext = `
@@ -96,16 +98,17 @@ namespace pingpong {
 }
 `.substr(1);
 
-	const ircText = fs.readFileSync("core/irc.cpp", "utf8");
+	const ircPath = sourcebase + "/core/irc.cpp";
+	const ircText = fs.readFileSync(ircPath, "utf8");
 	if (ircText.indexOf(`add_ctor<${cls}>`) == -1) {
-		fs.writeFileSync("core/irc.cpp",
+		fs.writeFileSync(ircPath,
 			ircText.replace(/(void irc::init_messages\(\) {)/, `$1\n\t\tmessage::add_ctor<${cls}>();`));
 	}
 
 	updateModule(allDir = "messages", name);
 } else if (type.match(/^l(ib(rary)?)?$/i)) {
-	sourcepath = `lib/${name}.cpp`;
-	headerpath = `include/lib/${name}.h`;
+	sourcename = `lib/${name}.cpp`;
+	headername = `lib/${name}.h`;
 
 	headertext = `
 #ifndef LIB_${name.toUpperCase()}_H_
@@ -128,8 +131,8 @@ namespace pingpong {
 
 	updateModule("lib", name);
 } else if (type.match(/^core$/i)) {
-	sourcepath = `core/${name}.cpp`;
-	headerpath = `include/core/${name}.h`;
+	sourcename = `core/${name}.cpp`;
+	headername = `core/${name}.h`;
 
 	headertext = `
 #ifndef CORE_${name.toUpperCase()}_H_
@@ -156,19 +159,19 @@ namespace pingpong {
 	yikes(`Expected "command" | "core" | "lib" | "message"`);
 }
 
-fs.writeFileSync(sourcepath, sourcetext);
-fs.writeFileSync(headerpath, headertext);
+fs.writeFileSync(`${sourcebase}/${sourcename}`, sourcetext);
+fs.writeFileSync(`${headerbase}/${headername}`, headertext);
 
 if (allDir) {
-	const allText = fs.readFileSync(`include/${allDir}/all.h`, "utf8");
+	const allText = fs.readFileSync(`${headerbase}/${allDir}/all.h`, "utf8");
 	if (allText.indexOf(`#include "${name}.h"`) == -1) {
-		fs.writeFileSync(`include/${allDir}/all.h`, allText.replace(/(\n#endif)/, `#include "${name}.h"\n$1`));
+		fs.writeFileSync(`${headerbase}/${allDir}/all.h`, allText.replace(/(\n#endif)/, `#include "${name}.h"\n$1`));
 	}
 }
 
 function updateModule(type, name) {
-	const moduleText = fs.readFileSync(`${type}/module.mk`, "utf8");
-	if (moduleText.indexOf(`${type}/${name}.cpp`) == -1) {
-		fs.writeFileSync(`${type}/module.mk`, moduleText.replace(/\s+$/, ` ${type}/${name}.cpp\n`));
+	const moduleText = fs.readFileSync(`${sourcebase}/${type}/module.mk`, "utf8");
+	if (moduleText.indexOf(`${sourcebase}/${type}/${name}.cpp`) == -1) {
+		fs.writeFileSync(`${sourcebase}/${type}/module.mk`, moduleText.replace(/\s+$/, ` ${sourcebase}/${type}/${name}.cpp\n`));
 	}
 }
