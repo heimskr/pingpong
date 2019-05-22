@@ -7,5 +7,6 @@
 #include "irc.h"
 #include "mask.h"
 #include "server.h"
+#include "user.h"
 
 #endif

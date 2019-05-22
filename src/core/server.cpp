@@ -15,8 +15,6 @@
 #include "commands/pong.h"
 
 namespace pingpong {
-	using std::endl, std::cout;
-
 	server::operator std::string() const {
 		return port != irc::default_port? hostname + ":" + std::to_string(port) : hostname;
 	}
@@ -54,7 +52,7 @@ namespace pingpong {
 		try {
 			msg = pingpong::message::parse(line);
 		} catch (std::invalid_argument &err) {
-			parent << ansi::red << " >> " << ansi::reset << line.original << std::endl;
+			parent << ansi::red << " >> " << ansi::reset << line.original << "\n";
 			return;
 		}
 
@@ -65,7 +63,7 @@ namespace pingpong {
 		}
 
 		if (!message::is<numeric_message>(msg))
-			parent.dbgout() << std::string(*msg) << std::endl;
+			parent.dbgout() << std::string(*msg) << "\n";
 	}
 
 	void server::quote(const std::string &str) {
@@ -75,7 +73,7 @@ namespace pingpong {
 		}
 
 		auto l = parent.lock_console();
-		parent.dbgin() << str << std::endl;
+		parent.dbgin() << str << "\n";
 
 		*stream << str << "\r\n";
 		stream->flush();
@@ -95,7 +93,7 @@ namespace pingpong {
 	}
 
 	void server::cleanup(std::unique_lock<std::mutex> &) {
-		parent << "["_d << std::string(*this) << ": cleanup]"_d << std::endl;
+		parent << "["_d << std::string(*this) << ": cleanup]"_d << "\n";
 		status = unconnected;
 
 		if (server_thread)

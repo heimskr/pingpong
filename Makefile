@@ -1,5 +1,5 @@
 COMPILER		 = clang++
-CFLAGS			:= -std=c++17 -g -O3 -Wall -Wextra -fdiagnostics-color=always
+CFLAGS			:= -std=c++2a -g -O3 -Wall -Wextra -fdiagnostics-color=always
 LDFLAGS			:=
 CC				 = $(COMPILER) $(CFLAGS) $(CHECKFLAGS)
 CHECKFLAGS		:=
@@ -16,7 +16,7 @@ endif
 all: Makefile
 
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
-MODULES			:= core commands messages lib test
+MODULES			:= core commands events messages lib test
 COMMONSRC		:=
 CFLAGS			+= -Iinclude
 LIBS			:=

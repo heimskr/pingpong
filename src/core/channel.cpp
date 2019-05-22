@@ -1,3 +1,4 @@
+#include <ostream>
 #include <stdexcept>
 #include <string>
 
@@ -12,7 +13,13 @@ namespace pingpong {
 
 	channel::channel(std::string name_): channel(name_, nullptr) {}
 
-	bool channel::is_user() {
-		return name.at(0) != '#';
+	bool channel::is_user() const {
+		return name[0] != '#';
+	}
+
+	std::ostream & operator<<(std::ostream &os, const channel &chan) {
+		os << std::string(chan);
+		return os;
 	}
 }
+

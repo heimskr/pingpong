@@ -4,6 +4,8 @@
 #include "lib/ansi.h"
 
 #define YIKES(x) \
-	(ansi::ansistream() << ansi::red << "!! " << ansi::reset << x << std::endl)
+	(ansi::ansistream() << ansi::red << "!! " << ansi::reset << x << "\n")
+
+#define HELLO std::cout << "\e[2m[" << __FILE__ << ":" << __LINE__ << "]\e[0m\n"
 
 #endif

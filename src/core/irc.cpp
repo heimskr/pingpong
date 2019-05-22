@@ -4,6 +4,10 @@
 #include "messages/all.h"
 
 namespace pingpong {
+	void irc::init() {
+		init_messages();
+	}
+
 	void irc::init_messages() {
 		message::add_ctor<quit_message>();
 		message::add_ctor<join_message>();
