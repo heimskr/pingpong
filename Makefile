@@ -4,7 +4,6 @@ LDFLAGS			:=
 CC				 = $(COMPILER) $(CFLAGS) $(CHECKFLAGS)
 CHECKFLAGS		:=
 MKBUILD			:= mkdir -p build
-
 CHECK			:= asan
 
 ifeq ($(CHECK), asan)
@@ -15,7 +14,6 @@ endif
 
 .PHONY: all test clean depend mkbuild
 all: Makefile
-	@echo $(COMMONOBJ)
 
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
 MODULES			:= core commands messages lib test
@@ -53,6 +51,7 @@ DEPFLAGS = -f $(DEPFILE) -s $(DEPTOKEN)
 depend:
 	@ echo $(DEPTOKEN) > $(DEPFILE)
 	makedepend $(DEPFLAGS) -- $(CC) -- $(SRC) 2>/dev/null
-	@ rm $(DEPFILE).bak
+	@ sed -i .sed 's/^src\//build\//' $(DEPFILE)
+	@ rm $(DEPFILE).bak $(DEPFILE).sed
 
 sinclude $(DEPFILE)
