@@ -1,1 +1,1 @@
-COMMONSRC += src/events/events.cpp
+COMMONSRC += src/events/event.cpp

@@ -106,6 +106,32 @@ namespace pingpong {
 	}
 
 	updateModule(allDir = "messages", name);
+} else if (type.match(/^(ev?|ev(en)?t)(-\w+)?$/i)) {
+	const base = type.match(/-/)? type.replace(/^.+-/, "") : null;
+	const parent = base? `${base}_event` : "event";
+
+	headername = `events/${name}.h`;
+	const cls = `${name}_event`;
+
+	headertext = `
+#ifndef EVENTS_${name.toUpperCase()}_H_
+#define EVENTS_${name.toUpperCase()}_H_
+
+#include <string>
+
+#include "event.h"
+${base? `#include "${base}.h"\n` : ""}
+namespace pingpong {
+	class ${cls}: public ${parent} {
+		public:
+			using ${parent}::${parent};
+	};
+}
+
+#endif
+`.substr(1);
+
+	allDir = "events";
 } else if (type.match(/^l(ib(rary)?)?$/i)) {
 	sourcename = `lib/${name}.cpp`;
 	headername = `lib/${name}.h`;
@@ -156,11 +182,16 @@ namespace pingpong {
 	updateModule(allDir = "core", name);
 } else {
 	console.error("Unknown type:", type);
-	yikes(`Expected "command" | "core" | "lib" | "message"`);
+	yikes(`Expected "command" | "core" | "lib" | "message" | "event"`);
 }
 
-fs.writeFileSync(`${sourcebase}/${sourcename}`, sourcetext);
-fs.writeFileSync(`${headerbase}/${headername}`, headertext);
+if (sourcetext) {
+	fs.writeFileSync(`${sourcebase}/${sourcename}`, sourcetext);
+}
+
+if (headertext) {
+	fs.writeFileSync(`${headerbase}/${headername}`, headertext);
+}
 
 if (allDir) {
 	const allText = fs.readFileSync(`${headerbase}/${allDir}/all.h`, "utf8");

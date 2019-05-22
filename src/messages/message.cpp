@@ -3,7 +3,9 @@
 #include <string>
 
 #include "messages/all.h"
-#include "core/debug.h"
+#include "core/server.h"
+#include "events/event.h"
+#include "events/message.h"
 
 namespace pingpong {
 	std::map<std::string, message_ctor> message::ctors;

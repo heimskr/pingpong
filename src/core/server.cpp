@@ -13,6 +13,8 @@
 #include "commands/user.h"
 #include "commands/nick.h"
 #include "commands/pong.h"
+#include "events/event.h"
+#include "events/message.h"
 
 namespace pingpong {
 	server::operator std::string() const {
@@ -59,11 +61,9 @@ namespace pingpong {
 		if (message::is<ping_message>(msg)) {
 			auto &ping = dynamic_cast<ping_message &>(*msg);
 			pong_command(this, ping.text).send();
-			return;
 		}
 
-		if (!message::is<numeric_message>(msg))
-			parent.dbgout() << std::string(*msg) << "\n";
+		events::dispatch<message_event>(this, msg);
 	}
 
 	void server::quote(const std::string &str) {

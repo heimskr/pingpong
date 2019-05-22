@@ -2,7 +2,7 @@
 #define EVENTS_JOIN_H_
 
 #include "core/channel.h"
-#include "events/events.h"
+#include "events/event.h"
 
 namespace pingpong {
 	class join_event: public user_event {

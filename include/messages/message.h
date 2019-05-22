@@ -5,12 +5,13 @@
 #include <memory>
 #include <string>
 
-#include "line.h"
+#include "core/server.h"
+#include "messages/line.h"
 
 namespace pingpong {
 	class message;
-	using message_ptr = std::unique_ptr<pingpong::message>;
-	using message_ctor = std::function<std::unique_ptr<message>(pingpong::line)>;
+	using message_ptr = std::shared_ptr<pingpong::message>;
+	using message_ctor = std::function<message_ptr(pingpong::line)>;
 
 	class message {
 		protected:
@@ -29,14 +30,14 @@ namespace pingpong {
 
 			template <class T>
 			static void add_ctor() {
-				message::ctors.insert({T::get_name(), [](pingpong::line line_) -> std::unique_ptr<T> {
-					return std::unique_ptr<T>(new T(line_));
+				message::ctors.insert({T::get_name(), [](pingpong::line line_) -> std::shared_ptr<T> {
+					return std::shared_ptr<T>(new T(line_));
 				}});
 			}
 
 			template <class T>
 			static bool is(message_ptr &ptr) {
-				return bool(dynamic_cast<T *>(&*ptr));
+				return bool(dynamic_cast<T *>(ptr.get()));
 			}
 	};
 }
