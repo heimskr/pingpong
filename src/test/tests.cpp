@@ -55,7 +55,7 @@ namespace tests {
 }
 
 int main(int, char **) {
-	irc instance;
+	std::shared_ptr<irc> instance = std::make_shared<irc>();
 	server serv(instance, "localhost");
 
 	// tests::test_network(serv);

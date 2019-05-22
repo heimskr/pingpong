@@ -1,4 +1,6 @@
+#include <functional>
 #include <map>
+#include <memory>
 #include <string>
 
 #include "events/event.h"

@@ -36,7 +36,7 @@ namespace pingpong {
 	}
 
 	void server::work() {
-		user_command(this, parent.username, parent.realname).send();
+		user_command(this, parent->username, parent->realname).send();
 
 		std::string line;
 		while (std::getline(*stream, line)) {
@@ -54,7 +54,7 @@ namespace pingpong {
 		try {
 			msg = pingpong::message::parse(line);
 		} catch (std::invalid_argument &err) {
-			parent << ansi::red << " >> " << ansi::reset << line.original << "\n";
+			*parent << ansi::red << " >> " << ansi::reset << line.original << "\n";
 			return;
 		}
 
@@ -72,8 +72,8 @@ namespace pingpong {
 			throw std::runtime_error("Stream not ready");
 		}
 
-		auto l = parent.lock_console();
-		parent.dbgin() << str << "\n";
+		auto l = parent->lock_console();
+		parent->dbgin() << str << "\n";
 
 		*stream << str << "\r\n";
 		stream->flush();
@@ -93,7 +93,7 @@ namespace pingpong {
 	}
 
 	void server::cleanup(std::unique_lock<std::mutex> &) {
-		parent << "["_d << std::string(*this) << ": cleanup]"_d << "\n";
+		*parent << "["_d << std::string(*this) << ": cleanup]"_d << "\n";
 		status = unconnected;
 
 		if (server_thread)

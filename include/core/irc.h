@@ -1,6 +1,7 @@
 #ifndef CORE_IRC_H_
 #define CORE_IRC_H_
 
+#include <memory>
 #include <mutex>
 #include <vector>
 
@@ -29,6 +30,8 @@ namespace pingpong {
 			ansi::ansistream & operator<<(const T &value) { return dbg << value; }
 			ansi::ansistream & dbgout() { return dbg << " >> "_d; }
 			ansi::ansistream & dbgin()  { return dbg << "<<  "_d; }
+
+			static std::shared_ptr<irc> shared() { return std::make_shared<irc>(); }
 	};
 }
 

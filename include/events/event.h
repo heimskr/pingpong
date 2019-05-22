@@ -28,6 +28,8 @@ namespace pingpong {
 
 	using listener_fn = std::function<void(event *)>;
 
+	class fake_event: public event { public: fake_event(): event() {} };
+
 	class events {
 		private:
 			static std::multimap<std::string, listener_fn> listeners;
@@ -37,9 +39,9 @@ namespace pingpong {
 			static void listen(std::function<void(T *)> fn) {
 				listeners.insert(std::pair<std::string, listener_fn>(
 					std::string(typeid(T).name()),
-					listener_fn([&](event *ev) {
+					[=](event *ev) {
 						fn(dynamic_cast<T *>(ev));
-					})
+					}
 				));
 			}
 

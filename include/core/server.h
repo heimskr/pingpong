@@ -23,7 +23,7 @@ namespace pingpong {
 		private:
 			StreamSocket socket;
 			std::shared_ptr<SocketStream> stream;
-			irc &parent;
+			std::shared_ptr<irc> parent;
 			std::string nick;
 
 			void cleanup(std::unique_lock<std::mutex> &);
@@ -50,8 +50,10 @@ namespace pingpong {
 			std::mutex status_mux;
 			stage status = unconnected;
 
-			server(irc &parent, std::string hostname, int port): parent(parent), hostname(hostname), port(port) {}
-			server(irc &parent, std::string hostname): server(parent, hostname, irc::default_port) {}
+			server(const std::shared_ptr<irc> &parent, std::string hostname, int port):
+				parent(parent), hostname(hostname), port(port) {}
+			server(const std::shared_ptr<irc> &parent, std::string hostname):
+				server(parent, hostname, irc::default_port) {}
 
 			void quote(const std::string &);
 			void set_nick(const std::string &);
