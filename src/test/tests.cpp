@@ -39,7 +39,6 @@ int main(int, char **) {
 	irc instance;
 	server serv(instance, "localhost");
 
-	tests::test_mask();
 	tests::test_network(serv);
 	return 0;
 }

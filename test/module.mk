@@ -1,1 +1,0 @@
-SRC += test/tests.cpp
