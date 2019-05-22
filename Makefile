@@ -52,7 +52,7 @@ DEPFLAGS = -f $(DEPFILE) -s $(DEPTOKEN)
 
 depend:
 	@ echo $(DEPTOKEN) > $(DEPFILE)
-	makedepend $(DEPFLAGS) -- $(CC) -- $(SRC)
+	makedepend $(DEPFLAGS) -- $(CC) -- $(SRC) 2>/dev/null
 	@ rm $(DEPFILE).bak
 
 sinclude $(DEPFILE)
