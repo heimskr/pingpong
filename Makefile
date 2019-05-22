@@ -18,16 +18,16 @@ all: Makefile
 	@echo $(COMMONOBJ)
 
 # Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
-MODULES			:= src/core src/commands src/messages src/lib src/test
+MODULES			:= core commands messages lib test
 COMMONSRC		:=
-CFLAGS			+= -Iinclude -I../include -I.
+CFLAGS			+= -Iinclude
 LIBS			:=
 SRC				:=
-include $(patsubst %,%/module.mk,$(MODULES))
+include $(patsubst %,src/%/module.mk,$(MODULES))
 SRC				+= $(COMMONSRC)
 COMMONOBJ		:= $(patsubst src/%.cpp,build/%.o, $(filter %.cpp,$(COMMONSRC)))
 OBJ				:= $(patsubst src/%.cpp,build/%.o, $(filter %.cpp,$(SRC)))
-sinclude $(patsubst %,%/targets.mk,$(MODULES))
+sinclude $(patsubst %,src/%/targets.mk,$(MODULES))
 
 include conan.mk
 
@@ -41,7 +41,6 @@ grind: build/tests
 
 clean:
 	rm -rf build
-	rm -rf *.o **/*.o
 
 build/%.o: src/%.cpp
 	@ mkdir -p "$(shell dirname "$@")"
