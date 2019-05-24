@@ -9,10 +9,12 @@ namespace pingpong {
 	class server;
 	class irc;
 	class user;
+	class message;
 
 	using server_ptr = pingpong::server *;
 	using channel_ptr = std::shared_ptr<channel>;
 	using user_ptr = std::shared_ptr<user>;
+	using message_ptr = std::shared_ptr<message>;
 
 	class user_exists_error: public std::exception {
 		public:

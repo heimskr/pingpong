@@ -64,6 +64,7 @@ namespace pingpong {
 
 		events::dispatch<message_event>(this, msg);
 		(*msg)(this);
+		last_message = msg;
 	}
 
 	server & server::operator+=(const std::string &chan) {

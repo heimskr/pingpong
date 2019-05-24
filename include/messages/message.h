@@ -5,12 +5,12 @@
 #include <memory>
 #include <string>
 
+#include "core/defs.h"
 #include "core/server.h"
 #include "messages/line.h"
 
 namespace pingpong {
 	class message;
-	using message_ptr = std::shared_ptr<pingpong::message>;
 	using message_ctor = std::function<message_ptr(pingpong::line)>;
 
 	class message {

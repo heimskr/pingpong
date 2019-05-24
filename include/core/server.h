@@ -11,14 +11,17 @@
 #include "Poco/Net/StreamSocket.h"
 #include "Poco/Net/SocketStream.h"
 
-#include "defs.h"
-#include "channel.h"
-#include "irc.h"
+#include "core/defs.h"
+#include "core/channel.h"
+#include "core/irc.h"
 #include "messages/line.h"
+#include "messages/message.h"
 
 using Poco::Net::SocketAddress, Poco::Net::StreamSocket, Poco::Net::SocketStream;
 
 namespace pingpong {
+	class message;
+
 	class server {
 		private:
 			StreamSocket socket;
@@ -45,6 +48,7 @@ namespace pingpong {
 			uint16_t port;
 			std::map<std::string, channel_ptr> channels {};
 			channel_ptr active_channel = nullptr;
+			message_ptr last_message;
 
 			std::shared_ptr<std::thread> server_thread;
 			std::mutex status_mux;

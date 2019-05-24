@@ -3,6 +3,8 @@
 
 #include <stdexcept>
 #include <string>
+#include <unordered_set>
+#include <utility>
 
 #include "message.h"
 #include "sourced.h"
@@ -13,16 +15,14 @@ namespace pingpong {
 			static constexpr auto get_name = []() -> std::string { return "_NUMERIC"; };
 			static bool is_numeric(const char *);
 			static bool is_numeric(const char *, long &);
+			static std::pair<std::string, std::unordered_set<std::string>> parse353(const std::string &);
 
 			long number;
 
-			numeric_message(pingpong::line line_): message(line_) {
-				if (!is_numeric(line_.command.c_str(), number))
-					throw std::invalid_argument("Expected a numeric command");
-			}
+			numeric_message(pingpong::line);
 
 			operator std::string() const override;
-
+			void operator()(server_ptr) const override;
 	};
 }
 

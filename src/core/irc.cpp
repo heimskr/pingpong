@@ -2,9 +2,12 @@
 
 #include "core/irc.h"
 #include "core/server.h"
+#include "lib/ansi.h"
 #include "messages/all.h"
 
 namespace pingpong {
+	ansi::ansistream irc::dbg;
+
 	void irc::init() {
 		init_messages();
 	}

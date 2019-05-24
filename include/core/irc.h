@@ -12,12 +12,12 @@ namespace pingpong {
 	class irc {
 		private:
 			std::mutex console_mux = std::mutex();
-			ansi::ansistream dbg;
 
 		public:
 			static constexpr int default_port = 6667;
 
 			std::string username, realname;
+			static ansi::ansistream dbg;
 
 			std::set<server_ptr> servers;
 			server_ptr active_server = nullptr;
