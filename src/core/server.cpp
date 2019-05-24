@@ -77,14 +77,15 @@ namespace pingpong {
 		return *this;
 	}
 
-	void server::quote(const std::string &str) {
+	void server::quote(const std::string &str, bool silent) {
 		if (stream == nullptr) {
 			YIKES("server::quote" >> ansi::bold << ": Stream not ready");
 			throw std::runtime_error("Stream not ready");
 		}
-
 		auto l = parent->lock_console();
-		parent->dbgin() << str << "\n";
+
+		if (!silent)
+			parent->dbgin() << str << "\n";
 
 		*stream << str << "\r\n";
 		stream->flush();

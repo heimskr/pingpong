@@ -57,7 +57,7 @@ namespace pingpong {
 			// Adds a channel.
 			server & operator+=(const std::string &);
 
-			void quote(const std::string &);
+			void quote(const std::string &, bool = false);
 			void set_nick(const std::string &);
 			const std::string & get_nick() const;
 
