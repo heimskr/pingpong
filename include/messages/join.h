@@ -3,8 +3,9 @@
 
 #include <string>
 
-#include "message.h"
-#include "basic.h"
+#include "core/server.h"
+#include "messages/message.h"
+#include "messages/basic.h"
 
 namespace pingpong {
 	class join_message: public basic_message {
@@ -13,6 +14,7 @@ namespace pingpong {
 			static constexpr auto get_name = []() -> std::string { return "JOIN"; };
 
 			operator std::string() const override;
+			void operator()(server_ptr) const override;
 	};
 }
 

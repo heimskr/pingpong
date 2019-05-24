@@ -25,19 +25,20 @@ namespace pingpong {
 			virtual ~message() = 0;
 
 			virtual operator std::string() const;
+			virtual void operator()(server_ptr) const {}
 
 			static message_ptr parse(const pingpong::line &);
 
-			template <class T>
+			template <typename T>
 			static void add_ctor() {
 				message::ctors.insert({T::get_name(), [](pingpong::line line_) -> std::shared_ptr<T> {
 					return std::shared_ptr<T>(new T(line_));
 				}});
 			}
 
-			template <class T>
-			static bool is(message_ptr &ptr) {
-				return bool(dynamic_cast<T *>(ptr.get()));
+			template <typename T>
+			bool is() {
+				return bool(dynamic_cast<T *>(this));
 			}
 	};
 }

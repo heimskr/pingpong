@@ -17,6 +17,22 @@ namespace pingpong {
 		return name[0] != '#';
 	}
 
+	bool channel::operator==(const std::string &str) const {
+		return name == str;
+	}
+
+	bool channel::operator==(const channel &chan) const {
+		return name == chan.name && serv == chan.serv;
+	}
+
+	bool channel::operator<(const channel &chan) const {
+		return name < chan.name;
+	}
+
+	bool channel::has_server() const {
+		return serv != nullptr;
+	}
+
 	std::ostream & operator<<(std::ostream &os, const channel &chan) {
 		os << std::string(chan);
 		return os;

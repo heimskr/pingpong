@@ -5,7 +5,7 @@
 #include <mutex>
 #include <string>
 #include <thread>
-#include <vector>
+#include <set>
 
 #include "Poco/Net/SocketAddress.h"
 #include "Poco/Net/StreamSocket.h"
@@ -31,7 +31,6 @@ namespace pingpong {
 			void work();
 			void handle_line(const pingpong::line &);
 
-
 		public:
 			enum stage {
 				// Connecting to an IRC server occurs in multiple stages.
@@ -44,7 +43,7 @@ namespace pingpong {
 
 			std::string hostname;
 			uint16_t port;
-			std::vector<channel> channels {};
+			std::set<channel> channels {};
 
 			std::shared_ptr<std::thread> server_thread;
 			std::mutex status_mux;
@@ -54,6 +53,9 @@ namespace pingpong {
 				parent(parent), hostname(hostname), port(port) {}
 			server(const std::shared_ptr<irc> &parent, std::string hostname):
 				server(parent, hostname, irc::default_port) {}
+
+			// Adds a channel.
+			server & operator+=(const std::string &);
 
 			void quote(const std::string &);
 			void set_nick(const std::string &);

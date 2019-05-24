@@ -58,12 +58,23 @@ namespace pingpong {
 			return;
 		}
 
-		if (message::is<ping_message>(msg)) {
-			auto &ping = dynamic_cast<ping_message &>(*msg);
-			pong_command(this, ping.text).send();
+		if (ping_message *ping = dynamic_cast<ping_message *>(msg.get())) {
+			pong_command(this, ping->text).send();
 		}
 
 		events::dispatch<message_event>(this, msg);
+		(*msg)(this);
+	}
+
+	server & server::operator+=(const std::string &chan) {
+		if (!channels.count(chan)) {
+			std::cout << "Adding channel " << chan << "\n";
+			channels.insert({chan, this});
+		} else {
+			std::cout << "Channel already exists: " << chan << "\n";
+		}
+
+		return *this;
 	}
 
 	void server::quote(const std::string &str) {
