@@ -126,6 +126,11 @@ namespace pingpong {
 		return channels.count(chanstr) != 0;
 	}
 
+	channel_ptr server::get_channel(const std::string &chanstr) const {
+		if (!has_channel(chanstr)) return nullptr;
+		return channels.at(chanstr);
+	}
+
 	void server::rename_user(const std::string &old_nick, const std::string &new_nick) {
 		if (old_nick == nick)
 			nick = new_nick;

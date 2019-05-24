@@ -5,7 +5,7 @@
 namespace pingpong {
 	part_command::operator std::string() const {
 		if (reason.empty())
-			return "PART " + chan.name;
-		return "PART " + chan.name + " :" + reason;
+			return "PART " + chan->name;
+		return "PART " + chan->name + " :" + reason;
 	}
 }

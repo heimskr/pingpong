@@ -15,6 +15,8 @@ namespace pingpong {
 
 	class channel {
 		public:
+			enum visibility {pub='=', priv='*', secret='@'};
+
 			std::string name;
 			server_ptr serv;
 			std::map<std::string, user_ptr> users;

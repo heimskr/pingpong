@@ -3,15 +3,16 @@
 
 #include <stdexcept>
 #include <string>
-#include <unordered_set>
-#include <utility>
 
-#include "message.h"
-#include "sourced.h"
+#include "core/channel.h"
+#include "messages/message.h"
+#include "messages/sourced.h"
 
 namespace pingpong {
 	class numeric_message: public message {
 		public:
+			using names = std::tuple<std::string, channel::visibility, std::vector<std::pair<user::hat, std::string>>>;
+
 			long number;
 
 			numeric_message(pingpong::line);
@@ -22,7 +23,7 @@ namespace pingpong {
 			static constexpr auto get_name = []() -> std::string { return "_NUMERIC"; };
 			static bool is_numeric(const char *);
 			static bool is_numeric(const char *, long &);
-			static std::pair<std::string, std::unordered_set<std::string>> parse353(const std::string &);
+			static names parse353(const std::string &);
 	};
 }
 
