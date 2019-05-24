@@ -7,12 +7,12 @@
 
 namespace pingpong {
 	class user {
-		enum hat {none=' ', voiced='+', halfop='%', op='@', admin='&', owner='~'};
-
 		private:
 			std::string name;
 
 		public:
+			enum hat {none=' ', voiced='+', halfop='%', op='@', admin='&', owner='~'};
+
 			server_ptr serv;
 
 			user(const std::string &name_, server_ptr serv_): name(name_), serv(serv_) {}
