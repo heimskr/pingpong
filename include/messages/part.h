@@ -16,6 +16,7 @@ namespace pingpong {
 			part_message(pingpong::line line_);
 
 			operator std::string() const override;
+			void operator()(server_ptr) const override;
 	};
 }
 

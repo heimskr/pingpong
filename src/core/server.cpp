@@ -67,11 +67,22 @@ namespace pingpong {
 	}
 
 	server & server::operator+=(const std::string &chan) {
-		if (!channels.count(chan)) {
-			std::cout << "Adding channel " << chan << "\n";
+		if (!has_channel(chan)) {
+			parent->dbgout() << "Adding channel " << chan << "\n";
 			channels.insert({chan, this});
 		} else {
-			std::cout << "Channel already exists: " << chan << "\n";
+			YIKES("Channel already exists: " << chan << "\n");
+		}
+
+		return *this;
+	}
+
+	server & server::operator-=(const std::string &chan) {
+		if (has_channel(chan)) {
+			parent->dbgout() << "Removing channel " << chan << "\n";
+			channels.erase(chan);
+		} else {
+			YIKES("Channel not in list: " << chan << "\n");
 		}
 
 		return *this;
@@ -97,6 +108,19 @@ namespace pingpong {
 
 	const std::string & server::get_nick() const {
 		return nick;
+	}
+
+	bool server::has_channel(const channel &chan) const {
+		return channels.count(chan) != 0;
+	}
+
+	bool server::has_channel(const std::string &chanstr) const {
+		for (const channel &chan: channels) {
+			if (chan.name == chanstr)
+				return true;
+		}
+
+		return false;
 	}
 
 	void server::cleanup() {

@@ -24,4 +24,8 @@ namespace pingpong {
 
 		return start + " [" + reason + "]";
 	}
+
+	void part_message::operator()(server_ptr serv) const {
+		*serv -= chan;
+	}
 }
