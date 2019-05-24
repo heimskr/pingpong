@@ -44,15 +44,15 @@ namespace pingpong {
 			std::string hostname;
 			uint16_t port;
 			std::map<std::string, channel_ptr> channels {};
-			channel_ptr active_channel;
+			channel_ptr active_channel = nullptr;
 
 			std::shared_ptr<std::thread> server_thread;
 			std::mutex status_mux;
 			stage status = unconnected;
 
-			server(const std::shared_ptr<irc> &parent, std::string hostname, int port):
+			server(std::shared_ptr<irc> parent, std::string hostname, int port):
 				parent(parent), hostname(hostname), port(port) {}
-			server(const std::shared_ptr<irc> &parent, std::string hostname):
+			server(std::shared_ptr<irc> parent, std::string hostname):
 				server(parent, hostname, irc::default_port) {}
 
 			// Adds a channel.

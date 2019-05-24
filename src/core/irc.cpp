@@ -1,6 +1,7 @@
 #include <string>
 
 #include "core/irc.h"
+#include "core/server.h"
 #include "messages/all.h"
 
 namespace pingpong {
@@ -16,5 +17,15 @@ namespace pingpong {
 		message::add_ctor<part_message>();
 		message::add_ctor<ping_message>();
 		message::add_ctor<privmsg_message>();
+	}
+
+	irc & irc::operator+=(const server_ptr &ptr) {
+		if (servers.count(ptr) == 0) {
+			servers.insert(ptr);
+			if (!active_server)
+				active_server = ptr;
+		}
+
+		return *this;
 	}
 }
