@@ -131,9 +131,18 @@ namespace pingpong {
 		return channels.at(chanstr);
 	}
 
+	user_ptr server::get_user(const std::string &name, bool create) {
+		if (users.count(name) == 0)
+			return create? users[name] = std::make_shared<user>(name, this) : nullptr;
+		return users[name];
+	}
+
 	void server::rename_user(const std::string &old_nick, const std::string &new_nick) {
 		if (old_nick == nick)
 			nick = new_nick;
+
+		if (user_ptr uptr = get_user(old_nick, false))
+			uptr->name = new_nick;
 
 		for (auto [chanstr, chan]: channels)
 			chan->rename_user(old_nick, new_nick);

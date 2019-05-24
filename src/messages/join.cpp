@@ -10,6 +10,7 @@ namespace pingpong {
 	}
 
 	void join_message::operator()(server_ptr serv) const {
-		*serv += content;
+		if (!serv->has_channel(content))
+			*serv += content;
 	}
 }

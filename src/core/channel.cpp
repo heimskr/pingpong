@@ -8,14 +8,11 @@
 
 namespace pingpong {
 	channel::channel(std::string name_, server_ptr serv_): name(name_), serv(serv_) {
-		if (name_ == "") throw std::invalid_argument("Invalid channel name");
+		if (name_.empty() || name_[0] != '#')
+			throw std::invalid_argument("Invalid channel name");
 	}
 
 	channel::channel(std::string name_): channel(name_, nullptr) {}
-
-	bool channel::is_user() const {
-		return name[0] != '#';
-	}
 
 	bool channel::has_server() const {
 		return serv != nullptr;
@@ -33,6 +30,10 @@ namespace pingpong {
 		std::swap(users[old_nick], iter->second);
 		users.erase(iter);
 		return true;
+	}
+
+	user_ptr channel::operator[](const std::string &str) {
+		return users.count(str) > 0? users.at(str) : nullptr;
 	}
 
 	bool channel::operator==(const std::string &str) const {

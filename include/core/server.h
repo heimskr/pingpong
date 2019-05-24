@@ -47,6 +47,7 @@ namespace pingpong {
 			std::string hostname;
 			uint16_t port;
 			std::map<std::string, channel_ptr> channels {};
+			std::map<std::string, user_ptr> users{};
 			channel_ptr active_channel = nullptr;
 			message_ptr last_message;
 
@@ -70,6 +71,7 @@ namespace pingpong {
 			const std::string & get_nick() const;
 			bool has_channel(const std::string &) const;
 			channel_ptr get_channel(const std::string &) const;
+			user_ptr get_user(const std::string &, bool = true);
 			void rename_user(const std::string &, const std::string &);
 
 			operator std::string() const;

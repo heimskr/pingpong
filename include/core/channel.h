@@ -20,15 +20,16 @@ namespace pingpong {
 			std::string name;
 			server_ptr serv;
 			std::map<std::string, user_ptr> users;
+			std::map<user_ptr, hat> hats;
 
 			channel(std::string, server_ptr);
 			channel(std::string);
 
-			bool is_user() const;
 			bool has_server() const;
 			bool rename_user(const std::string &, const std::string &);
 
 			operator std::string() const { return name; }
+			user_ptr operator[](const std::string &);
 			bool operator==(const std::string &) const;
 			bool operator==(const channel &) const;
 			bool operator<(const channel &) const;

@@ -10,7 +10,12 @@ namespace pingpong {
 		return os;
 	}
 
-	user::hat user::get_hat(char ch) {
+	user & user::operator+=(channel_ptr chan) {
+		channels.insert(chan);
+		return *this;
+	}
+
+	hat user::get_hat(char ch) {
 		if (ch == hat::voiced) return hat::voiced;
 		if (ch == hat::halfop) return hat::halfop;
 		if (ch == hat::op)     return hat::op;
@@ -19,7 +24,7 @@ namespace pingpong {
 		return hat::none;
 	}
 
-	user::hat user::get_hat(const std::string &str) {
+	hat user::get_hat(const std::string &str) {
 		return str.empty() || str[0] == ' '? hat::none : get_hat(str[0]);
 	}
 }

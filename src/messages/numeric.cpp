@@ -17,15 +17,40 @@ namespace pingpong {
 		return "[" + std::to_string(number) + "] " + line.original;
 	}
 
-	void numeric_message::operator()(server_ptr) const {
+	void numeric_message::operator()(server_ptr serv) const {
 		if (number == 353) {
 			irc::dbg << ansi::yellow;
 			irc::dbg << "[" << line.parameters << "]\n" << ansi::reset;
 
+			names parsed;
 			try {
-				numeric_message::parse353(line.parameters);
+				parsed = numeric_message::parse353(line.parameters);
 			} catch (const std::invalid_argument &err) {
 				YIKES("Couldn't parse 353 message");
+			}
+
+			std::string chanstr;
+			channel::visibility vis;
+			std::vector<std::pair<hat, std::string>> userlist;
+			std::tie(chanstr, vis, userlist) = parsed;
+
+
+			channel_ptr chan = serv->get_channel(chanstr);
+
+			if ((!serv->last_message || serv->last_message->get_name() != "_NUMERIC"
+			    || dynamic_cast<numeric_message *>(serv->last_message.get())->number != 353) && chan) {
+				// If the previous message was something other than a NAMES reply, reset the current user list.
+				chan->users.clear();
+			} else if (!chan) {
+				WARN("Channel not in list: " << chanstr);
+			}
+
+			if (chan) {
+				for (auto [hat, name]: userlist) {
+					user_ptr uptr = serv->get_user(name, true);
+					*uptr += chan;
+					chan->users.insert({name, uptr});
+				}
 			}
 
 			irc::dbg << "\n" << ansi::reset;
@@ -62,7 +87,7 @@ namespace pingpong {
 			throw std::invalid_argument("Invalid 353 message");
 		}
 
-		std::vector<std::pair<user::hat, std::string>> userlist;
+		std::vector<std::pair<hat, std::string>> userlist;
 		while (userstr.length() > 0) {
 			size_t space = userstr.find(' ');
 			std::string to_add;
@@ -75,8 +100,8 @@ namespace pingpong {
 				userstr.erase(0, space);
 			}
 
-			user::hat userhat = user::get_hat(to_add);
-			if (userhat != user::hat::none)
+			hat userhat = user::get_hat(to_add);
+			if (userhat != hat::none)
 				to_add.erase(0, 1);
 			userlist.push_back({userhat, to_add});
 		}

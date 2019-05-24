@@ -11,7 +11,7 @@
 namespace pingpong {
 	class numeric_message: public message {
 		public:
-			using names = std::tuple<std::string, channel::visibility, std::vector<std::pair<user::hat, std::string>>>;
+			using names = std::tuple<std::string, channel::visibility, std::vector<std::pair<hat, std::string>>>;
 
 			long number;
 

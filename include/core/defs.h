@@ -11,6 +11,8 @@ namespace pingpong {
 	class user;
 	class message;
 
+	enum hat {none=' ', voiced='+', halfop='%', op='@', admin='&', owner='~'};
+
 	using server_ptr = pingpong::server *;
 	using channel_ptr = std::shared_ptr<channel>;
 	using user_ptr = std::shared_ptr<user>;

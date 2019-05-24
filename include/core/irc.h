@@ -33,8 +33,8 @@ namespace pingpong {
 		
 			template <typename T>
 			ansi::ansistream & operator<<(const T &value) { return dbg << value; }
-			ansi::ansistream & dbgout() { return dbg << " >> "_d; }
-			ansi::ansistream & dbgin()  { return dbg << "<<  "_d; }
+			ansi::ansistream & dbgout()  { return dbg << " >> "_d; }
+			ansi::ansistream & dbgin()   { return dbg << "<<  "_d; }
 
 			static std::shared_ptr<irc> shared() { return std::make_shared<irc>(); }
 	};
