@@ -10,5 +10,6 @@
 #include "pong.h"
 #include "quit.h"
 #include "msg.h"
+#include "part.h"
 
 #endif
