@@ -69,7 +69,10 @@ namespace pingpong {
 	server & server::operator+=(const std::string &chan) {
 		if (!has_channel(chan)) {
 			parent->dbgout() << "Adding channel " << chan << "\n";
-			channels.insert({chan, this});
+			channel_ptr cptr = std::make_shared<channel>(chan, this);
+			if (channels.empty())
+				active_channel = cptr;
+			channels[chan] = cptr;
 		} else {
 			YIKES("Channel already exists: " << chan << "\n");
 		}
@@ -81,6 +84,12 @@ namespace pingpong {
 		if (has_channel(chan)) {
 			parent->dbgout() << "Removing channel " << chan << "\n";
 			channels.erase(chan);
+			if (active_channel && active_channel->name == chan) {
+				if (channels.empty())
+					active_channel = nullptr;
+				else
+					active_channel = channels.begin()->second;
+			}
 		} else {
 			YIKES("Channel not in list: " << chan << "\n");
 		}
@@ -89,12 +98,12 @@ namespace pingpong {
 	}
 
 	void server::quote(const std::string &str, bool silent) {
-		if (stream == nullptr) {
+		if (!stream) {
 			YIKES("server::quote" >> ansi::bold << ": Stream not ready");
 			throw std::runtime_error("Stream not ready");
 		}
-		auto l = parent->lock_console();
 
+		auto l = parent->lock_console();
 		if (!silent)
 			parent->dbgin() << str << "\n";
 
@@ -110,17 +119,8 @@ namespace pingpong {
 		return nick;
 	}
 
-	bool server::has_channel(const channel &chan) const {
-		return channels.count(chan) != 0;
-	}
-
 	bool server::has_channel(const std::string &chanstr) const {
-		for (const channel &chan: channels) {
-			if (chan.name == chanstr)
-				return true;
-		}
-
-		return false;
+		return channels.count(chanstr) != 0;
 	}
 
 	void server::cleanup() {

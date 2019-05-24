@@ -1,6 +1,7 @@
 #ifndef CORE_CHANNEL_H_
 #define CORE_CHANNEL_H_
 
+#include <memory>
 #include <ostream>
 #include <string>
 

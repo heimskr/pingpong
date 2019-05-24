@@ -5,7 +5,7 @@
 #include <mutex>
 #include <string>
 #include <thread>
-#include <set>
+#include <map>
 
 #include "Poco/Net/SocketAddress.h"
 #include "Poco/Net/StreamSocket.h"
@@ -43,7 +43,8 @@ namespace pingpong {
 
 			std::string hostname;
 			uint16_t port;
-			std::set<channel> channels {};
+			std::map<std::string, channel_ptr> channels {};
+			channel_ptr active_channel;
 
 			std::shared_ptr<std::thread> server_thread;
 			std::mutex status_mux;
@@ -63,7 +64,6 @@ namespace pingpong {
 			void quote(const std::string &, bool = false);
 			void set_nick(const std::string &);
 			const std::string & get_nick() const;
-			bool has_channel(const channel &) const;
 			bool has_channel(const std::string &) const;
 
 			operator std::string() const;

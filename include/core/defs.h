@@ -9,6 +9,7 @@ namespace pingpong {
 	class irc;
 
 	using server_ptr = pingpong::server *;
+	using channel_ptr = std::shared_ptr<channel>;
 }
 
 #endif
