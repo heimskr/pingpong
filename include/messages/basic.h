@@ -9,9 +9,9 @@
 namespace pingpong {
 	class basic_message: public message {
 		public:
-			std::string text;
+			std::string content;
 
-			basic_message(pingpong::line line_): message(line_), text(line_.parameters.substr(1)) {}
+			basic_message(pingpong::line line_): message(line_), content(line_.parameters.substr(1)) {}
 	};
 }
 

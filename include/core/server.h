@@ -65,6 +65,7 @@ namespace pingpong {
 			void set_nick(const std::string &);
 			const std::string & get_nick() const;
 			bool has_channel(const std::string &) const;
+			void rename_user(const std::string &, const std::string &);
 
 			operator std::string() const;
 			bool start();

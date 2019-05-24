@@ -4,6 +4,6 @@
 
 namespace pingpong {
 	ping_message::operator std::string() const {
-		return "PING " + text;
+		return "PING " + content;
 	}
 }

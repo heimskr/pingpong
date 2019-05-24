@@ -17,6 +17,24 @@ namespace pingpong {
 		return name[0] != '#';
 	}
 
+	bool channel::has_server() const {
+		return serv != nullptr;
+	}
+
+	bool channel::rename_user(const std::string &old_nick, const std::string &new_nick) {
+		if (users.count(new_nick) > 0)
+			throw user_exists_error(serv, old_nick, new_nick);
+
+		auto iter = users.find(old_nick);
+		if (iter == users.end())
+			return false;
+
+		iter->second->rename(new_nick);
+		std::swap(users[old_nick], iter->second);
+		users.erase(iter);
+		return true;
+	}
+
 	bool channel::operator==(const std::string &str) const {
 		return name == str;
 	}
@@ -27,10 +45,6 @@ namespace pingpong {
 
 	bool channel::operator<(const channel &chan) const {
 		return name < chan.name;
-	}
-
-	bool channel::has_server() const {
-		return serv != nullptr;
 	}
 
 	std::ostream & operator<<(std::ostream &os, const channel &chan) {

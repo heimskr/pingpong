@@ -59,7 +59,7 @@ namespace pingpong {
 		}
 
 		if (ping_message *ping = dynamic_cast<ping_message *>(msg.get())) {
-			pong_command(this, ping->text).send();
+			pong_command(this, ping->content).send();
 		}
 
 		events::dispatch<message_event>(this, msg);
@@ -112,6 +112,8 @@ namespace pingpong {
 	}
 
 	void server::set_nick(const std::string &new_nick) {
+		if (nick.empty())
+			nick = new_nick;
 		nick_command(this, new_nick).send();
 	}
 
@@ -121,6 +123,14 @@ namespace pingpong {
 
 	bool server::has_channel(const std::string &chanstr) const {
 		return channels.count(chanstr) != 0;
+	}
+
+	void server::rename_user(const std::string &old_nick, const std::string &new_nick) {
+		if (old_nick == nick)
+			nick = new_nick;
+
+		for (auto [chanstr, chan]: channels)
+			chan->rename_user(old_nick, new_nick);
 	}
 
 	void server::cleanup() {

@@ -11,5 +11,6 @@
 #include "privmsg.h"
 #include "part.h"
 #include "quit.h"
+#include "nick.h"
 
 #endif
