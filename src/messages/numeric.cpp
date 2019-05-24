@@ -38,21 +38,42 @@ namespace pingpong {
 		if (equals == std::string::npos || colon == std::string::npos || colon < equals)
 			throw std::invalid_argument("Invalid 353 message");
 
+		std::string chanstr, userstr;
 		try {
-			std::string chanstr = params.substr(equals + 3, colon - equals - 4);
-			std::string userlist = params.substr(colon + 1);
-			while (userlist.back() == ' ')
-				userlist.pop_back();
-
-			irc::dbg << ansi::magenta << "[" << params.substr(0, equals) << "]";
-			irc::dbg << ansi::cyan << " [" << chanstr << "]";
-			irc::dbg << ansi::yeen << " [" << userlist << "]";
-
-			return {"", {}};
+			chanstr = params.substr(equals + 3, colon - equals - 4);
+			userstr = params.substr(colon + 1);
+			while (userstr.back() == ' ')
+				userstr.pop_back();
 		} catch (const std::out_of_range &err) {
 			YIKES("Encountered out_of_range while parsing 353 message");
 			throw std::invalid_argument("Invalid 353 message");
 		}
+
+		irc::dbg << ansi::magenta << "[" << params.substr(0, equals) << "]";
+		irc::dbg << ansi::cyan << " [" << chanstr << "]";
+		irc::dbg << ansi::yeen << " [" << userstr << "]";
+
+		std::unordered_set<std::string> userlist;
+		irc::dbg << ansi::sky;
+		while (userstr.length() > 0) {
+			size_t space = userstr.find(' ');
+			if (space == std::string::npos) {
+				irc::dbg << ansi::red << "\n[" << userstr << "]";
+				userlist.insert(userstr);
+				break;
+			} else {
+				irc::dbg << "\n[" << userstr << "] / [" << userstr.substr(0, space) << "]";
+				userlist.insert(userstr.substr(0, space));
+				for (; userstr[space] == ' '; ++space);
+				userstr.erase(0, space);
+			}
+		}
+
+		irc::dbg << ansi::orange << "\nUsers:";
+		for (auto &username: userlist) irc::dbg << " " << username;
+
+
+		return {chanstr, {}};
 	}
 	
 	bool numeric_message::is_numeric(const char *str) {

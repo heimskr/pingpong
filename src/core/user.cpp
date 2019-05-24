@@ -9,4 +9,17 @@ namespace pingpong {
 		os << std::string(who);
 		return os;
 	}
+
+	user::hat user::get_hat(char ch) {
+		if (ch == hat::voiced) return hat::voiced;
+		if (ch == hat::halfop) return hat::halfop;
+		if (ch == hat::op)     return hat::op;
+		if (ch == hat::admin)  return hat::admin;
+		if (ch == hat::owner)  return hat::owner;
+		return hat::none;
+	}
+
+	user::hat user::get_hat(const std::string &str) {
+		return str.empty() || str[0] == ' '? hat::none : get_hat(str[0]);
+	}
 }

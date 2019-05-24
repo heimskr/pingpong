@@ -7,6 +7,8 @@
 
 namespace pingpong {
 	class user {
+		enum hat {none=' ', voiced='+', halfop='%', op='@', admin='&', owner='~'};
+
 		private:
 			std::string name;
 
@@ -19,6 +21,8 @@ namespace pingpong {
 			operator std::string() const { return name; }
 
 			friend std::ostream & operator<<(std::ostream &os, const user &who);
+			static hat get_hat(char);
+			static hat get_hat(const std::string &);
 	};
 }
 
