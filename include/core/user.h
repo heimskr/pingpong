@@ -22,6 +22,7 @@ namespace pingpong {
 			user & operator+=(channel_ptr);
 
 			friend std::ostream & operator<<(std::ostream &os, const user &who);
+
 			static hat get_hat(char);
 			static hat get_hat(const std::string &);
 	};

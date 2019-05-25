@@ -34,7 +34,6 @@ namespace pingpong {
 			std::vector<std::pair<hat, std::string>> userlist;
 			std::tie(chanstr, vis, userlist) = parsed;
 
-
 			channel_ptr chan = serv->get_channel(chanstr);
 
 			if ((!serv->last_message || serv->last_message->get_name() != "_NUMERIC"
@@ -46,10 +45,11 @@ namespace pingpong {
 			}
 
 			if (chan) {
-				for (auto [hat, name]: userlist) {
+				for (auto [uhat, name]: userlist) {
 					user_ptr uptr = serv->get_user(name, true);
 					*uptr += chan;
 					chan->users.insert({name, uptr});
+					chan->hats.insert({uptr, uhat});
 				}
 			}
 

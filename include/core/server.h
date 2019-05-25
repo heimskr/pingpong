@@ -73,6 +73,7 @@ namespace pingpong {
 			channel_ptr get_channel(const std::string &) const;
 			user_ptr get_user(const std::string &, bool = true);
 			void rename_user(const std::string &, const std::string &);
+			std::shared_ptr<irc> get_parent() { return parent; }
 
 			operator std::string() const;
 			bool start();

@@ -6,21 +6,22 @@
 #include "core/irc.h"
 #include "core/channel.h"
 #include "core/server.h"
+#include "core/user.h"
+#include "lib/ansi.h"
 
 namespace pingpong {
 	void debug::print_all(const irc &obj) {
 		for (server_ptr serv: obj.servers) {
-			std::cout << "S ";
 			if (!serv) {
-				std::cout << "null\n";
+				ansi::out << ansi::red << "null" << ansi::endl;
 				continue;
 			}
 
-			std::cout << serv->hostname << "\n";
+			ansi::out << ansi::underline << ansi::yeen << serv->hostname << ansi::endl;
 			for (auto [chanstr, chan]: serv->channels) {
-				std::cout << "  C " << chanstr << "\n";
-				for (auto [username, user]: chan->users)
-					std::cout << "    U " << username << "\n";
+				ansi::out << "  " << ansi::magenta << ansi::bold << chanstr << ansi::endl;
+				for (auto [username, uptr]: chan->users)
+					ansi::out << "    " << static_cast<char>(chan->hats[uptr]) << ansi::cyan << username << ansi::endl;
 			}
 		}
 	}

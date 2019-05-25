@@ -10,7 +10,8 @@
 #define WARN(x) \
 	(ansi::ansistream() << ansi::yellow << " ?? " << ansi::reset << x << "\n")
 
-#define HELLO std::cout << "\e[2m[" << __FILE__ << ":" << __LINE__ << "]\e[0m\n"
+#define HELLO std::cout << "\e[2m[" << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << "]\e[0m\n"
+#define HELLOP std::cout << "\e[2m[" << __FILE__ << ":" << __LINE__ << " " << __PRETTY_FUNCTION__ << "]\e[0m\n"
 
 namespace pingpong {
 	class debug {

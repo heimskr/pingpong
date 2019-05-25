@@ -26,9 +26,12 @@ namespace pingpong {
 		if (iter == users.end())
 			return false;
 
-		iter->second->rename(new_nick);
-		std::swap(users[old_nick], iter->second);
-		users.erase(iter);
+		user_ptr uptr = iter->second;
+		uptr->rename(new_nick);
+		auto nh = users.extract(iter);
+		nh.key() = new_nick;
+		users.insert(std::move(nh));
+
 		return true;
 	}
 
