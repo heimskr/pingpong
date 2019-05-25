@@ -51,7 +51,7 @@ namespace pingpong {
 			channel_ptr active_channel = nullptr;
 			message_ptr last_message;
 
-			std::shared_ptr<std::thread> server_thread;
+			std::shared_ptr<std::thread> worker;
 			std::mutex status_mux;
 			stage status = unconnected;
 

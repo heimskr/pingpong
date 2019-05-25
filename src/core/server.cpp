@@ -30,7 +30,7 @@ namespace pingpong {
 		SocketAddress addr(hostname, port);
 		socket = StreamSocket(addr);
 		stream = std::make_shared<SocketStream>(socket);
-		server_thread = std::make_shared<std::thread>(&server::work, this);
+		worker = std::make_shared<std::thread>(&server::work, this);
 
 		return true;
 	}
@@ -157,7 +157,7 @@ namespace pingpong {
 		*parent << "["_d << std::string(*this) << ": cleanup]"_d << "\n";
 		status = unconnected;
 
-		if (server_thread)
-			server_thread->join();
+		if (worker)
+			worker->join();
 	}
 }

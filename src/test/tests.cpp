@@ -28,7 +28,7 @@ namespace tests {
 	void test_network(server &serv) {
 		serv.start();
 		serv.set_nick("pingpong");
-		serv.server_thread->join();
+		serv.worker->join();
 	}
 
 	void test_mask() {
