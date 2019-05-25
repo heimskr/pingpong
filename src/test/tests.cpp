@@ -13,8 +13,8 @@ namespace tests {
 	void test_channel() {
 		channel chan("#programming");
 		channel user("NickServ");
-		cout << "chan.is_user(): " << chan.is_user() << "\n";
-		cout << "user.is_user(): " << user.is_user() << "\n";
+//		cout << "chan.is_user(): " << chan.is_user() << "\n";
+//		cout << "user.is_user(): " << user.is_user() << "\n";
 	}
 
 	void test_commands(server_ptr serv) {
