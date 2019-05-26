@@ -54,7 +54,7 @@ namespace pingpong {
 		try {
 			msg = pingpong::message::parse(line);
 		} catch (std::invalid_argument &err) {
-			*parent << ansi::red << " >> " << ansi::reset << line.original << "\n";
+			*parent << ansi::red << " >> " << ansi::reset << line.original << "\r\n";
 			return;
 		}
 
@@ -69,13 +69,13 @@ namespace pingpong {
 
 	server & server::operator+=(const std::string &chan) {
 		if (!has_channel(chan)) {
-			parent->dbgout() << "Adding channel " << chan << "\n";
+			parent->dbgout() << "Adding channel " << chan << "\r\n";
 			channel_ptr cptr = std::make_shared<channel>(chan, this);
 			if (channels.empty())
 				active_channel = cptr;
 			channels[chan] = cptr;
 		} else {
-			YIKES("Channel already exists: " << chan << "\n");
+			YIKES("Channel already exists: " << chan << "\r\n");
 		}
 
 		return *this;
@@ -106,7 +106,7 @@ namespace pingpong {
 
 		auto l = parent->lock_console();
 		if (!silent)
-			parent->dbgin() << str << "\n";
+			parent->dbgin() << str << "\r\n";
 
 		*stream << str << "\r\n";
 		stream->flush();
@@ -154,7 +154,7 @@ namespace pingpong {
 	}
 
 	void server::cleanup(std::unique_lock<std::mutex> &) {
-		*parent << "["_d << std::string(*this) << ": cleanup]"_d << "\n";
+		*parent << "["_d << std::string(*this) << ": cleanup]"_d << "\r\n";
 		status = unconnected;
 
 		if (worker)
