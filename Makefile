@@ -4,7 +4,8 @@ LDFLAGS			:=
 CC				 = $(COMPILER) $(CFLAGS) $(CHECKFLAGS)
 CHECKFLAGS		:=
 MKBUILD			:= mkdir -p build
-CHECK			:= asan
+CHECK			:= none
+SDKFLAGS		:= --sysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
 
 ifeq ($(CHECK), asan)
 	CHECKFLAGS += -fsanitize=address -fno-common
@@ -42,7 +43,7 @@ clean:
 
 build/%.o: src/%.cpp
 	@ mkdir -p "$(shell dirname "$@")"
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CC) $(SDKFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 DEPFILE  = .dep
 DEPTOKEN = "\# MAKEDEPENDS"
