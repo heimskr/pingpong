@@ -54,7 +54,7 @@ namespace pingpong {
 		try {
 			msg = pingpong::message::parse(line);
 		} catch (std::invalid_argument &err) {
-			*parent << ansi::red << " >> " << ansi::reset << line.original << "\r\n";
+			*parent << ansi::wrap(" >> ", ansi::color::red) << line.original << "\r\n";
 			return;
 		}
 
@@ -100,7 +100,7 @@ namespace pingpong {
 
 	void server::quote(const std::string &str, bool silent) {
 		if (!stream) {
-			YIKES("server::quote" >> ansi::bold << ": Stream not ready");
+			YIKES("server::quote" >> ansi::style::bold << ": Stream not ready");
 			throw std::runtime_error("Stream not ready");
 		}
 
