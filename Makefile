@@ -1,11 +1,11 @@
 COMPILER		 = clang++
-CFLAGS			:= -std=c++2a -stdlib=libc++ -g -O3 -Wall -Wextra -fdiagnostics-color=always
+CFLAGS			:= -std=c++2a -g -ggdb -O0 -Wall -Wextra
 LDFLAGS			:=
-CC				 = $(COMPILER) $(CFLAGS) $(CHECKFLAGS)
+CC				 = $(COMPILER) $(strip $(CFLAGS)) $(CHECKFLAGS)
 CHECKFLAGS		:=
 MKBUILD			:= mkdir -p build
-CHECK			:= none
-SDKFLAGS		:= --sysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+CHECK			:= asan
+SDKFLAGS		:= --sysroot /etc/sdk
 
 ifeq ($(CHECK), asan)
 	CHECKFLAGS += -fsanitize=address -fno-common
@@ -43,7 +43,7 @@ clean:
 
 build/%.o: src/%.cpp
 	@ mkdir -p "$(shell dirname "$@")"
-	$(CC) $(SDKFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CC) $(strip $(SDKFLAGS) $(CPPFLAGS) $(CXXFLAGS)) -c $< -o $@
 
 DEPFILE  = .dep
 DEPTOKEN = "\# MAKEDEPENDS"
