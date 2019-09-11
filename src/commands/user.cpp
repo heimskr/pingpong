@@ -8,8 +8,8 @@ namespace pingpong {
 		return "USER " + username + " 0 * :" + realname;
 	}
 
-	void user_command::send(bool silent) {
-		command::send(silent);
+	void user_command::send() {
+		command::send();
 		if (serv->status == server::stage::setuser)
 			serv->status = server::stage::setnick;
 	}

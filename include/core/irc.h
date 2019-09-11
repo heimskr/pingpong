@@ -15,6 +15,7 @@ namespace pingpong {
 
 		public:
 			static constexpr int default_port = 6667;
+			static constexpr const char *default_nick = "pingpong";
 
 			std::string username, realname;
 			static ansi::ansistream dbg;

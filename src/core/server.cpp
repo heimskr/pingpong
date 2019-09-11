@@ -13,8 +13,10 @@
 #include "commands/user.h"
 #include "commands/nick.h"
 #include "commands/pong.h"
+#include "events/bad_line.h"
 #include "events/event.h"
 #include "events/message.h"
+#include "events/raw.h"
 
 namespace pingpong {
 	server::operator std::string() const {
@@ -45,7 +47,11 @@ namespace pingpong {
 				line.pop_back();
 			}
 
-			handle_line(pingpong::line(line));
+			try {
+				handle_line(pingpong::line(line));
+			} catch (std::invalid_argument &) {
+				// Already dealt with by dispatching a bad_line_event.
+			}
 		}
 	}
 
@@ -54,9 +60,11 @@ namespace pingpong {
 		try {
 			msg = pingpong::message::parse(line);
 		} catch (std::invalid_argument &err) {
-			*parent << ansi::wrap(" >> ", ansi::color::red) << line.original << "\r\n";
-			return;
+			events::dispatch<bad_line_event>(this, line.original);
+			throw;
 		}
+
+		events::dispatch<raw_in_event>(this, line.original);
 
 		if (ping_message *ping = dynamic_cast<ping_message *>(msg.get())) {
 			pong_command(this, ping->content).send();
@@ -98,15 +106,14 @@ namespace pingpong {
 		return *this;
 	}
 
-	void server::quote(const std::string &str, bool silent) {
+	void server::quote(const std::string &str) {
 		if (!stream) {
 			YIKES("server::quote" >> ansi::style::bold << ": Stream not ready");
 			throw std::runtime_error("Stream not ready");
 		}
 
 		auto l = parent->lock_console();
-		if (!silent)
-			parent->dbgin() << str << "\r\n";
+		events::dispatch<raw_out_event>(this, str);
 
 		*stream << str << "\r\n";
 		stream->flush();
@@ -116,10 +123,6 @@ namespace pingpong {
 		if (nick.empty())
 			nick = new_nick;
 		nick_command(this, new_nick).send();
-	}
-
-	const std::string & server::get_nick() const {
-		return nick;
 	}
 
 	bool server::has_channel(const std::string &chanstr) const {

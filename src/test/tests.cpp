@@ -55,10 +55,11 @@ namespace tests {
 }
 
 int main(int, char **) {
-	std::shared_ptr<irc> instance = std::make_shared<irc>();
+	irc *instance = new irc();
 	server serv(instance, "localhost");
 
 	// tests::test_network(serv);
 	tests::test_events(serv);
+	delete instance;
 	return 0;
 }

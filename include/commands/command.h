@@ -14,7 +14,6 @@ namespace pingpong {
 			command(server_ptr serv_): serv(serv_) {}
 			virtual operator std::string() const = 0;
 
-			virtual void send(bool silent);
 			virtual void send();
 
 			virtual bool is_silent() const { return false; }

@@ -26,7 +26,7 @@ namespace pingpong {
 		private:
 			StreamSocket socket;
 			std::shared_ptr<SocketStream> stream;
-			std::shared_ptr<irc> parent;
+			irc *parent;
 			std::string nick;
 
 			void cleanup(std::unique_lock<std::mutex> &);
@@ -55,27 +55,45 @@ namespace pingpong {
 			std::mutex status_mux;
 			stage status = unconnected;
 
-			server(std::shared_ptr<irc> parent, std::string hostname, int port):
-				parent(parent), hostname(hostname), port(port) {}
-			server(std::shared_ptr<irc> parent, std::string hostname):
-				server(parent, hostname, irc::default_port) {}
+			server(irc *parent_, std::string hostname_, int port_):
+				parent(parent_), hostname(hostname_), port(port_) {}
+			server(irc *parent_, std::string hostname_):
+				server(parent_, hostname_, irc::default_port) {}
 
-			// Adds a channel.
+			/** Adds a channel. */
 			server & operator+=(const std::string &);
 
-			// Removes a channel.
+			/** Removes a channel. */
 			server & operator-=(const std::string &);
 
-			void quote(const std::string &, bool = false);
-			void set_nick(const std::string &);
-			const std::string & get_nick() const;
-			bool has_channel(const std::string &) const;
-			channel_ptr get_channel(const std::string &) const;
-			user_ptr get_user(const std::string &, bool = true);
-			void rename_user(const std::string &, const std::string &);
-			std::shared_ptr<irc> get_parent() { return parent; }
+			/** Sends a raw string to the server. */
+			void quote(const std::string &);
 
+			/** Requests a nickname change. */
+			void set_nick(const std::string &);
+
+			/** Returns the current nickname. */
+			const std::string & get_nick() const { return nick; }
+
+			/** Returns whether the user is in a given channel. */
+			bool has_channel(const std::string &) const;
+
+			/** Retrieves a channel pointer by name. */
+			channel_ptr get_channel(const std::string &) const;
+
+			/** Retrieves a user pointer by name. */
+			user_ptr get_user(const std::string &, bool create = true);
+
+			/** Renames a user. */
+			void rename_user(const std::string &old_nick, const std::string &new_nick);
+
+			/** Returns the parent irc instance. */
+			irc * get_parent() { return parent; }
+
+			/** Returns a string representing the hostname and port (if not the default port) of the connection. */
 			operator std::string() const;
+
+			/** Connects to the server. */
 			bool start();
 	};
 }
