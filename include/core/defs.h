@@ -13,9 +13,9 @@ namespace pingpong {
 
 	enum hat {none=' ', voiced='+', halfop='%', op='@', admin='&', owner='~'};
 
-	using server_ptr  = pingpong::server *;
+	using  server_ptr = pingpong::server *;
 	using channel_ptr = std::shared_ptr<channel>;
-	using user_ptr    = std::shared_ptr<user>;
+	using    user_ptr = std::shared_ptr<user>;
 	using message_ptr = std::shared_ptr<message>;
 
 	class user_exists_error: public std::exception {
