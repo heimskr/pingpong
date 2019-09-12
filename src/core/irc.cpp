@@ -21,6 +21,7 @@ namespace pingpong {
 		message::add_ctor<part_message>();
 		message::add_ctor<ping_message>();
 		message::add_ctor<privmsg_message>();
+		message::add_ctor<error_message>();
 	}
 
 	irc & irc::operator+=(const server_ptr &ptr) {

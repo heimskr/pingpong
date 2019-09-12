@@ -4,6 +4,7 @@
 #include "line.h"
 #include "message.h"
 
+#include "error.h"
 #include "join.h"
 #include "nick.h"
 #include "notice.h"

@@ -66,8 +66,6 @@ namespace pingpong {
 		message *raw = msg.get();
 		const std::string name = raw->name();
 
-		DBG("name(" << name << ")");
-
 		if (name == "PING") {
 			ping_message *ping = dynamic_cast<ping_message *>(raw);
 			pong_command(this, ping->content).send();

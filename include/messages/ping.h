@@ -1,10 +1,7 @@
-#ifndef MESSAGES_PING_H_
-#define MESSAGES_PING_H_
-
-#include <string>
+#ifndef PINGPONG_MESSAGES_PING_H_
+#define PINGPONG_MESSAGES_PING_H_
 
 #include "basic.h"
-#include "message.h"
 
 namespace pingpong {
 	class ping_message: public basic_message {
