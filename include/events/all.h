@@ -2,6 +2,7 @@
 #define EVENTS_ALL_H_
 
 #include "bad_line.h"
+#include "command.h"
 #include "event.h"
 #include "join.h"
 #include "message.h"

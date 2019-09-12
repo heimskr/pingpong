@@ -1,7 +1,6 @@
 #ifndef EVENTS_BAD_LINE_H_
 #define EVENTS_BAD_LINE_H_
 
-#include <memory>
 #include <string>
 
 #include "core/server.h"
