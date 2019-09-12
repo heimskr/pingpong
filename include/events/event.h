@@ -18,10 +18,11 @@ namespace pingpong {
 
 		protected:
 			bool is_empty = false;
-			event(bool empty): is_empty(empty) {}
+			event(bool empty, const std::string &content_): is_empty(empty), content(content_) {}
 
 		public:
 			long stamp = util::timestamp();
+			std::string content;
 
 			virtual ~event() = default;
 			event(): is_empty(true) {}
@@ -71,29 +72,32 @@ namespace pingpong {
 		public:
 			server_ptr serv;
 
-			server_event(server_ptr serv_): event(false), serv(serv_) {}
+			server_event(server_ptr serv_, const std::string &content_ = ""): event(false, content_), serv(serv_) {}
 	};
 
-	// For events local to one channel on one server.
+	// For events local to one channel on one server, such as topic changes.
 	class channel_event: public server_event {
 		public:
 			channel_ptr chan;
 
-			channel_event(channel_ptr chan_, server_ptr serv_): server_event(serv_), chan(chan_) {
+			channel_event(channel_ptr chan_, server_ptr serv_, const std::string &content_):
+			server_event(serv_, content_), chan(chan_) {
 				chan->serv = serv;
 			}
 
-			channel_event(channel_ptr chan_): server_event(chan_->serv), chan(chan_) {
+			channel_event(channel_ptr chan_, const std::string &content_):
+			server_event(chan_->serv, content_), chan(chan_) {
 				if (!chan_->has_server())
 					throw std::invalid_argument("Channel is not associated with a server");
 			}
 	};
 
-	// For events local to one user in one channel on one server.
+	// For events local to one user in one channel on one server, such as joins and privmsgs.
+	// This can also be used for things like quits, which are specific to a user and server but not to a channel, by
+	// leaving the channel pointer null.
 	class user_event: public channel_event {
 		public:
 			user_ptr who;
-			std::string content;
 
 			user_event(user_ptr, channel_ptr, const std::string & = "");
 	};
