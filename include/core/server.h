@@ -45,7 +45,7 @@ namespace pingpong {
 			};
 
 			std::string hostname;
-			uint16_t port;
+			int port;
 			std::map<std::string, channel_ptr> channels {};
 			std::map<std::string, user_ptr> users {};
 			channel_ptr active_channel = nullptr;

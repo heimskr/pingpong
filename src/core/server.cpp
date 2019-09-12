@@ -13,10 +13,7 @@
 #include "commands/user.h"
 #include "commands/nick.h"
 #include "commands/pong.h"
-#include "events/bad_line.h"
-#include "events/event.h"
-#include "events/message.h"
-#include "events/raw.h"
+#include "events/all.h"
 
 namespace pingpong {
 	server::operator std::string() const {
@@ -66,28 +63,22 @@ namespace pingpong {
 
 		events::dispatch<raw_in_event>(this, line.original);
 
-		if (ping_message *ping = dynamic_cast<ping_message *>(msg.get())) {
+		message *raw = msg.get();
+
+		if (ping_message *ping = dynamic_cast<ping_message *>(raw)) {
 			pong_command(this, ping->content).send();
+		} else if (join_message *join = dynamic_cast<join_message *>(raw)) {
+			events::dispatch<join_event>(*join->who, *join->chan);
+		} else {
+			events::dispatch<message_event>(this, msg);
 		}
 
-		events::dispatch<message_event>(this, msg);
 		(*msg)(this);
 		last_message = msg;
 	}
 
 	server & server::operator+=(const std::string &chan) {
 		if (!has_channel(chan)) {
-
-			
-			DBG("Parent is " << (parent == nullptr? "null" : "not null"));
-
-
-
-			DBG("Adding channel " << chan);
-			
-			
-			
-			
 			channel_ptr cptr = std::make_shared<channel>(chan, this);
 			if (channels.empty())
 				active_channel = cptr;
