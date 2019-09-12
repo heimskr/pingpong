@@ -10,9 +10,8 @@ namespace pingpong {
 
 	user_event::user_event(user_ptr who_, channel_ptr chan_, const std::string &content_):
 	channel_event(chan_, content_), who(who_) {
-		assert(chan_);
 		assert(who_);
-		if (who_->serv != chan_->serv)
+		if (chan_ && who_->serv != chan_->serv)
 			throw std::invalid_argument("User and channel are associated with different servers");
 	}
 }
