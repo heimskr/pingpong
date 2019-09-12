@@ -1,10 +1,10 @@
-#ifndef CORE_USER_H_
-#define CORE_USER_H_
+#ifndef PINGPONG_CORE_USER_H_
+#define PINGPONG_CORE_USER_H_
 
 #include <string>
 #include <unordered_set>
 
-#include "core/defs.h"
+#include "core/ppdefs.h"
 #include "core/server.h"
 
 namespace pingpong {
@@ -25,6 +25,8 @@ namespace pingpong {
 
 			static hat get_hat(char);
 			static hat get_hat(const std::string &);
+
+			bool operator==(const user &) const;
 	};
 }
 

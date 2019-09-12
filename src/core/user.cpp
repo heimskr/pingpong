@@ -27,4 +27,8 @@ namespace pingpong {
 	hat user::get_hat(const std::string &str) {
 		return str.empty() || str[0] == ' '? hat::none : get_hat(str[0]);
 	}
+
+	bool user::operator==(const user &other) const {
+		return serv == other.serv && name == other.name;
+	}
 }
