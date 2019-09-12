@@ -1,11 +1,11 @@
-#ifndef CORE_IRC_H_
-#define CORE_IRC_H_
+#ifndef PINGPONG_CORE_IRC_H_
+#define PINGPONG_CORE_IRC_H_
 
 #include <memory>
 #include <mutex>
 #include <set>
 
-#include "core/defs.h"
+#include "core/ppdefs.h"
 #include "lib/ansi.h"
 
 namespace pingpong {

@@ -1,5 +1,5 @@
-#ifndef CORE_DEFS_H_
-#define CORE_DEFS_H_
+#ifndef PINGPONG_CORE_PPDEFS_H_
+#define PINGPONG_CORE_PPDEFS_H_
 
 #include <exception>
 #include <memory>

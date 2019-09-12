@@ -1,5 +1,5 @@
-#ifndef CORE_SERVER_H_
-#define CORE_SERVER_H_
+#ifndef PINGPONG_CORE_SERVER_H_
+#define PINGPONG_CORE_SERVER_H_
 
 #include <memory>
 #include <mutex>
@@ -11,7 +11,7 @@
 #include "Poco/Net/StreamSocket.h"
 #include "Poco/Net/SocketStream.h"
 
-#include "core/defs.h"
+#include "core/ppdefs.h"
 #include "core/channel.h"
 #include "core/irc.h"
 #include "messages/line.h"

@@ -7,6 +7,7 @@
 #include "join.h"
 #include "message.h"
 #include "privmsg.h"
+#include "quit.h"
 #include "raw.h"
 
 #endif

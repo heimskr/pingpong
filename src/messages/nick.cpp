@@ -1,6 +1,3 @@
-#include <string>
-
-#include "core/defs.h"
 #include "messages/nick.h"
 
 namespace pingpong {

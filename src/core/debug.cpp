@@ -2,7 +2,7 @@
 #include <string>
 
 #include "core/debug.h"
-#include "core/defs.h"
+#include "core/ppdefs.h"
 #include "core/irc.h"
 #include "core/channel.h"
 #include "core/server.h"
