@@ -8,7 +8,9 @@ namespace pingpong {
 	class nick_message: public basic_message {
 		public:
 			using basic_message::basic_message;
+
 			static constexpr auto get_name = []() -> std::string { return "NICK"; };
+			virtual std::string name() const override { return get_name(); }
 
 			operator std::string() const override;
 			void operator()(server_ptr) const override;

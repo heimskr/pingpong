@@ -18,6 +18,7 @@ namespace pingpong {
 
 		public:
 			message(const pingpong::line &line_): line(line_) {}
+
 			static constexpr auto get_name = []() -> std::string { return "???"; };
 
 			static std::map<std::string, message_ctor> ctors;
@@ -27,6 +28,8 @@ namespace pingpong {
 			virtual void operator()(server_ptr) const {}
 
 			static message_ptr parse(const pingpong::line &);
+			virtual std::string name() const = 0;
+
 
 			template <typename T>
 			static void add_ctor() {

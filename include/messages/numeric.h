@@ -10,17 +10,19 @@
 
 namespace pingpong {
 	class numeric_message: public message {
-		public:
-			using names = std::tuple<std::string, channel::visibility, std::vector<std::pair<hat, std::string>>>;
+		using names = std::tuple<std::string, channel::visibility, std::vector<std::pair<hat, std::string>>>;
 
+		public:
 			long number;
 
 			numeric_message(pingpong::line);
 
+			static constexpr auto get_name = []() -> std::string { return "_NUMERIC"; };
+			virtual std::string name() const override { return get_name(); }
+
 			operator std::string() const override;
 			void operator()(server_ptr) const override;
 
-			static constexpr auto get_name = []() -> std::string { return "_NUMERIC"; };
 			static bool is_numeric(const char *);
 			static bool is_numeric(const char *, long &);
 			static names parse353(const std::string &);

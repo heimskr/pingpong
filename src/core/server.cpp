@@ -64,7 +64,9 @@ namespace pingpong {
 		events::dispatch<raw_in_event>(this, line.original);
 
 		message *raw = msg.get();
-		const std::string name = raw->get_name();
+		const std::string name = raw->name();
+
+		DBG("name(" << name << ")");
 
 		if (name == "PING") {
 			ping_message *ping = dynamic_cast<ping_message *>(raw);

@@ -82,12 +82,13 @@ namespace pingpong {
 
 			channel_event(channel_ptr chan_, server_ptr serv_, const std::string &content_):
 			server_event(serv_, content_), chan(chan_) {
-				chan->serv = serv;
+				if (chan)
+					chan->serv = serv;
 			}
 
 			channel_event(channel_ptr chan_, const std::string &content_):
-			server_event(chan_->serv, content_), chan(chan_) {
-				if (!chan_->has_server())
+			server_event(chan_? chan_->serv : nullptr, content_), chan(chan_) {
+				if (chan && !chan->has_server())
 					throw std::invalid_argument("Channel is not associated with a server");
 			}
 	};

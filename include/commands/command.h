@@ -8,10 +8,8 @@
 
 namespace pingpong {
 	class command {
-		protected:
-			server_ptr serv;
-
 		public:
+			server_ptr serv;
 			long sent_time = util::timestamp();
 
 			command(server_ptr serv_): serv(serv_) {}
