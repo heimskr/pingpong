@@ -80,8 +80,6 @@ namespace pingpong {
 	server & server::operator+=(const std::string &chan) {
 		if (!has_channel(chan)) {
 			channel_ptr cptr = std::make_shared<channel>(chan, this);
-			if (channels.empty())
-				active_channel = cptr;
 			channels[chan] = cptr;
 		} else {
 			YIKES("Channel already exists: " << chan << "\r\n");
@@ -94,12 +92,6 @@ namespace pingpong {
 		if (has_channel(chan)) {
 			DBG("Removing channel " << chan);
 			channels.erase(chan);
-			if (active_channel && active_channel->name == chan) {
-				if (channels.empty())
-					active_channel = nullptr;
-				else
-					active_channel = channels.begin()->second;
-			}
 		} else {
 			YIKES("Channel not in list: " << chan << "\n");
 		}

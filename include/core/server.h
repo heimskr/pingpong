@@ -48,7 +48,6 @@ namespace pingpong {
 			int port;
 			std::map<std::string, channel_ptr> channels {};
 			std::map<std::string, user_ptr> users {};
-			channel_ptr active_channel = nullptr;
 			message_ptr last_message;
 
 			std::shared_ptr<std::thread> worker;
