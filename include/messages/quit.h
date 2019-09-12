@@ -4,14 +4,14 @@
 #include <string>
 
 #include "message.h"
-#include "basic.h"
+#include "sourced.h"
 
 namespace pingpong {
-	class quit_message: public basic_message {
+	class quit_message: public sourced_message {
 		public:
-			using basic_message::basic_message;
-			static constexpr auto get_name = []() -> std::string { return "QUIT"; };
+			using sourced_message::sourced_message;
 
+			static constexpr auto get_name = []() -> std::string { return "QUIT"; };
 			operator std::string() const override;
 	};
 }

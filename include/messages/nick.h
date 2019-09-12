@@ -1,9 +1,6 @@
-#ifndef MESSAGES_NICK_H_
-#define MESSAGES_NICK_H_
+#ifndef PINGPONG_MESSAGES_NICK_H_
+#define PINGPONG_MESSAGES_NICK_H_
 
-#include <string>
-
-#include "core/defs.h"
 #include "messages/message.h"
 #include "messages/basic.h"
 

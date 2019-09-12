@@ -1,11 +1,10 @@
-#ifndef MESSAGES_MESSAGE_H_
-#define MESSAGES_MESSAGE_H_
+#ifndef PINGPONG_MESSAGES_MESSAGE_H_
+#define PINGPONG_MESSAGES_MESSAGE_H_
 
 #include <map>
 #include <memory>
 #include <string>
 
-#include "core/defs.h"
 #include "core/server.h"
 #include "messages/line.h"
 
