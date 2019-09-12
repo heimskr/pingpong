@@ -48,7 +48,7 @@ namespace pingpong {
 			}
 
 			try {
-				handle_line(pingpong::line(line));
+				handle_line(pingpong::line(this, line));
 			} catch (std::invalid_argument &) {
 				// Already dealt with by dispatching a bad_line_event.
 			}
@@ -77,7 +77,17 @@ namespace pingpong {
 
 	server & server::operator+=(const std::string &chan) {
 		if (!has_channel(chan)) {
-			parent->dbgout() << "Adding channel " << chan << "\r\n";
+
+			
+			DBG("Parent is " << (parent == nullptr? "null" : "not null"));
+
+
+
+			DBG("Adding channel " << chan);
+			
+			
+			
+			
 			channel_ptr cptr = std::make_shared<channel>(chan, this);
 			if (channels.empty())
 				active_channel = cptr;
@@ -91,7 +101,7 @@ namespace pingpong {
 
 	server & server::operator-=(const std::string &chan) {
 		if (has_channel(chan)) {
-			parent->dbgout() << "Removing channel " << chan << "\n";
+			DBG("Removing channel " << chan);
 			channels.erase(chan);
 			if (active_channel && active_channel->name == chan) {
 				if (channels.empty())
@@ -129,8 +139,13 @@ namespace pingpong {
 		return channels.count(chanstr) != 0;
 	}
 
-	channel_ptr server::get_channel(const std::string &chanstr) const {
-		if (!has_channel(chanstr)) return nullptr;
+	channel_ptr server::get_channel(const std::string &chanstr, bool create) {
+		if (!has_channel(chanstr)) {
+			if (!create)
+				return nullptr;
+			*this += chanstr;
+		}
+
 		return channels.at(chanstr);
 	}
 

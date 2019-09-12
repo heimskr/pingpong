@@ -4,14 +4,8 @@
 #include "lib/ansi.h"
 #include "core/irc.h"
 
-#define YIKES(x) \
-	(ansi::ansistream() << ansi::color::red << " !! " << ansi::action::reset << x << "\n")
-
-#define WARN(x) \
-	(ansi::ansistream() << ansi::color::yellow << " ?? " << ansi::action::reset << x << "\n")
-
-#define HELLO std::cout << "\e[2m[" << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << "]\e[0m\n"
-#define HELLOP std::cout << "\e[2m[" << __FILE__ << ":" << __LINE__ << " " << __PRETTY_FUNCTION__ << "]\e[0m\n"
+#define YIKES(x) DBG(ansi::color::red    << " !! " << ansi::action::reset << x)
+#define WARN(x)  DBG(ansi::color::yellow << " ?? " << ansi::action::reset << x)
 
 namespace pingpong {
 	class debug {

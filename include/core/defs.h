@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <memory>
+#include <string>
 
 namespace pingpong {
 	class channel;

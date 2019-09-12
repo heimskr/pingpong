@@ -19,8 +19,7 @@ namespace pingpong {
 
 	void numeric_message::operator()(server_ptr serv) const {
 		if (number == 353) {
-			irc::dbg << ansi::color::yellow;
-			irc::dbg << "[" << line.parameters << "]\n" << ansi::action::reset;
+			DBG(ansi::color::yellow << "[" << line.parameters << "]");
 
 			names parsed;
 			try {

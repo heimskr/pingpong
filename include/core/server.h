@@ -47,7 +47,7 @@ namespace pingpong {
 			std::string hostname;
 			uint16_t port;
 			std::map<std::string, channel_ptr> channels {};
-			std::map<std::string, user_ptr> users{};
+			std::map<std::string, user_ptr> users {};
 			channel_ptr active_channel = nullptr;
 			message_ptr last_message;
 
@@ -55,10 +55,8 @@ namespace pingpong {
 			std::mutex status_mux;
 			stage status = unconnected;
 
-			server(irc *parent_, std::string hostname_, int port_):
+			server(irc *parent_, std::string hostname_, int port_ = irc::default_port):
 				parent(parent_), hostname(hostname_), port(port_) {}
-			server(irc *parent_, std::string hostname_):
-				server(parent_, hostname_, irc::default_port) {}
 
 			/** Adds a channel. */
 			server & operator+=(const std::string &);
@@ -79,10 +77,10 @@ namespace pingpong {
 			bool has_channel(const std::string &) const;
 
 			/** Retrieves a channel pointer by name. */
-			channel_ptr get_channel(const std::string &) const;
+			channel_ptr get_channel(const std::string &, bool create = false);
 
 			/** Retrieves a user pointer by name. */
-			user_ptr get_user(const std::string &, bool create = true);
+			user_ptr get_user(const std::string &, bool create = false);
 
 			/** Renames a user. */
 			void rename_user(const std::string &old_nick, const std::string &new_nick);

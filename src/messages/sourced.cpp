@@ -1,24 +1,25 @@
+#include "lib/ansi.h"
 #include "messages/all.h"
 
 namespace pingpong {
-	template <typename S, typename C>
-	std::pair<std::string, std::string> sourced_message<S, C>::parse_source_and_content(const std::string &combined) {
-		std::string source;
-		size_t i, length = combined.size();
-		for (i = 0; combined[i] != ' ' && i < length; ++i)
-			source += combined[i];
+	sourced_message::sourced_message(const pingpong::line &line_): message(line_) {
+		const std::string &raw = line_.parameters;
 
-		for (; combined[i] == ' '; ++i);
+		if (raw.empty())
+			throw std::runtime_error("Line parameters are empty");
 
-		if (i == length || combined[i] != ':')
-			throw std::runtime_error("Couldn't parse sourced_message");
+		if (raw.front() == ':') {
+			// Some messages, like JOINs, look like "JOIN :#chan". (Recall that a line's parameters string doesn't
+			// include the name of the message type—the first character is ':'.) For commands like JOIN where what we're
+			// categorizing here as content is actually the channel name—the corresponding message classes are
+			// responsible for using the content to find the channel before clearing the content.
+			content = raw.substr(1);
+		} else {
+			// Other messages look like "PRIVMSG #chan :Hello".
+			content = raw.substr(raw.find(':') + 1);
+			chan = line_.serv->get_channel(raw.substr(0, raw.find(' ')));
+		}
 
-		return {source, combined.substr(i + 1)};
-	}
-
-	template <>
-	sourced_message<std::string, std::string>::sourced_message(const pingpong::line &line_,
-	const std::string &combined): message(line_) {
-		std::tie(source, content) = parse_source_and_content(combined.empty()? line_.parameters : combined);
+		who = line_.serv->get_user(line_.source.nick, true);
 	}
 }

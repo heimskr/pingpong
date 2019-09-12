@@ -8,9 +8,9 @@
 #include "messages/sourced.h"
 
 namespace pingpong {
-	class join_message: public sourced_message<channel_ptr, user_ptr> {
+	class join_message: public sourced_message {
 		public:
-			using sourced_message::sourced_message;
+			join_message(const pingpong::line &line_);
 
 			static constexpr auto get_name = []() -> std::string { return "JOIN"; };
 

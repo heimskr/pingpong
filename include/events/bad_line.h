@@ -11,9 +11,10 @@
 namespace pingpong {
 	class bad_line_event: public server_event {
 		public:
-			line bad_line;
+			std::string bad_line;
 
-			bad_line_event(const server_ptr &serv_, const line &bad_line_): server_event(serv_), bad_line(bad_line_) {}
+			bad_line_event(const server_ptr &serv_, const std::string &bad_line_):
+				server_event(serv_), bad_line(bad_line_) {}
 	};
 }
 

@@ -12,6 +12,5 @@
 #include "ping.h"
 #include "privmsg.h"
 #include "quit.h"
-#include "triple.h"
 
 #endif
