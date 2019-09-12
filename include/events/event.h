@@ -68,20 +68,20 @@ namespace pingpong {
 		public:
 			server_ptr serv;
 
-			server_event(const server_ptr &serv_): event(false), serv(serv_) {}
+			server_event(server_ptr serv_): event(false), serv(serv_) {}
 	};
 
 	// For events local to one channel on one server.
 	class channel_event: public server_event {
 		public:
-			channel chan;
+			channel_ptr chan;
 
-			channel_event(const channel &chan_, const server_ptr &serv_): server_event(serv_), chan(chan_) {
-				chan.serv = serv;
+			channel_event(channel_ptr chan_, server_ptr serv_): server_event(serv_), chan(chan_) {
+				chan->serv = serv;
 			}
 
-			channel_event(const channel &chan_): server_event(chan_.serv), chan(chan_) {
-				if (!chan_.has_server())
+			channel_event(channel_ptr chan_): server_event(chan_->serv), chan(chan_) {
+				if (!chan_->has_server())
 					throw std::invalid_argument("Channel is not associated with a server");
 			}
 	};
@@ -89,10 +89,12 @@ namespace pingpong {
 	// For events local to one user in one channel on one server.
 	class user_event: public channel_event {
 		public:
-			user who;
+			user_ptr who;
 
-			user_event(const user &who_, const channel &chan_): channel_event(chan_), who(who_) {
-				if (who_.serv != chan_.serv)
+			user_event(user_ptr who_, channel_ptr chan_): channel_event(chan_), who(who_) {
+				assert(chan_);
+				assert(who_);
+				if (who_->serv != chan_->serv)
 					throw std::invalid_argument("User and channel are associated with different servers");
 			}
 	};
