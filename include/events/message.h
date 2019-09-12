@@ -1,5 +1,5 @@
-#ifndef EVENTS_MESSAGE_H_
-#define EVENTS_MESSAGE_H_
+#ifndef PINGPONG_EVENTS_MESSAGE_H_
+#define PINGPONG_EVENTS_MESSAGE_H_
 
 #include <memory>
 #include <string>

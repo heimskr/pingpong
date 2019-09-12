@@ -1,5 +1,5 @@
-#ifndef EVENTS_RAW_IN_H_
-#define EVENTS_RAW_IN_H_
+#ifndef PINGPONG_EVENTS_RAW_H_
+#define PINGPONG_EVENTS_RAW_H_
 
 #include <memory>
 #include <string>

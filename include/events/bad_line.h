@@ -1,5 +1,5 @@
-#ifndef EVENTS_BAD_LINE_H_
-#define EVENTS_BAD_LINE_H_
+#ifndef PINGPONG_EVENTS_BAD_LINE_H_
+#define PINGPONG_EVENTS_BAD_LINE_H_
 
 #include <string>
 

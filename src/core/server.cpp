@@ -69,6 +69,8 @@ namespace pingpong {
 			pong_command(this, ping->content).send();
 		} else if (join_message *join = dynamic_cast<join_message *>(raw)) {
 			events::dispatch<join_event>(join->who, join->chan);
+		} else if (privmsg_message *privmsg = dynamic_cast<privmsg_message *>(raw)) {
+			events::dispatch<privmsg_event>(privmsg->who, privmsg->chan, privmsg->content);
 		} else {
 			events::dispatch<message_event>(this, msg);
 		}

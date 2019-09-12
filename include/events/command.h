@@ -1,5 +1,5 @@
-#ifndef EVENTS_COMMAND_H_
-#define EVENTS_COMMAND_H_
+#ifndef PINGPONG_EVENTS_COMMAND_H_
+#define PINGPONG_EVENTS_COMMAND_H_
 
 #include <string>
 

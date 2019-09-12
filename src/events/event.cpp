@@ -7,4 +7,12 @@
 
 namespace pingpong {
 	std::multimap<std::string, listener_fn> events::listeners;
+
+	user_event::user_event(user_ptr who_, channel_ptr chan_, const std::string &content_):
+	channel_event(chan_), who(who_), content(content_) {
+		assert(chan_);
+		assert(who_);
+		if (who_->serv != chan_->serv)
+			throw std::invalid_argument("User and channel are associated with different servers");
+	}
 }

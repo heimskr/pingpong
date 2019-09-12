@@ -1,5 +1,5 @@
-#ifndef EVENTS_EVENTS_H_
-#define EVENTS_EVENTS_H_
+#ifndef PINGPONG_EVENTS_EVENT_H_
+#define PINGPONG_EVENTS_EVENT_H_
 
 #include <functional>
 #include <map>
@@ -10,6 +10,7 @@
 #include "core/debug.h"
 #include "core/server.h"
 #include "core/user.h"
+#include "core/pputil.h"
 
 namespace pingpong {
 	class event {
@@ -20,6 +21,8 @@ namespace pingpong {
 			event(bool empty): is_empty(empty) {}
 
 		public:
+			long stamp = util::timestamp();
+
 			virtual ~event() = default;
 			event(): is_empty(true) {}
 
@@ -90,13 +93,9 @@ namespace pingpong {
 	class user_event: public channel_event {
 		public:
 			user_ptr who;
+			std::string content;
 
-			user_event(user_ptr who_, channel_ptr chan_): channel_event(chan_), who(who_) {
-				assert(chan_);
-				assert(who_);
-				if (who_->serv != chan_->serv)
-					throw std::invalid_argument("User and channel are associated with different servers");
-			}
+			user_event(user_ptr, channel_ptr, const std::string & = "");
 	};
 }
 
