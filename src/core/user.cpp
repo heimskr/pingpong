@@ -16,11 +16,11 @@ namespace pingpong {
 	}
 
 	hat user::get_hat(char ch) {
-		if (ch == hat::voiced) return hat::voiced;
-		if (ch == hat::halfop) return hat::halfop;
-		if (ch == hat::op)     return hat::op;
-		if (ch == hat::admin)  return hat::admin;
-		if (ch == hat::owner)  return hat::owner;
+		if (ch == static_cast<char>(hat::voiced)) return hat::voiced;
+		if (ch == static_cast<char>(hat::halfop)) return hat::halfop;
+		if (ch == static_cast<char>(hat::op))     return hat::op;
+		if (ch == static_cast<char>(hat::admin))  return hat::admin;
+		if (ch == static_cast<char>(hat::owner))  return hat::owner;
 		return hat::none;
 	}
 

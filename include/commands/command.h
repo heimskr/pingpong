@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "core/pputil.h"
 #include "core/server.h"
 
 namespace pingpong {
@@ -11,6 +12,8 @@ namespace pingpong {
 			server_ptr serv;
 
 		public:
+			long sent_time = util::timestamp();
+
 			command(server_ptr serv_): serv(serv_) {}
 			virtual operator std::string() const = 0;
 

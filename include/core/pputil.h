@@ -9,13 +9,13 @@ namespace pingpong {
 	 */
 	class util {
 		private:
-			std::chrono::system_clock::duration now() const;
+			static std::chrono::system_clock::duration now();
 
 		public:
-			long timestamp() const;
-			long millistamp() const;
-			long microstamp() const;
-			long nanostamp() const;
+			static long timestamp();
+			static long millistamp();
+			static long microstamp();
+			static long nanostamp();
 	};
 }
 
