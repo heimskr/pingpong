@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "core/defs.h"
+#include "core/ppdefs.h"
 #include "core/channel.h"
 #include "core/server.h"
 
@@ -33,6 +33,14 @@ namespace pingpong {
 		users.insert(std::move(nh));
 
 		return true;
+	}
+
+	bool channel::has_user(user_ptr user) const {
+		return user && user->serv == serv && users.count(user->name) == 1 && users.at(user->name) == user;
+	}
+
+	bool channel::has_user(const std::string &name) const {
+		return users.count(name) == 1;
 	}
 
 	user_ptr channel::operator[](const std::string &str) {

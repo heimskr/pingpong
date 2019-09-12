@@ -1,5 +1,5 @@
-#ifndef CORE_CHANNEL_H_
-#define CORE_CHANNEL_H_
+#ifndef PINGPONG_CORE_CHANNEL_H_
+#define PINGPONG_CORE_CHANNEL_H_
 
 #include <map>
 #include <memory>
@@ -7,7 +7,7 @@
 #include <string>
 
 #include "core/user.h"
-#include "core/defs.h"
+#include "core/ppdefs.h"
 #include "core/server.h"
 
 namespace pingpong {
@@ -25,8 +25,17 @@ namespace pingpong {
 			channel(std::string, server_ptr);
 			channel(std::string);
 
+			/** Returns whether the channel is associated with a server (it really should be...). */
 			bool has_server() const;
+
+			/** Renames a user in the channel. */
 			bool rename_user(const std::string &, const std::string &);
+
+			/** Returns whether a particular user is in the channel. */
+			bool has_user(user_ptr) const;
+
+			/** Determines whether there's any user in the channel with a given nick. */
+			bool has_user(const std::string &) const;
 
 			operator std::string() const { return name; }
 			user_ptr operator[](const std::string &);
