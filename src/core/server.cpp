@@ -64,13 +64,20 @@ namespace pingpong {
 		events::dispatch<raw_in_event>(this, line.original);
 
 		message *raw = msg.get();
+		const std::string name = raw->get_name();
 
-		if (ping_message *ping = dynamic_cast<ping_message *>(raw)) {
+		if (name == "PING") {
+			ping_message *ping = dynamic_cast<ping_message *>(raw);
 			pong_command(this, ping->content).send();
-		} else if (join_message *join = dynamic_cast<join_message *>(raw)) {
+		} else if (name == "JOIN") {
+			join_message *join = dynamic_cast<join_message *>(raw);
 			events::dispatch<join_event>(join->who, join->chan);
-		} else if (privmsg_message *privmsg = dynamic_cast<privmsg_message *>(raw)) {
+		} else if (name == "PRIVMSG") {
+			privmsg_message *privmsg = dynamic_cast<privmsg_message *>(raw);
 			events::dispatch<privmsg_event>(privmsg->who, privmsg->chan, privmsg->content);
+		} else if (name == "QUIT") {
+			quit_message *quit = dynamic_cast<quit_message *>(raw);
+			events::dispatch<quit_event>(quit->who, nullptr, quit->content);
 		} else {
 			events::dispatch<message_event>(this, msg);
 		}
