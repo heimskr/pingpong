@@ -4,7 +4,7 @@
 #include "core/mask.h"
 
 namespace pingpong {
-	line::line(std::string in): original(in), source(mask("", "", "")) {
+	line::line(server_ptr serv_, const std::string &in): serv(serv_), original(in), source(mask("", "", "")) {
 		size_t index = 0;
 
 		if (in[0] == '@') {

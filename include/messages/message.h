@@ -15,10 +15,10 @@ namespace pingpong {
 
 	class message {
 		protected:
-			line line;
+			pingpong::line line;
 
 		public:
-			message(pingpong::line line_): line(line_) {}
+			message(const pingpong::line &line_): line(line_) {}
 			static constexpr auto get_name = []() -> std::string { return "???"; };
 
 			static std::map<std::string, message_ctor> ctors;
@@ -32,7 +32,7 @@ namespace pingpong {
 			template <typename T>
 			static void add_ctor() {
 				message::ctors.insert({T::get_name(), [](pingpong::line line_) -> std::shared_ptr<T> {
-					return std::shared_ptr<T>(new T(line_));
+					return std::make_shared<T>(line_);
 				}});
 			}
 

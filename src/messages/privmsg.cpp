@@ -4,6 +4,6 @@
 
 namespace pingpong {
 	privmsg_message::operator std::string() const {
-		return "[" + source + "] <" + line.source.nick + "> " + content;
+		return "[" + chan->name + "] <" + who->name + "> " + content;
 	}
 }

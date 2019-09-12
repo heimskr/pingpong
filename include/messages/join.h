@@ -5,12 +5,13 @@
 
 #include "core/server.h"
 #include "messages/message.h"
-#include "messages/basic.h"
+#include "messages/sourced.h"
 
 namespace pingpong {
-	class join_message: public basic_message {
+	class join_message: public sourced_message<channel_ptr, user_ptr> {
 		public:
-			using basic_message::basic_message;
+			using sourced_message::sourced_message;
+
 			static constexpr auto get_name = []() -> std::string { return "JOIN"; };
 
 			operator std::string() const override;

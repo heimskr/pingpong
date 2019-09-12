@@ -1,17 +1,15 @@
 #ifndef MESSAGES_PRIVMSG_H_
 #define MESSAGES_PRIVMSG_H_
 
-#include <string>
-
 #include "message.h"
-#include "sourced.h"
+#include "triple.h"
 
 namespace pingpong {
-	class privmsg_message: public sourced_message {
+	class privmsg_message: public triple_message {
 		public:
-			using sourced_message::sourced_message;
-			static constexpr auto get_name = []() -> std::string { return "PRIVMSG"; };
+			using triple_message::triple_message;
 
+			static constexpr auto get_name = []() -> std::string { return "PRIVMSG"; };
 			operator std::string() const override;
 	};
 }

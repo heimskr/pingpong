@@ -6,11 +6,11 @@
 
 namespace pingpong {
 	join_message::operator std::string() const {
-		return line.source.nick + " joined " + content;
+		return line.source.nick + " joined " + source->name;
 	}
 
 	void join_message::operator()(server_ptr serv) const {
-		if (!serv->has_channel(content))
-			*serv += content;
+		if (!serv->has_channel(source->name))
+			*serv += source->name;
 	}
 }
