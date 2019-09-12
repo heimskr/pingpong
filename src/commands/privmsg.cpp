@@ -4,6 +4,6 @@
 
 namespace pingpong {
 	privmsg_command::operator std::string() const {
-		return "PRIVMSG " + destination.name + " :" + message;
+		return "PRIVMSG " + destination->name + " :" + message;
 	}
 }
