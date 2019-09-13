@@ -11,13 +11,17 @@ namespace pingpong {
 			channel_ptr destination;
 			std::string message;
 
-			privmsg_command(channel_ptr destination_, std::string message_):
-				command(destination_->serv), destination(destination_), message(message_) {}
+			privmsg_command(server_ptr serv_, channel_ptr destination_, std::string message_):
+				command(serv_), destination(destination_), message(message_) {}
 
 			privmsg_command(server_ptr serv_, std::string destination_, std::string message_):
 				privmsg_command(serv_->get_channel(destination_), message_) {}
 
+			privmsg_command(channel_ptr destination_, std::string message_):
+				privmsg_command(destination_->serv, destination_, message_) {}
+
 			operator std::string() const override;
+			virtual void send() override;
 	};
 }
 

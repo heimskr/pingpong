@@ -3,13 +3,12 @@
 
 #include "command.h"
 
-#include "nick.h"
-#include "user.h"
-#include "privmsg.h"
 #include "join.h"
-#include "pong.h"
-#include "quit.h"
-#include "msg.h"
+#include "nick.h"
 #include "part.h"
+#include "pong.h"
+#include "privmsg.h"
+#include "quit.h"
+#include "user.h"
 
 #endif
