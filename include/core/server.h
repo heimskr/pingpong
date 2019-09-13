@@ -84,6 +84,9 @@ namespace pingpong {
 			/** Renames a user. */
 			void rename_user(const std::string &old_nick, const std::string &new_nick);
 
+			/** Retrieves the pointer for the user of the client. */
+			user_ptr get_self();
+
 			/** Returns the parent irc instance. */
 			irc * get_parent() { return parent; }
 

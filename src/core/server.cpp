@@ -158,6 +158,12 @@ namespace pingpong {
 			chan->rename_user(old_nick, new_nick);
 	}
 
+	user_ptr server::get_self() {
+		if (nick.empty())
+			throw std::runtime_error("Can't get self: no nick for server");
+		return get_user(nick, true);
+	}
+
 	void server::cleanup() {
 		std::unique_lock ulock(status_mux);
 		cleanup(ulock);
