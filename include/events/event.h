@@ -101,6 +101,8 @@ namespace pingpong {
 			user_ptr who;
 
 			user_event(user_ptr, channel_ptr, const std::string & = "");
+			user_event(user_ptr who_, server_ptr serv_, const std::string &content_ = ""):
+				user_event(who_, static_cast<channel_ptr>(nullptr), content_) { serv = serv_; }
 	};
 }
 

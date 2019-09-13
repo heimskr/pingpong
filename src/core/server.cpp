@@ -77,7 +77,7 @@ namespace pingpong {
 			events::dispatch<privmsg_event>(privmsg->who, privmsg->chan, privmsg->content);
 		} else if (name == "QUIT") {
 			quit_message *quit = dynamic_cast<quit_message *>(raw);
-			events::dispatch<quit_event>(quit->who, nullptr, quit->content);
+			events::dispatch<quit_event>(quit->who, this, quit->content);
 		} else {
 			events::dispatch<message_event>(this, msg);
 		}
