@@ -1,8 +1,9 @@
 #include <iostream>
 #include <string>
 
-#include "messages/join.h"
 #include "core/server.h"
+#include "events/join.h"
+#include "messages/join.h"
 
 namespace pingpong {
 	join_message::join_message(const pingpong::line &line_): sourced_message(line_) {
@@ -16,8 +17,10 @@ namespace pingpong {
 		return who_ + " joined " + chan_;
 	}
 
-	void join_message::operator()(server_ptr serv) const {
+	bool join_message::operator()(server_ptr serv) {
 		if (!serv->has_channel(chan->name))
 			*serv += chan->name;
+		events::dispatch<join_event>(who, chan);
+		return true;
 	}
 }

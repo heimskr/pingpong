@@ -1,3 +1,4 @@
+#include "events/nick.h"
 #include "messages/nick.h"
 
 namespace pingpong {
@@ -5,7 +6,9 @@ namespace pingpong {
 		return line.source.nick + " is now known as " + content;
 	}
 
-	void nick_message::operator()(server_ptr serv) const {
+	bool nick_message::operator()(server_ptr serv) {
 		serv->rename_user(line.source.nick, content);
+		events::dispatch<nick_event>(who, get_server(), line.source.nick);
+		return true;
 	}
 }

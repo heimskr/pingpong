@@ -6,14 +6,15 @@
 
 #include "Poco/StreamCopier.h"
 
-#include "lib/ansi.h"
-#include "core/debug.h"
-#include "core/server.h"
-#include "messages/all.h"
 #include "commands/user.h"
 #include "commands/nick.h"
 #include "commands/pong.h"
-#include "events/all.h"
+#include "core/debug.h"
+#include "core/server.h"
+#include "events/bad_line.h"
+#include "events/message.h"
+#include "events/raw.h"
+#include "messages/all.h"
 
 namespace pingpong {
 	server::operator std::string() const {
@@ -62,27 +63,8 @@ namespace pingpong {
 		}
 
 		events::dispatch<raw_in_event>(this, line.original);
-
-		message *raw = msg.get();
-		const std::string name = raw->name();
-
-		if (name == "PING") {
-			ping_message *ping = dynamic_cast<ping_message *>(raw);
-			pong_command(this, ping->content).send();
-		} else if (name == "JOIN") {
-			join_message *join = dynamic_cast<join_message *>(raw);
-			events::dispatch<join_event>(join->who, join->chan);
-		} else if (name == "PRIVMSG") {
-			privmsg_message *privmsg = dynamic_cast<privmsg_message *>(raw);
-			events::dispatch<privmsg_event>(privmsg->who, privmsg->chan, privmsg->content);
-		} else if (name == "QUIT") {
-			quit_message *quit = dynamic_cast<quit_message *>(raw);
-			events::dispatch<quit_event>(quit->who, this, quit->content);
-		} else {
+		if (!(*msg)(this))
 			events::dispatch<message_event>(this, msg);
-		}
-
-		(*msg)(this);
 		last_message = msg;
 	}
 

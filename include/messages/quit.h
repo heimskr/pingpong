@@ -15,6 +15,7 @@ namespace pingpong {
 			virtual std::string name() const override { return get_name(); }
 
 			operator std::string() const override;
+			bool operator()(server_ptr) override;
 	};
 }
 

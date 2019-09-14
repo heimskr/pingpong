@@ -1,31 +1,21 @@
 #include <string>
 
-#include "messages/line.h"
 #include "messages/part.h"
+#include "events/part.h"
 
 namespace pingpong {
-	part_message::part_message(pingpong::line line_): message(line_) {
-		std::string &params = line_.parameters;
-		size_t separator = params.find(" :");
-
-		if (separator == std::string::npos) {
-			chan = params;
-		} else {
-			chan = params.substr(0, separator);
-			reason = params.substr(separator + 2);
-		}
-	}
-
 	part_message::operator std::string() const {
-		std::string start = line.source.nick + " left " + chan;
-		if (reason.empty()) {
+		std::string start = line.source.nick + " left " + chan->name;
+		if (content.empty()) {
 			return start;
 		}
 
-		return start + " [" + reason + "]";
+		return start + " [" + content + "]";
 	}
 
-	void part_message::operator()(server_ptr serv) const {
-		*serv -= chan;
+	bool part_message::operator()(server_ptr serv) {
+		*serv -= chan->name;
+		events::dispatch<part_event>(who, chan, content);
+		return true;
 	}
 }

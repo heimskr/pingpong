@@ -21,7 +21,7 @@ namespace pingpong {
 			virtual std::string name() const override { return get_name(); }
 
 			operator std::string() const override;
-			void operator()(server_ptr) const override;
+			bool operator()(server_ptr) override;
 
 			static bool is_numeric(const char *);
 			static bool is_numeric(const char *, long &);

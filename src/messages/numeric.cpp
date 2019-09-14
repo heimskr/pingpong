@@ -17,10 +17,8 @@ namespace pingpong {
 		return "[" + std::to_string(number) + "] " + line.original;
 	}
 
-	void numeric_message::operator()(server_ptr serv) const {
+	bool numeric_message::operator()(server_ptr serv) {
 		if (number == 353) {
-			DBG(ansi::color::yellow << "[" << line.parameters << "]");
-
 			names parsed;
 			try {
 				parsed = numeric_message::parse353(line.parameters);
@@ -52,8 +50,10 @@ namespace pingpong {
 				}
 			}
 
-			irc::dbg << "\n" << ansi::action::reset;
+			return true;
 		}
+
+		return false;
 	}
 
 	numeric_message::names numeric_message::parse353(const std::string &params) {

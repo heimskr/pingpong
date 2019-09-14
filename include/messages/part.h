@@ -8,17 +8,15 @@
 #include "line.h"
 
 namespace pingpong {
-	class part_message: public message {
+	class part_message: public sourced_message {
 		public:
-			std::string chan, reason;
-
-			part_message(pingpong::line line_);
+			using sourced_message::sourced_message;
 
 			static constexpr auto get_name = []() -> std::string { return "PART"; };
 			virtual std::string name() const override { return get_name(); }
 
 			operator std::string() const override;
-			void operator()(server_ptr) const override;
+			bool operator()(server_ptr) override;
 	};
 }
 

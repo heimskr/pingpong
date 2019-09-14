@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <vector>
 
+#include "core/channel.h"
 #include "core/debug.h"
 #include "core/server.h"
 #include "core/user.h"
