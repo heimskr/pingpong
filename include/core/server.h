@@ -7,25 +7,21 @@
 #include <thread>
 #include <map>
 
-#include "Poco/Net/SocketAddress.h"
-#include "Poco/Net/StreamSocket.h"
-#include "Poco/Net/SocketStream.h"
-
 #include "core/ppdefs.h"
 #include "core/channel.h"
 #include "core/irc.h"
+
 #include "messages/line.h"
 #include "messages/message.h"
 
-using Poco::Net::SocketAddress, Poco::Net::StreamSocket, Poco::Net::SocketStream;
+#include "net/sock.h"
 
 namespace pingpong {
 	class message;
 
 	class server {
 		private:
-			StreamSocket socket;
-			std::shared_ptr<SocketStream> stream;
+			net::sock *sock = nullptr;
 			irc *parent;
 			std::string nick;
 
@@ -55,6 +51,8 @@ namespace pingpong {
 
 			server(irc *parent_, std::string hostname_, int port_ = irc::default_port):
 				parent(parent_), hostname(hostname_), port(port_) {}
+
+			~server();
 
 			/** Adds a channel. */
 			server & operator+=(const std::string &);

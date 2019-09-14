@@ -4,8 +4,6 @@
 #include <string>
 #include <thread>
 
-#include "Poco/StreamCopier.h"
-
 #include "core/debug.h"
 #include "core/server.h"
 
@@ -17,7 +15,14 @@
 #include "events/message.h"
 #include "events/raw.h"
 
+#include "net/sock.h"
+#include "net/socket_stream.h"
+
 namespace pingpong {
+	server::~server() {
+		delete sock;
+	}
+
 	server::operator std::string() const {
 		return port != irc::default_port? hostname + ":" + std::to_string(port) : hostname;
 	}
@@ -28,9 +33,15 @@ namespace pingpong {
 		if (status == dead)        cleanup();
 		if (status != unconnected) throw std::runtime_error("Can't connect: server not unconnected");
 
-		SocketAddress addr(hostname, port);
-		socket = StreamSocket(addr);
-		stream = std::make_shared<SocketStream>(socket);
+		// SocketAddress addr(hostname, port);
+		// net
+		// socket = StreamSocket(addr);
+		// stream = std::make_shared<SocketStream>(socket);
+
+		// sock = new net::sock(hostname, port);
+		// socket_stream stream(sock);
+
+
 		worker = std::make_shared<std::thread>(&server::work, this);
 
 		return true;
@@ -40,7 +51,7 @@ namespace pingpong {
 		user_command(this, parent->username, parent->realname).send();
 
 		std::string line;
-		while (std::getline(*stream, line)) {
+		/* while (std::getline(*stream, line)) {
 			if (line.back() == '\r') {
 				// Remove the carriage return. It's part of the spec, but std::getline removes only the newline.
 				line.pop_back();
@@ -51,7 +62,7 @@ namespace pingpong {
 			} catch (std::invalid_argument &) {
 				// Already dealt with by dispatching a bad_line_event.
 			}
-		}
+		} */
 	}
 
 	void server::handle_line(const pingpong::line &line) {
@@ -92,16 +103,16 @@ namespace pingpong {
 	}
 
 	void server::quote(const std::string &str) {
-		if (!stream) {
+		/* if (!stream) {
 			YIKES("server::quote" >> ansi::style::bold << ": Stream not ready");
 			throw std::runtime_error("Stream not ready");
-		}
+		} */
 
 		auto l = parent->lock_console();
 		events::dispatch<raw_out_event>(this, str);
 
-		*stream << str << "\r\n";
-		stream->flush();
+		// *stream << str << "\r\n";
+		// stream->flush();
 	}
 
 	void server::set_nick(const std::string &new_nick) {

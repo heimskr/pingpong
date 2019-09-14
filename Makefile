@@ -28,8 +28,6 @@ COMMONOBJ		:= $(patsubst src/%.cpp,build/%.o, $(filter %.cpp,$(COMMONSRC)))
 OBJ				:= $(patsubst src/%.cpp,build/%.o, $(filter %.cpp,$(SRC)))
 sinclude $(patsubst %,src/%/targets.mk,$(MODULES))
 
-include conan.mk
-
 all: $(COMMONOBJ)
 
 test: build/tests

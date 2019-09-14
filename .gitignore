@@ -1,6 +1,8 @@
 .vscode
 .dep
 .log
+.DS_Store
+._*
 build
 builddir
 
