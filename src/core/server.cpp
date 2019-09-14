@@ -23,7 +23,7 @@ namespace pingpong {
 	bool server::start() {
 		std::unique_lock<std::mutex> ulock(status_mux);
 
-		if (status == dead)        cleanup(ulock);
+		if (status == dead)        cleanup();
 		if (status != unconnected) throw std::runtime_error("Can't connect: server not unconnected");
 
 		SocketAddress addr(hostname, port);
@@ -165,8 +165,7 @@ namespace pingpong {
 	}
 
 	void server::cleanup() {
-		std::unique_lock ulock(status_mux);
-		*parent << "["_d << std::string(*this) << ": cleanup]"_d << "\r\n";
+		DBG("["_d << std::string(*this) << ": cleanup]"_d);
 		status = unconnected;
 
 		if (worker)
