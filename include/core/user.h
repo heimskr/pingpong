@@ -25,6 +25,7 @@ namespace pingpong {
 
 			static hat get_hat(char);
 			static hat get_hat(const std::string &);
+			bool is_self() const;
 
 			bool operator==(const user &) const;
 	};
