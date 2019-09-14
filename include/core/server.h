@@ -29,7 +29,6 @@ namespace pingpong {
 			irc *parent;
 			std::string nick;
 
-			void cleanup(std::unique_lock<std::mutex> &);
 			void cleanup();
 			void work();
 			void handle_line(const pingpong::line &);

@@ -166,10 +166,6 @@ namespace pingpong {
 
 	void server::cleanup() {
 		std::unique_lock ulock(status_mux);
-		cleanup(ulock);
-	}
-
-	void server::cleanup(std::unique_lock<std::mutex> &) {
 		*parent << "["_d << std::string(*this) << ": cleanup]"_d << "\r\n";
 		status = unconnected;
 
