@@ -2,9 +2,16 @@
 #include <iostream>
 #include <string>
 
-#include "core/all.h"
-#include "events/all.h"
-#include "commands/all.h"
+#include "core/channel.h"
+#include "core/server.h"
+
+#include "commands/join.h"
+#include "commands/nick.h"
+#include "commands/privmsg.h"
+#include "commands/user.h"
+
+#include "events/event.h"
+#include "events/join.h"
 
 using namespace std;
 using namespace pingpong;
@@ -41,15 +48,17 @@ namespace tests {
 		server_ptr ptr = &serv;
 
 		events::listen<join_event>([&](auto *ev) {
-			cout << "join1(" << ev->who << " -> " << ev->chan << ")\n";
+			cout << "join1(" << *ev->who << " -> " << *ev->chan << ")\n";
 		});
 
 		events::listen<join_event>([&](auto *ev) {
-			cout << "join2(" << ev->who << " -> " << ev->chan << ")\n";
+			cout << "join2(" << *ev->who << " -> " << *ev->chan << ")\n";
 		});
 
 		for (int i = 1; i < 10; ++i) {
-			events::dispatch<join_event>(user("someone" + std::to_string(i), ptr), channel("#somewhere" + std::to_string(i), ptr));
+			std::shared_ptr<user> u = std::make_shared<user>("someone" + std::to_string(i), ptr);
+			std::shared_ptr<channel> c = std::make_shared<channel>("#somewhere" + std::to_string(i), ptr);
+			events::dispatch<join_event>(u, c);
 		}
 	}
 }

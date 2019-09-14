@@ -6,15 +6,16 @@
 
 #include "Poco/StreamCopier.h"
 
+#include "core/debug.h"
+#include "core/server.h"
+
 #include "commands/user.h"
 #include "commands/nick.h"
 #include "commands/pong.h"
-#include "core/debug.h"
-#include "core/server.h"
+
 #include "events/bad_line.h"
 #include "events/message.h"
 #include "events/raw.h"
-#include "messages/all.h"
 
 namespace pingpong {
 	server::operator std::string() const {
