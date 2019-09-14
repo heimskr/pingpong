@@ -27,6 +27,7 @@ namespace pingpong {
 		if (status != unconnected) throw std::runtime_error("Can't connect: server not unconnected");
 
 		sock   = std::make_shared<net::sock>(hostname, port);
+		sock->connect();
 		buffer = std::make_shared<net::socket_buffer>(sock.get());
 		stream = std::make_shared<std::iostream>(buffer.get());
 		worker = std::make_shared<std::thread>(&server::work, this);
@@ -98,7 +99,7 @@ namespace pingpong {
 		auto l = parent->lock_console();
 		events::dispatch<raw_out_event>(this, str);
 
-		*stream << str << "\r\n";
+		*stream << str + "\r\n";
 		stream->flush();
 	}
 

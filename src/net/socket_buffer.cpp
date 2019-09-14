@@ -21,8 +21,12 @@ namespace pingpong::net {
 
 	std::streambuf::int_type socket_buffer::underflow() {
 		std::streambuf::int_type byte;
-		if (source->recv(&byte, 1))
+		if (source->recv(&byte, 1) == 0)
 			return traits_type::eof();
 		return byte;
+	}
+
+	std::streambuf::int_type socket_buffer::uflow() {
+		return underflow();
 	}
 }

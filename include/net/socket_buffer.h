@@ -15,6 +15,7 @@ namespace pingpong::net {
 			virtual std::streamsize xsgetn(char *, std::streamsize) override;
 			virtual std::streambuf::int_type overflow(std::streambuf::int_type) override;
 			virtual std::streambuf::int_type underflow() override;
+			virtual std::streambuf::int_type uflow() override;
 
 		public:
 			socket_buffer(sock *source_): source(source_) {}

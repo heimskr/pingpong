@@ -1,3 +1,4 @@
+#include <cstring>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -32,13 +33,13 @@ namespace pingpong::net {
 
 	ssize_t sock::send(const void *data, size_t bytes) {
 		if (!connected)
-			throw std::runtime_error("Socket not connected");
+			throw std::invalid_argument("Socket not connected");
 		return ::send(fd, data, bytes, 0);
 	}
 
 	ssize_t sock::recv(void *data, size_t bytes) {
 		if (!connected)
-			throw std::runtime_error("Socket not connected");
+			throw std::invalid_argument("Socket not connected");
 		return ::recv(fd, data, bytes, 0);
 	}
 }
