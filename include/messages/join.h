@@ -11,7 +11,6 @@ namespace pingpong {
 			join_message(const pingpong::line &line_);
 
 			static constexpr auto get_name = []() -> std::string { return "JOIN"; };
-			virtual std::string name() const override { return get_name(); }
 
 			operator std::string() const override;
 			bool operator()(server_ptr) override;

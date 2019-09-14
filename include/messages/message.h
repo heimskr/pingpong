@@ -33,7 +33,6 @@ namespace pingpong {
 			server_ptr get_server() { return line.serv; }
 
 			static message_ptr parse(const pingpong::line &);
-			virtual std::string name() const = 0;
 
 			template <typename T>
 			static void add_ctor() {

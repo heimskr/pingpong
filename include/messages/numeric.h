@@ -18,7 +18,6 @@ namespace pingpong {
 			numeric_message(pingpong::line);
 
 			static constexpr auto get_name = []() -> std::string { return "_NUMERIC"; };
-			virtual std::string name() const override { return get_name(); }
 
 			operator std::string() const override;
 			bool operator()(server_ptr) override;
