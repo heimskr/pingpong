@@ -15,13 +15,16 @@
 #include "messages/message.h"
 
 #include "net/sock.h"
+#include "net/socket_buffer.h"
 
 namespace pingpong {
 	class message;
 
 	class server {
 		private:
-			net::sock *sock = nullptr;
+			std::shared_ptr<net::sock> sock;
+			std::shared_ptr<net::socket_buffer> buffer;
+			std::shared_ptr<std::iostream> stream;
 			irc *parent;
 			std::string nick;
 
@@ -51,8 +54,6 @@ namespace pingpong {
 
 			server(irc *parent_, std::string hostname_, int port_ = irc::default_port):
 				parent(parent_), hostname(hostname_), port(port_) {}
-
-			~server();
 
 			/** Adds a channel. */
 			server & operator+=(const std::string &);

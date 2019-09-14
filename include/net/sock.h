@@ -7,12 +7,12 @@
 
 namespace pingpong::net {
 	class sock {
-		friend class socket_stream;
 		friend class socket_buffer;
 
 		private:
 			struct addrinfo *info;
 			int fd;
+			bool connected = false;
 
 		public:
 			const std::string hostname;
@@ -26,7 +26,14 @@ namespace pingpong::net {
 
 			~sock();
 
+			/** Connects to the socket. */
 			void connect();
+
+			/** Sends a given number of bytes from a buffer through the socket. */
+			ssize_t send(const void *, size_t);
+
+			/** Reads a given number of bytes into a buffer from the socket. */
+			ssize_t recv(void *, size_t);
 	};
 }
 

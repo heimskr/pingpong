@@ -1,7 +1,7 @@
 COMPILER		 = clang++
 CFLAGS			:= -std=c++2a -g -ggdb -O0 -Wall -Wextra
 LDFLAGS			:=
-CC				 = $(COMPILER) $(strip $(CFLAGS)) $(CHECKFLAGS)
+CC				 = $(COMPILER) $(strip $(CFLAGS) $(CHECKFLAGS))
 CHECKFLAGS		:=
 MKBUILD			:= mkdir -p build
 CHECK			:= asan
@@ -41,7 +41,7 @@ clean:
 
 build/%.o: src/%.cpp
 	@ mkdir -p "$(shell dirname "$@")"
-	$(CC) $(strip $(SDKFLAGS) $(CPPFLAGS) $(CXXFLAGS)) -c $< -o $@
+	$(CC) $(strip $(SDKFLAGS) $(strip $(CPPFLAGS)) $(strip $(CXXFLAGS))) -c $< -o $@
 
 DEPFILE  = .dep
 DEPTOKEN = "\# MAKEDEPENDS"
