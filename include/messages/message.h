@@ -1,6 +1,7 @@
 #ifndef PINGPONG_MESSAGES_MESSAGE_H_
 #define PINGPONG_MESSAGES_MESSAGE_H_
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <string>
