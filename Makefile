@@ -5,7 +5,10 @@ CC				 = $(COMPILER) $(strip $(CFLAGS) $(CHECKFLAGS))
 CHECKFLAGS		:=
 MKBUILD			:= mkdir -p build
 CHECK			:= asan
-SDKFLAGS		:= --sysroot /etc/sdk
+
+ifeq ($(shell uname -s), Darwin)
+	SDKFLAGS	:= --sysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+endif
 
 ifeq ($(CHECK), asan)
 	CHECKFLAGS += -fsanitize=address -fno-common
