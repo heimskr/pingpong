@@ -9,16 +9,18 @@ namespace pingpong::net {
 	class socket_buffer: public std::streambuf {
 		private:
 			sock *source;
+			char *buffer;
+			size_t buffer_size;
+			size_t putback_size;
 		
 		protected:
-			virtual std::streamsize xsputn(const char *, std::streamsize) override;
-			virtual std::streamsize xsgetn(char *, std::streamsize) override;
 			virtual std::streambuf::int_type overflow(std::streambuf::int_type) override;
+			virtual std::streamsize xsputn(const char *, std::streamsize) override;
 			virtual std::streambuf::int_type underflow() override;
-			virtual std::streambuf::int_type uflow() override;
 
 		public:
-			socket_buffer(sock *source_): source(source_) {}
+			socket_buffer(sock *source_, size_t buffer_size_ = 64, size_t putback_size_ = 4);
+			~socket_buffer();
 	};
 }
 

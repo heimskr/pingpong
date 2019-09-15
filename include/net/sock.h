@@ -29,10 +29,10 @@ namespace pingpong::net {
 			/** Connects to the socket. */
 			void connect();
 
-			/** Sends a given number of bytes from a buffer through the socket. */
+			/** Sends a given number of bytes from a buffer through the socket and returns the number of bytes sent. */
 			ssize_t send(const void *, size_t);
 
-			/** Reads a given number of bytes into a buffer from the socket. */
+			/** Reads a given number of bytes into a buffer from the socket and returns the number of bytes read. */
 			ssize_t recv(void *, size_t);
 	};
 }
