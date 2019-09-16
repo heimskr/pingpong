@@ -20,13 +20,13 @@ namespace pingpong {
 	}
 
 	bool channel::rename_user(const std::string &old_nick, const std::string &new_nick) {
-		if (has_user(new_nick))
-			throw user_exists_error(serv, old_nick, new_nick);
-
-		for (user_ptr user: users) {
-			if (user->name == old_nick) {
-				user->rename(new_nick);
-				return true;
+		// It's possible that the user has already been renamed in server::rename_user.
+		if (!has_user(new_nick)) {
+			for (user_ptr user: users) {
+				if (user->name == old_nick) {
+					user->rename(new_nick);
+					return true;
+				}
 			}
 		}
 

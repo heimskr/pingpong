@@ -13,6 +13,7 @@
 
 #include "events/bad_line.h"
 #include "events/message.h"
+#include "events/names_updated.h"
 #include "events/raw.h"
 #include "events/server_status.h"
 
@@ -197,8 +198,10 @@ namespace pingpong {
 		if (user_ptr uptr = get_user(old_nick, false))
 			uptr->name = new_nick;
 
-		for (channel_ptr chan: channels)
+		for (channel_ptr chan: channels) {
 			chan->rename_user(old_nick, new_nick);
+			events::dispatch<names_updated_event>(chan, this);
+		}
 	}
 
 	user_ptr server::get_self() {
