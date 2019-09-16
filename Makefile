@@ -4,7 +4,6 @@ LDFLAGS			:=
 CC				 = $(COMPILER) $(strip $(CFLAGS) $(CHECKFLAGS))
 CHECKFLAGS		:=
 MKBUILD			:= mkdir -p build
-CHECK			:= asan
 
 ifeq ($(shell uname -s), Darwin)
 	SDKFLAGS	:= --sysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
