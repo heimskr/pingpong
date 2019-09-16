@@ -1,6 +1,7 @@
 #ifndef PINGPONG_CORE_CHANNEL_H_
 #define PINGPONG_CORE_CHANNEL_H_
 
+#include <list>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -20,7 +21,7 @@ namespace pingpong {
 
 			std::string name;
 			server_ptr serv;
-			std::map<std::string, user_ptr> users;
+			std::list<user_ptr> users;
 			std::map<user_ptr, hat> hats;
 
 			channel(std::string, server_ptr);
@@ -38,7 +39,7 @@ namespace pingpong {
 			/** Determines whether there's any user in the channel with a given nick. */
 			bool has_user(const std::string &) const;
 
-			operator std::string() const { return name; }
+			operator std::string() const;
 			user_ptr operator[](const std::string &);
 			channel & operator+=(user_ptr);
 			channel & operator-=(user_ptr);

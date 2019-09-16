@@ -53,7 +53,7 @@ namespace pingpong {
 					*uptr += chan;
 					if (!chan->has_user(uptr)) {
 						any = true;
-						chan->users.insert({name, uptr});
+						*chan += uptr;
 						chan->hats.insert({uptr, uhat});
 					}
 				}

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <ostream>
 #include <stdexcept>
 #include <string>
@@ -19,43 +20,55 @@ namespace pingpong {
 	}
 
 	bool channel::rename_user(const std::string &old_nick, const std::string &new_nick) {
-		if (users.count(new_nick) > 0)
+		if (has_user(new_nick))
 			throw user_exists_error(serv, old_nick, new_nick);
 
-		auto iter = users.find(old_nick);
-		if (iter == users.end())
-			return false;
+		for (user_ptr user: users) {
+			if (user->name == old_nick) {
+				user->rename(new_nick);
+				return true;
+			}
+		}
 
-		user_ptr uptr = iter->second;
-		uptr->rename(new_nick);
-		auto nh = users.extract(iter);
-		nh.key() = new_nick;
-		users.insert(std::move(nh));
-
-		return true;
+		return false;
 	}
 
 	bool channel::has_user(user_ptr user) const {
-		return user && user->serv == serv && users.count(user->name) == 1 && users.at(user->name) == user;
+		return user && user->serv == serv && std::find(users.begin(), users.end(), user) != users.end();
 	}
 
 	bool channel::has_user(const std::string &name) const {
-		return users.count(name) == 1;
+		for (user_ptr user: users) {
+			if (user->name == name)
+				return true;
+		}
+		
+		return false;
 	}
 
-	user_ptr channel::operator[](const std::string &str) {
-		return users.count(str) > 0? users.at(str) : nullptr;
+	channel::operator std::string() const {
+		return serv->hostname + "/" + name;
+	}
+
+	user_ptr channel::operator[](const std::string &name) {
+		for (user_ptr user: users) {
+			if (user->name == name)
+				return user;
+		}
+
+		return nullptr;
 	}
 
 	channel & channel::operator+=(user_ptr user) {
 		if (!has_user(user))
-			users.insert({user->name, user});
+			users.push_back(user);
 		return *this;
 	}
 
 	channel & channel::operator-=(user_ptr user) {
-		if (has_user(user))
-			users.erase(user->name);
+		auto iter = std::find(users.begin(), users.end(), user);
+		if (iter != users.end())
+			users.erase(iter);
 		return *this;
 	}
 

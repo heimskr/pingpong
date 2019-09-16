@@ -21,7 +21,7 @@ namespace pingpong {
 			*serv += chan->name;
 
 		if (!chan->has_user(who)) {
-			chan->users.insert({who->name, who});
+			*chan += who;
 			events::dispatch<names_updated_event>(chan);
 		}
 		

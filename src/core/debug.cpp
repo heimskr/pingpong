@@ -13,15 +13,15 @@ namespace pingpong {
 	void debug::print_all(const irc &obj) {
 		for (server_ptr serv: obj.servers) {
 			if (!serv) {
-				ansi::out << ansi::color::red << "null" << ansi::endl;
+				DBG(ansi::red("null") << ansi::endl);
 				continue;
 			}
 
-			ansi::out << ansi::style::underline << ansi::color::yeen << serv->hostname << ansi::endl;
+			ansi::out << ansi::style::underline << ansi::yeen(serv->hostname) << ansi::endl;
 			for (auto [chanstr, chan]: serv->channels) {
-				ansi::out << "  " << ansi::color::magenta << ansi::style::bold << chanstr << ansi::endl;
-				for (auto [username, uptr]: chan->users)
-					ansi::out << "    " << static_cast<char>(chan->hats[uptr]) << ansi::color::cyan << username << ansi::endl;
+				DBG("    " << ansi::magenta(ansi::bold(chanstr)));
+				for (user_ptr user: chan->users)
+					DBG("        " << static_cast<char>(chan->hats[user]) << ansi::cyan(user->name));
 			}
 		}
 	}

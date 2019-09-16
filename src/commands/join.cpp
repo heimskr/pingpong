@@ -11,7 +11,7 @@ namespace pingpong {
 	}
 
 	join_command::join_command(server_ptr serv_, std::string chan): command(serv_) {
-		pairs = {{channel(chan, serv_), ""}};
+		pairs = {{chan, ""}};
 	}
 
 	join_command::join_command(server_ptr serv_, std::vector<std::string> chans): command(serv_) {
@@ -39,9 +39,8 @@ namespace pingpong {
 			for (auto iter = pairs.begin() + 1; iter != pairs.end(); ++iter) {
 				chans += "," + std::string(iter->first);
 				keys += "," + iter->second;
-				if (!iter->second.empty()) {
+				if (!iter->second.empty())
 					include_keys = true;
-				}
 			}
 
 			if (include_keys) {
