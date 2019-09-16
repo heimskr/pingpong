@@ -15,6 +15,8 @@ namespace pingpong::net {
 			bool connected = false;
 			fd_set fds;
 
+			enum class control_message: char {close='C'};
+
 		public:
 			const std::string hostname;
 			int port;
