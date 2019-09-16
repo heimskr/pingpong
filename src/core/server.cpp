@@ -153,12 +153,10 @@ namespace pingpong {
 	void server::cleanup() {
 		DBG("["_d << std::string(*this) << ": cleanup]"_d);
 		status = unconnected;
+
 		if (worker.joinable()) {
-			DBG("Joining server worker.");
 			buffer->close();
 			worker.join();
-			DBG("Joined server worker.");
 		}
-		// worker.~thread();
 	}
 }
