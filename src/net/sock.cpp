@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <sys/select.h>
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <unistd.h>
 
 #include "net/sock.h"
@@ -12,6 +13,8 @@
 #include "lib/ansi.h"
 
 namespace pingpong::net {
+	int sock::sock_count = 0;
+
 	sock::sock(const std::string &hostname_, int port_): hostname(hostname_), port(port_) {
 		struct addrinfo hints = {};
 		std::memset(&hints, 0, sizeof(hints));
@@ -30,20 +33,31 @@ namespace pingpong::net {
 	void sock::connect() {
 		net_fd = socket(info->ai_family, info->ai_socktype, info->ai_protocol);
 		int status = ::connect(net_fd, info->ai_addr, info->ai_addrlen);
-		if (status != 0)
+		if (status != 0) {
+			DBG("connect(): " << strerror(errno));
 			throw net_error(status);
-		connected = true;
+		}
 
-		control_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+		int control_pipe[2];
+		status = pipe(control_pipe);
+		if (status != 0) {
+			DBG("pipe(): " << strerror(errno));
+			throw net_error(status);
+		}
+
+		control_read = control_pipe[0];
+		control_write = control_pipe[1];
+
 		FD_ZERO(&fds);
 		FD_SET(net_fd, &fds);
-		FD_SET(control_fd, &fds);
+		FD_SET(control_read, &fds);
+
+		connected = true;
 	}
 
 	void sock::close() {
-		DBG("sock::close()");
 		control_message message = control_message::close;
-		::send(control_fd, &message, 1, 0);
+		::write(control_write, &message, 1);
 	}
 
 	ssize_t sock::send(const void *data, size_t bytes) {
@@ -56,41 +70,34 @@ namespace pingpong::net {
 		if (!connected)
 			throw std::invalid_argument("Socket not connected");
 
-		// int out = select(std::max(net_fd, control_fd) + 1, &fds, NULL, NULL, NULL);
 		fd_set fds_copy = fds;
 		int status = select(FD_SETSIZE, &fds_copy, NULL, NULL, NULL);
 		if (status < 0) {
-			DBG("select status: " << status);
-			return status;
+			DBG("select status: " << strerror(status));
+			throw net_error(status);
 		}
 			
 		if (FD_ISSET(net_fd, &fds_copy)) {
-			DBG("Reading from net_fd.");
 			return ::recv(net_fd, data, bytes, 0);
-		} else if (FD_ISSET(control_fd, &fds_copy)) {
-			DBG("Reading from control_fd.");
+		} else if (FD_ISSET(control_read, &fds_copy)) {
 			control_message message;
-			status = ::recv(control_fd, &message, 1, 0);
+			status = ::read(control_read, &message, 1);
 			if (status < 0) {
-				DBG("control_fd status: " << status);
-				return status;
+				DBG("control_fd status: " << strerror(status));
+				throw net_error(status);
 			}
 
 			if (message == control_message::close) {
-				DBG("Received close message.");
 				close();
-				return 0;
 			} else {
 				DBG("Unknown control message: '" << static_cast<char>(message) << "'");
 			}
+
+			return 0;
 		} else {
-			DBG("???");
+			DBG("No file descriptor is ready.");
 		}
 
-		DBG("This is bad.");
-		return 0;
-		
-		// ssize_t out = ::recv(net_fd, data, bytes, 0);
-		// return out;
+		return -1;
 	}
 }

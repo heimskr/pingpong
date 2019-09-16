@@ -20,19 +20,27 @@ namespace pingpong::net {
 		delete[] buffer;
 	}
 
-
-
 	std::streambuf::int_type socket_buffer::overflow(std::streambuf::int_type byte) {
-		if (!traits_type::eq_int_type(byte, traits_type::eof()))
-			source->send(&byte, 1);
+		if (!traits_type::eq_int_type(byte, traits_type::eof())) {
+			try {
+				source->send(&byte, 1);
+			} catch (const net_error &err) {
+				DBG("Network error in overflow(): " << err.what());
+				return EOF;
+			}
+		}
+
 		return traits_type::not_eof(byte);
 	}
 
 	std::streamsize socket_buffer::xsputn(const char *src, std::streamsize size) {
-		return source->send(src, size);
+		try {
+			return source->send(src, size);
+		} catch (const net_error &err) {
+			DBG("Network error in xsputn(): " << err.what());
+			return EOF;
+		}
 	}
-
-
 
 	std::streambuf::int_type socket_buffer::underflow() {
 		if (gptr() < egptr())
@@ -41,7 +49,14 @@ namespace pingpong::net {
 		int putback = std::min(putback_size, static_cast<size_t>(gptr() - eback()));
 		std::memmove(buffer + putback_size - putback, gptr() - putback, putback);
 
-		int bytes_read = source->recv(buffer + putback_size, buffer_size - putback_size);
+		int bytes_read;
+		try {
+			bytes_read = source->recv(buffer + putback_size, buffer_size - putback_size);
+		} catch (const net_error &err) {
+			DBG("Network error in underflow(): " << err.what());
+			return EOF;
+		}
+
 		if (bytes_read == 0)
 			return EOF;
 

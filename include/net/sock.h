@@ -10,8 +10,9 @@ namespace pingpong::net {
 		friend class socket_buffer;
 
 		private:
+			static int sock_count;
 			struct addrinfo *info;
-			int net_fd = -1, control_fd = -1;
+			int net_fd = -1, control_read = -1, control_write = -1;
 			bool connected = false;
 			fd_set fds;
 
