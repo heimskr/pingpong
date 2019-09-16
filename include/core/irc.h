@@ -31,7 +31,7 @@ namespace pingpong {
 			void init();
 			void init_messages();
 
-			irc & operator+=(const server_ptr &ptr);
+			irc & operator+=(server_ptr);
 		
 			template <typename T>
 			ansi::ansistream & operator<<(const T &value) { return dbg << value; }

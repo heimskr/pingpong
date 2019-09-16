@@ -74,6 +74,8 @@ namespace pingpong {
 
 			stage get_status() const { return status; }
 
+			std::string status_string() const;
+
 			/** Returns whether the user is in a given channel. */
 			bool has_channel(const std::string &) const;
 

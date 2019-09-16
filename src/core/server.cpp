@@ -124,6 +124,18 @@ namespace pingpong {
 		nick_command(this, new_nick).send();
 	}
 
+	std::string server::status_string() const {
+		switch (status) {
+			case stage::unconnected: return "unconnected";
+			case stage::setuser: return "setuser";
+			case stage::setnick: return "setnick";
+			case stage::ready: return "ready";
+			case stage::dead: return "dead";
+		}
+
+		return "unknown";
+	}
+
 	bool server::has_channel(const std::string &chanstr) const {
 		for (channel_ptr chan: channels) {
 			if (chan->name == chanstr)

@@ -3,6 +3,8 @@
 #include "core/irc.h"
 #include "core/server.h"
 
+#include "events/server_status.h"
+
 #include "messages/error.h"
 #include "messages/join.h"
 #include "messages/nick.h"
@@ -39,11 +41,12 @@ namespace pingpong {
 		message::add_ctor<privmsg_message>();
 	}
 
-	irc & irc::operator+=(const server_ptr &ptr) {
-		if (servers.count(ptr) == 0) {
-			servers.insert(ptr);
+	irc & irc::operator+=(server_ptr serv) {
+		if (servers.count(serv) == 0) {
+			servers.insert(serv);
 			if (!active_server)
-				active_server = ptr;
+				active_server = serv;
+			events::dispatch<server_status_event>(serv);
 		}
 
 		return *this;
