@@ -18,6 +18,11 @@
 namespace pingpong {
 	ansi::ansistream irc::dbg;
 
+	irc::~irc() {
+		for (server *serv: servers)
+			delete serv;
+	}
+
 	void irc::init() {
 		init_messages();
 	}

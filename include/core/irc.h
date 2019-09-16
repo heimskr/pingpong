@@ -25,6 +25,7 @@ namespace pingpong {
 
 			irc(std::string user, std::string real): username(user), realname(real) {}
 			irc(): irc("pingpong", "PingPong IRC") {}
+			~irc();
 			
 			std::unique_lock<std::mutex> lock_console() { return std::unique_lock(console_mux); }
 			void init();
