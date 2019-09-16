@@ -47,12 +47,32 @@ namespace pingpong {
 		return users.count(str) > 0? users.at(str) : nullptr;
 	}
 
+	channel & channel::operator+=(user_ptr user) {
+		if (!has_user(user))
+			users.insert({user->name, user});
+		return *this;
+	}
+
+	channel & channel::operator-=(user_ptr user) {
+		if (has_user(user))
+			users.erase(user->name);
+		return *this;
+	}
+
 	bool channel::operator==(const std::string &str) const {
 		return name == str;
 	}
 
+	bool channel::operator!=(const std::string &str) const {
+		return name != str;
+	}
+
 	bool channel::operator==(const channel &chan) const {
 		return name == chan.name && serv == chan.serv;
+	}
+
+	bool channel::operator!=(const channel &chan) const {
+		return name != chan.name || serv != chan.serv;
 	}
 
 	bool channel::operator<(const channel &chan) const {

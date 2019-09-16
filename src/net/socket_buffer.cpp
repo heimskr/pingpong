@@ -65,7 +65,6 @@ namespace pingpong::net {
 	}
 
 	void socket_buffer::close() {
-		DBG("socket_buffer::close()");
 		source->close();
 	}
 }

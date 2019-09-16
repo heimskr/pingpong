@@ -4,8 +4,13 @@
 #include <vector>
 
 #include "core/debug.h"
-#include "lib/ansi.h"
+
+#include "events/event.h"
+#include "events/names_updated.h"
+
 #include "messages/numeric.h"
+
+#include "lib/ansi.h"
 
 namespace pingpong {
 	numeric_message::numeric_message(pingpong::line line_): message(line_) {
@@ -42,12 +47,19 @@ namespace pingpong {
 			}
 
 			if (chan) {
+				bool any = false;
 				for (auto [uhat, name]: userlist) {
 					user_ptr uptr = serv->get_user(name, true);
 					*uptr += chan;
-					chan->users.insert({name, uptr});
-					chan->hats.insert({uptr, uhat});
+					if (!chan->has_user(uptr)) {
+						any = true;
+						chan->users.insert({name, uptr});
+						chan->hats.insert({uptr, uhat});
+					}
 				}
+
+				if (any)
+					events::dispatch<names_updated_event>(chan);
 			}
 
 			return true;

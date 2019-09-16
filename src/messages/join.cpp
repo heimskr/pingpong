@@ -3,6 +3,7 @@
 
 #include "core/server.h"
 #include "events/join.h"
+#include "events/names_updated.h"
 #include "messages/join.h"
 
 namespace pingpong {
@@ -12,14 +13,18 @@ namespace pingpong {
 	}
 
 	join_message::operator std::string() const {
-		std::string who_ = who->name;
-		std::string chan_ = chan->name;
-		return who_ + " joined " + chan_;
+		return who->name + " joined " + chan->name;
 	}
 
 	bool join_message::operator()(server_ptr serv) {
 		if (!serv->has_channel(chan->name))
 			*serv += chan->name;
+
+		if (!chan->has_user(who)) {
+			chan->users.insert({who->name, who});
+			events::dispatch<names_updated_event>(chan);
+		}
+		
 		events::dispatch<join_event>(who, chan);
 		return true;
 	}

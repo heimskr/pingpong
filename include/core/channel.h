@@ -3,6 +3,7 @@
 
 #include <map>
 #include <memory>
+#include <mutex>
 #include <ostream>
 #include <string>
 
@@ -39,8 +40,12 @@ namespace pingpong {
 
 			operator std::string() const { return name; }
 			user_ptr operator[](const std::string &);
+			channel & operator+=(user_ptr);
+			channel & operator-=(user_ptr);
 			bool operator==(const std::string &) const;
+			bool operator!=(const std::string &) const;
 			bool operator==(const channel &) const;
+			bool operator!=(const channel &) const;
 			bool operator<(const channel &) const;
 
 			friend std::ostream & operator<<(std::ostream &os, const channel &chan);

@@ -1,7 +1,9 @@
 #include <string>
 
-#include "messages/part.h"
 #include "events/part.h"
+#include "events/names_updated.h"
+
+#include "messages/part.h"
 
 namespace pingpong {
 	part_message::operator std::string() const {
@@ -14,7 +16,13 @@ namespace pingpong {
 	}
 
 	bool part_message::operator()(server_ptr serv) {
-		*serv -= chan->name;
+		if (who->is_self()) {
+			*serv -= chan->name;
+		} else {
+			*chan -= who;
+			events::dispatch<names_updated_event>(chan);
+		}
+
 		events::dispatch<part_event>(who, chan, content);
 		return true;
 	}
