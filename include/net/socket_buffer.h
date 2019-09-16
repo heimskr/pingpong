@@ -21,6 +21,9 @@ namespace pingpong::net {
 		public:
 			socket_buffer(sock *source_, size_t buffer_size_ = 64, size_t putback_size_ = 4);
 			~socket_buffer();
+
+			/** Closes the underlying socket connection. */
+			void close();
 	};
 }
 

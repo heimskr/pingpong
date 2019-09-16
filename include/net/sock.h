@@ -11,8 +11,9 @@ namespace pingpong::net {
 
 		private:
 			struct addrinfo *info;
-			int fd;
+			int net_fd = -1, control_fd = -1;
 			bool connected = false;
+			fd_set fds;
 
 		public:
 			const std::string hostname;
@@ -28,6 +29,9 @@ namespace pingpong::net {
 
 			/** Connects to the socket. */
 			void connect();
+
+			/** Closes the socket. */
+			void close();
 
 			/** Sends a given number of bytes from a buffer through the socket and returns the number of bytes sent. */
 			ssize_t send(const void *, size_t);

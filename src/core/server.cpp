@@ -16,6 +16,10 @@
 #include "events/raw.h"
 
 namespace pingpong {
+	server::~server() {
+		cleanup();
+	}
+
 	server::operator std::string() const {
 		return port != irc::default_port? hostname + ":" + std::to_string(port) : hostname;
 	}
@@ -30,7 +34,7 @@ namespace pingpong {
 		sock->connect();
 		buffer = std::make_shared<net::socket_buffer>(sock.get());
 		stream = std::make_shared<std::iostream>(buffer.get());
-		worker = std::make_shared<std::thread>(&server::work, this);
+		worker = std::thread(&server::work, this);
 
 		return true;
 	}
@@ -149,8 +153,12 @@ namespace pingpong {
 	void server::cleanup() {
 		DBG("["_d << std::string(*this) << ": cleanup]"_d);
 		status = unconnected;
-
-		if (worker)
-			worker->join();
+		if (worker.joinable()) {
+			DBG("Joining server worker.");
+			buffer->close();
+			worker.join();
+			DBG("Joined server worker.");
+		}
+		// worker.~thread();
 	}
 }

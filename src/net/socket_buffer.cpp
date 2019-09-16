@@ -48,4 +48,9 @@ namespace pingpong::net {
 		setg(buffer + putback_size - putback, buffer + putback_size, buffer + putback_size + bytes_read);
 		return traits_type::to_int_type(*gptr());
 	}
+
+	void socket_buffer::close() {
+		DBG("socket_buffer::close()");
+		source->close();
+	}
 }

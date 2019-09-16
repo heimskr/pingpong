@@ -48,12 +48,14 @@ namespace pingpong {
 			std::map<std::string, user_ptr> users {};
 			message_ptr last_message;
 
-			std::shared_ptr<std::thread> worker;
+			std::thread worker;
 			std::mutex status_mux;
 			stage status = unconnected;
 
 			server(irc *parent_, std::string hostname_, int port_ = irc::default_port):
 				parent(parent_), hostname(hostname_), port(port_) {}
+
+			~server();
 
 			/** Adds a channel. */
 			server & operator+=(const std::string &);
