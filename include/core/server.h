@@ -33,12 +33,12 @@ namespace pingpong {
 			void handle_line(const pingpong::line &);
 
 		public:
-			enum stage {
+			enum class stage {
 				// Connecting to an IRC server occurs in multiple stages.
 				unconnected, // At first, a socket hasn't even been connected yet.
 				setuser,     // Once the socket is connected, you need to send a USER message.
 				setnick,     // After the USER message is sent, you need to declare your nickname.
-				registered,  // After the nickname has been successfully declared, the connection is ready.
+				ready,       // After the nickname has been successfully declared, the connection is ready.
 				dead         // After the server has disconnected.
 			};
 
@@ -50,7 +50,7 @@ namespace pingpong {
 
 			std::thread worker;
 			std::mutex status_mux;
-			stage status = unconnected;
+			stage status = stage::unconnected;
 
 			server(irc *parent_, std::string hostname_, int port_ = irc::default_port):
 				parent(parent_), hostname(hostname_), port(port_) {}
@@ -71,6 +71,8 @@ namespace pingpong {
 
 			/** Returns the current nickname. */
 			const std::string & get_nick() const { return nick; }
+
+			stage get_status() const { return status; }
 
 			/** Returns whether the user is in a given channel. */
 			bool has_channel(const std::string &) const;

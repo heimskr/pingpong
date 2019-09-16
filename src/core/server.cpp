@@ -14,6 +14,7 @@
 #include "events/bad_line.h"
 #include "events/message.h"
 #include "events/raw.h"
+#include "events/server_status.h"
 
 namespace pingpong {
 	server::~server() {
@@ -27,13 +28,17 @@ namespace pingpong {
 	bool server::start() {
 		std::unique_lock<std::mutex> ulock(status_mux);
 
-		if (status == dead)        cleanup();
-		if (status != unconnected) throw std::runtime_error("Can't connect: server not unconnected");
+		if (status == stage::dead)        cleanup();
+		if (status != stage::unconnected) throw std::runtime_error("Can't connect: server not unconnected");
 
 		sock   = std::make_shared<net::sock>(hostname, port);
 		sock->connect();
 		buffer = std::make_shared<net::socket_buffer>(sock.get());
 		stream = std::make_shared<std::iostream>(buffer.get());
+
+		status = stage::setuser;
+		events::dispatch<server_status_event>(this);
+
 		worker = std::thread(&server::work, this);
 
 		return true;
@@ -192,7 +197,7 @@ namespace pingpong {
 
 	void server::cleanup() {
 		DBG("["_d << std::string(*this) << ": cleanup]"_d);
-		status = unconnected;
+		status = stage::dead;
 
 		if (worker.joinable()) {
 			buffer->close();
