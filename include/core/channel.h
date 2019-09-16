@@ -39,6 +39,9 @@ namespace pingpong {
 			/** Determines whether there's any user in the channel with a given nick. */
 			bool has_user(const std::string &) const;
 
+			/** Returns the hat corresponding to a user if it's known, or the default hat otherwise. */
+			hat get_hat(user_ptr user) const;
+
 			operator std::string() const;
 			user_ptr operator[](const std::string &);
 			channel & operator+=(user_ptr);

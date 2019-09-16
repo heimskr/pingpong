@@ -46,6 +46,11 @@ namespace pingpong {
 		return false;
 	}
 
+	hat channel::get_hat(user_ptr user) const {
+		auto iter = hats.find(user);
+		return iter == hats.end()? hat::none : iter->second;
+	}
+
 	channel::operator std::string() const {
 		return serv->hostname + "/" + name;
 	}
