@@ -18,8 +18,8 @@ namespace pingpong {
 			}
 
 			ansi::out << ansi::style::underline << ansi::yeen(serv->hostname) << ansi::endl;
-			for (auto [chanstr, chan]: serv->channels) {
-				DBG("    " << ansi::magenta(ansi::bold(chanstr)));
+			for (channel_ptr chan: serv->channels) {
+				DBG("    " << ansi::magenta(ansi::bold(chan->name)));
 				for (user_ptr user: chan->users)
 					DBG("        " << static_cast<char>(chan->hats[user]) << ansi::cyan(user->name));
 			}

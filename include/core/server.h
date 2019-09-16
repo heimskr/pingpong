@@ -1,11 +1,11 @@
 #ifndef PINGPONG_CORE_SERVER_H_
 #define PINGPONG_CORE_SERVER_H_
 
+#include <list>
 #include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
-#include <map>
 
 #include "core/ppdefs.h"
 #include "core/channel.h"
@@ -44,8 +44,8 @@ namespace pingpong {
 
 			std::string hostname;
 			int port;
-			std::map<std::string, channel_ptr> channels {};
-			std::map<std::string, user_ptr> users {};
+			std::list<channel_ptr> channels {};
+			std::list<user_ptr>    users    {};
 			message_ptr last_message;
 
 			std::thread worker;
@@ -74,6 +74,12 @@ namespace pingpong {
 
 			/** Returns whether the user is in a given channel. */
 			bool has_channel(const std::string &) const;
+
+			/** Returns whether the server knows a user to be in any of its channels. */
+			bool has_user(user_ptr) const;
+
+			/** Returns whether the server knows a user to be in any of its channels. */
+			bool has_user(const std::string &) const;
 
 			/** Retrieves a channel pointer by name. */
 			channel_ptr get_channel(const std::string &, bool create = false);

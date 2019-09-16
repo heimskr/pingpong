@@ -44,10 +44,9 @@ namespace pingpong {
 
 		std::string line;
 		while (std::getline(*stream, line)) {
-			if (line.back() == '\r') {
-				// Remove the carriage return. It's part of the spec, but std::getline removes only the newline.
+			// Remove the carriage return. It's part of the spec, but std::getline removes only the newline.
+			if (line.back() == '\r')
 				line.pop_back();
-			}
 
 			try {
 				handle_line(pingpong::line(this, line));
@@ -74,8 +73,7 @@ namespace pingpong {
 
 	server & server::operator+=(const std::string &chan) {
 		if (!has_channel(chan)) {
-			channel_ptr cptr = std::make_shared<channel>(chan, this);
-			channels[chan] = cptr;
+			channels.push_back(std::make_shared<channel>(chan, this));
 		} else {
 			YIKES("Channel already exists: " << chan << "\r\n");
 		}
@@ -84,9 +82,17 @@ namespace pingpong {
 	}
 
 	server & server::operator-=(const std::string &chan) {
-		if (has_channel(chan)) {
+		channel_ptr cptr = get_channel(chan, false);
+		if (cptr) {
+			auto iter = std::find(channels.begin(), channels.end(), cptr);
+			if (iter == channels.end()) {
+				DBG(ansi::color::red << "Channel pointer is inexplicably missing from server " << ansi::bold(hostname)
+					<< ": " << chan);
+				return *this;
+			}
+			
 			DBG("Removing channel " << chan);
-			channels.erase(chan);
+			channels.erase(iter);
 		} else {
 			YIKES("Channel not in list: " << chan << "\n");
 		}
@@ -114,7 +120,25 @@ namespace pingpong {
 	}
 
 	bool server::has_channel(const std::string &chanstr) const {
-		return channels.count(chanstr) != 0;
+		for (channel_ptr chan: channels) {
+			if (chan->name == chanstr)
+				return true;
+		}
+
+		return false;
+	}
+
+	bool server::has_user(user_ptr user) const {
+		return std::find(users.begin(), users.end(), user) != users.end();
+	}
+
+	bool server::has_user(const std::string &name) const {
+		for (user_ptr user: users) {
+			if (user->name == name)
+				return true;
+		}
+
+		return false;
 	}
 
 	channel_ptr server::get_channel(const std::string &chanstr, bool create) {
@@ -124,13 +148,29 @@ namespace pingpong {
 			*this += chanstr;
 		}
 
-		return channels.at(chanstr);
+		for (channel_ptr chan: channels) {
+			if (chan->name == chanstr)
+				return chan;
+		}
+
+		return nullptr;
 	}
 
 	user_ptr server::get_user(const std::string &name, bool create) {
-		if (users.count(name) == 0)
-			return create? users[name] = std::make_shared<user>(name, this) : nullptr;
-		return users[name];
+		if (!has_user(name)) {
+			if (!create)
+				return nullptr;
+			user_ptr new_user = std::make_shared<user>(name, this);
+			users.push_back(new_user);
+			return new_user;
+		}
+
+		for (user_ptr user: users) {
+			if (user->name == name)
+				return user;
+		}
+
+		return nullptr;
 	}
 
 	void server::rename_user(const std::string &old_nick, const std::string &new_nick) {
@@ -140,7 +180,7 @@ namespace pingpong {
 		if (user_ptr uptr = get_user(old_nick, false))
 			uptr->name = new_nick;
 
-		for (auto [chanstr, chan]: channels)
+		for (channel_ptr chan: channels)
 			chan->rename_user(old_nick, new_nick);
 	}
 
