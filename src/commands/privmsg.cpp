@@ -1,5 +1,6 @@
 #include "commands/privmsg.h"
-#include "events/event.h"
+
+#include "events/error.h"
 #include "events/privmsg.h"
 
 namespace pingpong {
@@ -15,10 +16,15 @@ namespace pingpong {
 
 	void privmsg_command::send() {
 		command::send();
-		if (destination.front() == '#')
-			events::dispatch<privmsg_event>(serv->get_self(), serv->get_channel(destination), message);
-		else
-			events::dispatch<privmsg_event>(serv->get_self(), serv->get_user(destination), message);
+		if (destination.front() == '#') {
+			std::shared_ptr<channel> chan = serv->get_channel(destination);
+			if (chan)
+				events::dispatch<privmsg_event>(serv->get_self(), chan, message);
+			else
+				events::dispatch<error_event>("Can't send message: channel is null", false);
+		} else {
+			events::dispatch<privmsg_event>(serv->get_self(), serv->get_user(destination, true), message);
+		}
 	}
 
 	bool privmsg_command::is_user() const {

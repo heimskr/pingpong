@@ -26,6 +26,9 @@ namespace pingpong {
 				server_event(speaker_->serv, message_), speaker(speaker_), whom(nullptr), chan(chan_) {}
 
 			std::string get_destination() const;
+
+			bool is_user() const;
+			bool is_channel() const;
 	};
 }
 

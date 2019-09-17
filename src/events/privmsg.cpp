@@ -9,4 +9,12 @@ namespace pingpong {
 		
 		return whom? whom->name : chan->name;
 	}
+
+	bool privmsg_event::is_user() const {
+		return whom? true : false;
+	}
+
+	bool privmsg_event::is_channel() const {
+		return chan? true : false;
+	}
 }

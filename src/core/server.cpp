@@ -210,7 +210,6 @@ namespace pingpong {
 	}
 
 	void server::cleanup() {
-		DBG("["_d << std::string(*this) << ": cleanup]"_d);
 		status = stage::dead;
 
 		if (worker.joinable()) {
