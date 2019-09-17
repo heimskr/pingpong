@@ -4,6 +4,8 @@
 #include <string>
 #include <thread>
 
+#include <signal.h>
+
 #include "core/debug.h"
 #include "core/server.h"
 
@@ -20,10 +22,6 @@
 namespace pingpong {
 	server::~server() {
 		cleanup();
-	}
-
-	server::operator std::string() const {
-		return port != irc::default_port? hostname + ":" + std::to_string(port) : hostname;
 	}
 
 	bool server::start() {
@@ -46,6 +44,7 @@ namespace pingpong {
 	}
 
 	void server::work() {
+		signal(SIGPIPE, SIG_IGN);
 		user_command(this, parent->username, parent->realname).send();
 
 		std::string line;
@@ -218,5 +217,9 @@ namespace pingpong {
 			buffer->close();
 			worker.join();
 		}
+	}
+
+	server::operator std::string() const {
+		return port != irc::default_port? hostname + ":" + std::to_string(port) : hostname;
 	}
 }

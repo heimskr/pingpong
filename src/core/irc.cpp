@@ -7,6 +7,7 @@
 
 #include "messages/error.h"
 #include "messages/join.h"
+#include "messages/kick.h"
 #include "messages/nick.h"
 #include "messages/notice.h"
 #include "messages/numeric.h"
@@ -32,6 +33,7 @@ namespace pingpong {
 	void irc::init_messages() {
 		message::add_ctor<error_message>();
 		message::add_ctor<join_message>();
+		message::add_ctor<kick_message>();
 		message::add_ctor<nick_message>();
 		message::add_ctor<notice_message>();
 		message::add_ctor<numeric_message>();

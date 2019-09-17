@@ -96,6 +96,16 @@ namespace pingpong {
 			user_event(user_ptr who_, server_ptr serv_, const std::string &content_ = ""):
 				user_event(who_, static_cast<channel_ptr>(nullptr), content_) { serv = serv_; }
 	};
+
+	// For events local to two users in one channel on one server, such as kicks.
+	class targeted_event: public user_event {
+		public:
+			user_ptr whom;
+
+			targeted_event(user_ptr, user_ptr, channel_ptr, const std::string & = "");
+			targeted_event(user_ptr who_, user_ptr whom_, server_ptr serv_, const std::string &content_ = ""):
+				targeted_event(who_, whom_, static_cast<channel_ptr>(nullptr), content_) { serv = serv_; }
+	};
 }
 
 #endif

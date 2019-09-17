@@ -28,7 +28,6 @@ namespace pingpong {
 			irc *parent;
 			std::string nick;
 
-			void cleanup();
 			void work();
 			void handle_line(const pingpong::line &);
 
@@ -100,11 +99,14 @@ namespace pingpong {
 			/** Returns the parent irc instance. */
 			irc * get_parent() { return parent; }
 
-			/** Returns a string representing the hostname and port (if not the default port) of the connection. */
-			operator std::string() const;
-
 			/** Connects to the server. */
 			bool start();
+
+			/** Disconnects the server. */
+			void cleanup();
+
+			/** Returns a string representing the hostname and port (if not the default port) of the connection. */
+			operator std::string() const;
 	};
 }
 
