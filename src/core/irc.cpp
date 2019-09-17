@@ -20,6 +20,9 @@
 
 namespace pingpong {
 	ansi::ansistream irc::dbg;
+	std::string irc::default_nick = "pingpong";
+	std::string irc::default_user = "pingpong";
+	std::string irc::default_realname = "PingPong IRC";
 
 	irc::~irc() {
 		for (server *serv: servers)
