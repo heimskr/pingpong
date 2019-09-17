@@ -16,7 +16,7 @@ namespace pingpong {
 		return who->name + " joined " + chan->name;
 	}
 
-	bool join_message::operator()(server_ptr serv) {
+	bool join_message::operator()(server *serv) {
 		if (!serv->has_channel(chan->name))
 			*serv += chan->name;
 

@@ -9,10 +9,10 @@
 namespace pingpong {
 	class command {
 		public:
-			server_ptr serv;
+			server *serv;
 			long sent_time = util::timestamp();
 
-			command(server_ptr serv_): serv(serv_) {}
+			command(server *serv_): serv(serv_) {}
 			virtual operator std::string() const = 0;
 
 			virtual void send();

@@ -8,7 +8,7 @@ namespace pingpong {
 		return "[" + (chan? chan->name : "?") + "] <" + (who? who->name : "?") + "> " + content;
 	}
 
-	bool privmsg_message::operator()(server_ptr) {
+	bool privmsg_message::operator()(server *) {
 		events::dispatch<privmsg_event>(who, chan, content);
 		return true;
 	}

@@ -15,7 +15,7 @@ namespace pingpong {
 	class command_event: public server_event {
 		public:
 			command *cmd;
-			command_event(const server_ptr &serv_, command *cmd_): server_event(serv_), cmd(cmd_) {}
+			command_event(server *serv_, command *cmd_): server_event(serv_), cmd(cmd_) {}
 	};
 }
 

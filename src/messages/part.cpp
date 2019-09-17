@@ -15,7 +15,7 @@ namespace pingpong {
 		return start + " [" + content + "]";
 	}
 
-	bool part_message::operator()(server_ptr serv) {
+	bool part_message::operator()(server *serv) {
 		if (who->is_self()) {
 			*serv -= chan->name;
 		} else {

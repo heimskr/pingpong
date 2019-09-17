@@ -8,7 +8,7 @@
 #include "core/server.h"
 
 namespace pingpong {
-	channel::channel(std::string name_, server_ptr serv_): name(name_), serv(serv_) {
+	channel::channel(std::string name_, server *serv_): name(name_), serv(serv_) {
 		if (name_.empty() || name_[0] != '#')
 			throw std::invalid_argument("Invalid channel name");
 	}
@@ -22,7 +22,7 @@ namespace pingpong {
 	bool channel::rename_user(const std::string &old_nick, const std::string &new_nick) {
 		// It's possible that the user has already been renamed in server::rename_user.
 		if (!has_user(new_nick)) {
-			for (user_ptr user: users) {
+			for (std::shared_ptr<user> user: users) {
 				if (user->name == old_nick) {
 					user->rename(new_nick);
 					return true;
@@ -33,12 +33,12 @@ namespace pingpong {
 		return false;
 	}
 
-	bool channel::has_user(user_ptr user) const {
+	bool channel::has_user(std::shared_ptr<user> user) const {
 		return user && user->serv == serv && std::find(users.begin(), users.end(), user) != users.end();
 	}
 
 	bool channel::has_user(const std::string &name) const {
-		for (user_ptr user: users) {
+		for (std::shared_ptr<user> user: users) {
 			if (user->name == name)
 				return true;
 		}
@@ -46,7 +46,7 @@ namespace pingpong {
 		return false;
 	}
 
-	hat channel::get_hat(user_ptr user) const {
+	hat channel::get_hat(std::shared_ptr<user> user) const {
 		auto iter = hats.find(user);
 		return iter == hats.end()? hat::none : iter->second;
 	}
@@ -55,8 +55,8 @@ namespace pingpong {
 		return serv->hostname + "/" + name;
 	}
 
-	user_ptr channel::operator[](const std::string &name) {
-		for (user_ptr user: users) {
+	std::shared_ptr<user> channel::operator[](const std::string &name) {
+		for (std::shared_ptr<user> user: users) {
 			if (user->name == name)
 				return user;
 		}
@@ -64,13 +64,13 @@ namespace pingpong {
 		return nullptr;
 	}
 
-	channel & channel::operator+=(user_ptr user) {
+	channel & channel::operator+=(std::shared_ptr<user> user) {
 		if (!has_user(user))
 			users.push_back(user);
 		return *this;
 	}
 
-	channel & channel::operator-=(user_ptr user) {
+	channel & channel::operator-=(std::shared_ptr<user> user) {
 		auto iter = std::find(users.begin(), users.end(), user);
 		if (iter != users.end())
 			users.erase(iter);

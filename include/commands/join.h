@@ -14,10 +14,10 @@ namespace pingpong {
 			std::vector<join_pair> pairs;
 
 			join_command(channel);
-			join_command(server_ptr, std::string);
-			join_command(server_ptr, std::vector<join_pair>);
-			join_command(server_ptr, std::vector<std::string>);
-			join_command(server_ptr, std::vector<channel>);
+			join_command(server *, std::string);
+			join_command(server *, std::vector<join_pair>);
+			join_command(server *, std::vector<std::string>);
+			join_command(server *, std::vector<channel>);
 
 			operator std::string() const override;
 	};

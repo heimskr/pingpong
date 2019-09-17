@@ -11,9 +11,9 @@
 namespace pingpong {
 	class message_event: public server_event {
 		public:
-			message_ptr msg;
+			std::shared_ptr<message> msg;
 
-			message_event(const server_ptr &serv_, message_ptr msg_): server_event(serv_), msg(msg_) {}
+			message_event(server *serv_, std::shared_ptr<message> msg_): server_event(serv_), msg(msg_) {}
 	};
 }
 

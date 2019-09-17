@@ -8,7 +8,7 @@ namespace pingpong {
 		public:
 			std::string token;
 
-			pong_command(server_ptr serv_, std::string token_): command(serv_), token(token_) {}
+			pong_command(server *serv_, const std::string &token_): command(serv_), token(token_) {}
 			operator std::string() const override;
 			bool is_silent() const override { return true; }
 	};

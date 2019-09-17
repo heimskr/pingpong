@@ -46,7 +46,7 @@ namespace pingpong {
 		message::add_ctor<privmsg_message>();
 	}
 
-	irc & irc::operator+=(server_ptr serv) {
+	irc & irc::operator+=(server *serv) {
 		if (servers.count(serv) == 0) {
 			servers.insert(serv);
 			if (!active_server)

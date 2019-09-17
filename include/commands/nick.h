@@ -8,7 +8,7 @@ namespace pingpong {
 		public:
 			std::string nickname;
 
-			nick_command(server_ptr serv_, std::string nickname_): command(serv_), nickname(nickname_) {}
+			nick_command(server *serv_, const std::string &nickname_): command(serv_), nickname(nickname_) {}
 			operator std::string() const override;
 	};
 }

@@ -8,8 +8,8 @@
 namespace pingpong {
 	class sourced_message: public message {
 		public:
-			channel_ptr chan = nullptr;
-			user_ptr who = nullptr;
+			std::shared_ptr<channel> chan = nullptr;
+			std::shared_ptr<user> who = nullptr;
 			std::string content;
 
 			sourced_message(const pingpong::line &line_);

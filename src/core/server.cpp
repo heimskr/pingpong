@@ -62,7 +62,7 @@ namespace pingpong {
 	}
 
 	void server::handle_line(const pingpong::line &line) {
-		message_ptr msg;
+		std::shared_ptr<message> msg;
 		try {
 			msg = pingpong::message::parse(line);
 		} catch (std::invalid_argument &err) {
@@ -87,7 +87,7 @@ namespace pingpong {
 	}
 
 	server & server::operator-=(const std::string &chan) {
-		channel_ptr cptr = get_channel(chan, false);
+		std::shared_ptr<channel> cptr = get_channel(chan, false);
 		if (cptr) {
 			auto iter = std::find(channels.begin(), channels.end(), cptr);
 			if (iter == channels.end()) {
@@ -137,7 +137,7 @@ namespace pingpong {
 	}
 
 	bool server::has_channel(const std::string &chanstr) const {
-		for (channel_ptr chan: channels) {
+		for (std::shared_ptr<channel> chan: channels) {
 			if (chan->name == chanstr)
 				return true;
 		}
@@ -145,12 +145,12 @@ namespace pingpong {
 		return false;
 	}
 
-	bool server::has_user(user_ptr user) const {
+	bool server::has_user(std::shared_ptr<user> user) const {
 		return std::find(users.begin(), users.end(), user) != users.end();
 	}
 
 	bool server::has_user(const std::string &name) const {
-		for (user_ptr user: users) {
+		for (std::shared_ptr<user> user: users) {
 			if (user->name == name)
 				return true;
 		}
@@ -158,14 +158,14 @@ namespace pingpong {
 		return false;
 	}
 
-	channel_ptr server::get_channel(const std::string &chanstr, bool create) {
+	std::shared_ptr<channel> server::get_channel(const std::string &chanstr, bool create) {
 		if (!has_channel(chanstr)) {
 			if (!create)
 				return nullptr;
 			*this += chanstr;
 		}
 
-		for (channel_ptr chan: channels) {
+		for (std::shared_ptr<channel> chan: channels) {
 			if (chan->name == chanstr)
 				return chan;
 		}
@@ -173,16 +173,16 @@ namespace pingpong {
 		return nullptr;
 	}
 
-	user_ptr server::get_user(const std::string &name, bool create) {
+	std::shared_ptr<user> server::get_user(const std::string &name, bool create) {
 		if (!has_user(name)) {
 			if (!create)
 				return nullptr;
-			user_ptr new_user = std::make_shared<user>(name, this);
+			std::shared_ptr<user> new_user = std::make_shared<user>(name, this);
 			users.push_back(new_user);
 			return new_user;
 		}
 
-		for (user_ptr user: users) {
+		for (std::shared_ptr<user> user: users) {
 			if (user->name == name)
 				return user;
 		}
@@ -194,16 +194,16 @@ namespace pingpong {
 		if (old_nick == nick)
 			nick = new_nick;
 
-		if (user_ptr uptr = get_user(old_nick, false))
+		if (std::shared_ptr<user> uptr = get_user(old_nick, false))
 			uptr->name = new_nick;
 
-		for (channel_ptr chan: channels) {
+		for (std::shared_ptr<channel> chan: channels) {
 			chan->rename_user(old_nick, new_nick);
 			events::dispatch<names_updated_event>(chan, this);
 		}
 	}
 
-	user_ptr server::get_self() {
+	std::shared_ptr<user> server::get_self() {
 		if (nick.empty())
 			throw std::runtime_error("Can't get self: no nick for server");
 		return get_user(nick, true);

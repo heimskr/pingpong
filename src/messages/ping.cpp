@@ -9,7 +9,7 @@ namespace pingpong {
 		return "PING " + content;
 	}
 
-	bool ping_message::operator()(server_ptr serv) {
+	bool ping_message::operator()(server *serv) {
 		if (serv->status == server::stage::setnick) {
 			serv->status = server::stage::ready;
 			events::dispatch<server_status_event>(serv);

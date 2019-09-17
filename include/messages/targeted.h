@@ -11,9 +11,9 @@ namespace pingpong {
 	 */
 	class targeted_message: public message {
 		public:
-			channel_ptr chan = nullptr;
-			user_ptr who = nullptr;
-			user_ptr whom = nullptr;
+			std::shared_ptr<channel> chan = nullptr;
+			std::shared_ptr<user> who = nullptr;
+			std::shared_ptr<user> whom = nullptr;
 			std::string content;
 
 			targeted_message(const pingpong::line &line_);

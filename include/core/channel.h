@@ -20,11 +20,11 @@ namespace pingpong {
 			enum class visibility: char {pub='=', priv='*', secret='@'};
 
 			std::string name;
-			server_ptr serv;
-			std::list<user_ptr> users;
-			std::map<user_ptr, hat> hats;
+			server *serv;
+			std::list<std::shared_ptr<user>> users;
+			std::map<std::shared_ptr<user>, hat> hats;
 
-			channel(std::string, server_ptr);
+			channel(std::string, server *);
 			channel(std::string);
 
 			/** Returns whether the channel is associated with a server (it really should be...). */
@@ -34,18 +34,18 @@ namespace pingpong {
 			bool rename_user(const std::string &, const std::string &);
 
 			/** Returns whether a particular user is in the channel. */
-			bool has_user(user_ptr) const;
+			bool has_user(std::shared_ptr<user>) const;
 
 			/** Determines whether there's any user in the channel with a given nick. */
 			bool has_user(const std::string &) const;
 
 			/** Returns the hat corresponding to a user if it's known, or the default hat otherwise. */
-			hat get_hat(user_ptr user) const;
+			hat get_hat(std::shared_ptr<user> user) const;
 
 			operator std::string() const;
-			user_ptr operator[](const std::string &);
-			channel & operator+=(user_ptr);
-			channel & operator-=(user_ptr);
+			std::shared_ptr<user> operator[](const std::string &);
+			channel & operator+=(std::shared_ptr<user>);
+			channel & operator-=(std::shared_ptr<user>);
 			bool operator==(const std::string &) const;
 			bool operator!=(const std::string &) const;
 			bool operator==(const channel &) const;

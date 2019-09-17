@@ -71,18 +71,18 @@ namespace pingpong {
 	// For events local to one server.
 	class server_event: public event {
 		public:
-			server_ptr serv;
+			server *serv;
 
-			server_event(server_ptr serv_, const std::string &content_ = ""): event(false, content_), serv(serv_) {}
+			server_event(server *serv_, const std::string &content_ = ""): event(false, content_), serv(serv_) {}
 	};
 
 	// For events local to one channel on one server, such as topic changes.
 	class channel_event: public server_event {
 		public:
-			channel_ptr chan;
+			std::shared_ptr<channel> chan;
 
-			channel_event(channel_ptr, server_ptr, const std::string & = "");
-			channel_event(channel_ptr, const std::string & = "");
+			channel_event(std::shared_ptr<channel>, server *, const std::string & = "");
+			channel_event(std::shared_ptr<channel>, const std::string & = "");
 	};
 
 	// For events local to one user in one channel on one server, such as joins and privmsgs.
@@ -90,21 +90,21 @@ namespace pingpong {
 	// leaving the channel pointer null.
 	class user_event: public channel_event {
 		public:
-			user_ptr who;
+			std::shared_ptr<user> who;
 
-			user_event(user_ptr, channel_ptr, const std::string & = "");
-			user_event(user_ptr who_, server_ptr serv_, const std::string &content_ = ""):
-				user_event(who_, static_cast<channel_ptr>(nullptr), content_) { serv = serv_; }
+			user_event(std::shared_ptr<user>, std::shared_ptr<channel>, const std::string & = "");
+			user_event(std::shared_ptr<user> who_, server *serv_, const std::string &content_ = ""):
+				user_event(who_, static_cast<std::shared_ptr<channel>>(nullptr), content_) { serv = serv_; }
 	};
 
 	// For events local to two users in one channel on one server, such as kicks.
 	class targeted_event: public user_event {
 		public:
-			user_ptr whom;
+			std::shared_ptr<user> whom;
 
-			targeted_event(user_ptr, user_ptr, channel_ptr, const std::string & = "");
-			targeted_event(user_ptr who_, user_ptr whom_, server_ptr serv_, const std::string &content_ = ""):
-				targeted_event(who_, whom_, static_cast<channel_ptr>(nullptr), content_) { serv = serv_; }
+			targeted_event(std::shared_ptr<user>, std::shared_ptr<user>, std::shared_ptr<channel>, const std::string & = "");
+			targeted_event(std::shared_ptr<user> who_, std::shared_ptr<user> whom_, server *serv_, const std::string &content_ = ""):
+				targeted_event(who_, whom_, static_cast<std::shared_ptr<channel>>(nullptr), content_) { serv = serv_; }
 	};
 }
 

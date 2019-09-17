@@ -22,7 +22,7 @@ namespace pingpong {
 		return "[" + std::to_string(number) + "] " + line.original;
 	}
 
-	bool numeric_message::operator()(server_ptr serv) {
+	bool numeric_message::operator()(server *serv) {
 		if (number == 353) {
 			names parsed;
 			try {
@@ -36,7 +36,7 @@ namespace pingpong {
 			std::vector<std::pair<hat, std::string>> userlist;
 			std::tie(chanstr, vis, userlist) = parsed;
 
-			channel_ptr chan = serv->get_channel(chanstr);
+			std::shared_ptr<channel> chan = serv->get_channel(chanstr);
 
 			if ((!serv->last_message || serv->last_message->get_name() != "_NUMERIC"
 			    || dynamic_cast<numeric_message *>(serv->last_message.get())->number != 353) && chan) {
@@ -49,7 +49,7 @@ namespace pingpong {
 			if (chan) {
 				bool any = false;
 				for (auto [uhat, name]: userlist) {
-					user_ptr uptr = serv->get_user(name, true);
+					std::shared_ptr<user> uptr = serv->get_user(name, true);
 					*uptr += chan;
 					if (!chan->has_user(uptr)) {
 						any = true;

@@ -13,14 +13,14 @@ namespace pingpong {
 		public:
 			std::string raw_in;
 
-			raw_in_event(const server_ptr &serv_, const std::string &raw_in_): server_event(serv_), raw_in(raw_in_) {}
+			raw_in_event(server *serv_, const std::string &raw_in_): server_event(serv_), raw_in(raw_in_) {}
 	};
 
 	class raw_out_event: public server_event {
 		public:
 			std::string raw_out;
 
-			raw_out_event(const server_ptr &serv_, const std::string &raw_out_):
+			raw_out_event(server *serv_, const std::string &raw_out_):
 				server_event(serv_), raw_out(raw_out_) {}
 	};
 }

@@ -12,8 +12,7 @@ namespace pingpong {
 
 			std::string reason;
 
-			quit_command(server_ptr serv, std::string reason_): command(serv), reason(reason_) {}
-			quit_command(server_ptr serv): quit_command(serv, "") {}
+			quit_command(server *serv_, const std::string &reason_ = ""): command(serv_), reason(reason_) {}
 
 			operator std::string() const override;
 	};

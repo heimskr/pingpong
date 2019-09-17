@@ -20,8 +20,8 @@ namespace pingpong {
 			std::string username, realname;
 			static ansi::ansistream dbg;
 
-			std::set<server_ptr> servers;
-			server_ptr active_server = nullptr;
+			std::set<server *> servers;
+			server *active_server = nullptr;
 
 			irc(std::string user, std::string real): username(user), realname(real) {}
 			irc(): irc(default_user, default_realname) {}
@@ -31,7 +31,7 @@ namespace pingpong {
 			void init();
 			void init_messages();
 
-			irc & operator+=(server_ptr);
+			irc & operator+=(server *);
 		
 			template <typename T>
 			ansi::ansistream & operator<<(const T &value) { return dbg << value; }

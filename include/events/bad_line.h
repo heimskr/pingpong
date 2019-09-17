@@ -12,8 +12,7 @@ namespace pingpong {
 		public:
 			std::string bad_line;
 
-			bad_line_event(const server_ptr &serv_, const std::string &bad_line_):
-				server_event(serv_), bad_line(bad_line_) {}
+			bad_line_event(server *serv_, const std::string &bad_line_): server_event(serv_), bad_line(bad_line_) {}
 	};
 }
 

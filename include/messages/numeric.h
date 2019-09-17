@@ -20,7 +20,7 @@ namespace pingpong {
 			static constexpr auto get_name = []() -> std::string { return "_NUMERIC"; };
 
 			operator std::string() const override;
-			bool operator()(server_ptr) override;
+			bool operator()(server *) override;
 
 			static bool is_numeric(const char *);
 			static bool is_numeric(const char *, long &);

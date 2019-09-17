@@ -12,7 +12,7 @@
 namespace pingpong {
 	std::map<std::string, message_ctor> message::ctors;
 
-	message_ptr message::parse(const pingpong::line &line) {
+	std::shared_ptr<message> message::parse(const pingpong::line &line) {
 		if (numeric_message::is_numeric(line.command.c_str()))
 			return std::make_shared<numeric_message>(line);
 

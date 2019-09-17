@@ -6,7 +6,7 @@ namespace pingpong {
 		return line.source.nick + " quit [" + content + "]";
 	}
 
-	bool quit_message::operator()(server_ptr serv) {
+	bool quit_message::operator()(server *serv) {
 		events::dispatch<quit_event>(who, serv, content);
 		return true;
 	}

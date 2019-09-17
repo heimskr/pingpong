@@ -11,16 +11,16 @@
 
 namespace pingpong {
 	void debug::print_all(const irc &obj) {
-		for (server_ptr serv: obj.servers) {
+		for (server *serv: obj.servers) {
 			if (!serv) {
 				DBG(ansi::red("null") << ansi::endl);
 				continue;
 			}
 
 			ansi::out << ansi::style::underline << ansi::yeen(serv->hostname) << ansi::endl;
-			for (channel_ptr chan: serv->channels) {
+			for (std::shared_ptr<channel> chan: serv->channels) {
 				DBG("    " << ansi::magenta(ansi::bold(chan->name)));
-				for (user_ptr user: chan->users)
+				for (std::shared_ptr<user> user: chan->users)
 					DBG("        " << static_cast<char>(chan->hats[user]) << ansi::cyan(user->name));
 			}
 		}

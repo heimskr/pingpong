@@ -43,9 +43,9 @@ namespace pingpong {
 
 			std::string hostname;
 			int port;
-			std::list<channel_ptr> channels {};
-			std::list<user_ptr>    users    {};
-			message_ptr last_message;
+			std::list<std::shared_ptr<channel>> channels {};
+			std::list<std::shared_ptr<user>>    users    {};
+			std::shared_ptr<message> last_message;
 
 			std::thread worker;
 			std::mutex status_mux;
@@ -79,22 +79,22 @@ namespace pingpong {
 			bool has_channel(const std::string &) const;
 
 			/** Returns whether the server knows a user to be in any of its channels. */
-			bool has_user(user_ptr) const;
+			bool has_user(std::shared_ptr<user>) const;
 
 			/** Returns whether the server knows a user to be in any of its channels. */
 			bool has_user(const std::string &) const;
 
 			/** Retrieves a channel pointer by name. */
-			channel_ptr get_channel(const std::string &, bool create = false);
+			std::shared_ptr<channel> get_channel(const std::string &, bool create = false);
 
 			/** Retrieves a user pointer by name. */
-			user_ptr get_user(const std::string &, bool create = false);
+			std::shared_ptr<user> get_user(const std::string &, bool create = false);
 
 			/** Renames a user. */
 			void rename_user(const std::string &old_nick, const std::string &new_nick);
 
 			/** Retrieves the pointer for the user of the client. */
-			user_ptr get_self();
+			std::shared_ptr<user> get_self();
 
 			/** Returns the parent irc instance. */
 			irc * get_parent() { return parent; }

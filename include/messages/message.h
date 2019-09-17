@@ -11,7 +11,7 @@
 
 namespace pingpong {
 	class message;
-	using message_ctor = std::function<message_ptr(pingpong::line)>;
+	using message_ctor = std::function<std::shared_ptr<message>(pingpong::line)>;
 
 	class message {
 		public:
@@ -29,11 +29,11 @@ namespace pingpong {
 			/** Performs any actions to be taken when the message is received. For a PING, this would be replying with
 			 *  a PONG; for most messages, it might just be dispatching the corresponding event. The function should
 			 *  return false if a default message_event should be dispatched, or true if it should be suppressed. */
-			virtual bool operator()(server_ptr) { return false; }
+			virtual bool operator()(server *) { return false; }
 
-			server_ptr get_server() { return line.serv; }
+			server * get_server() { return line.serv; }
 
-			static message_ptr parse(const pingpong::line &);
+			static std::shared_ptr<message> parse(const pingpong::line &);
 
 			template <typename T>
 			static void add_ctor() {

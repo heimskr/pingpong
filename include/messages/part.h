@@ -15,7 +15,7 @@ namespace pingpong {
 			static constexpr auto get_name = []() -> std::string { return "PART"; };
 
 			operator std::string() const override;
-			bool operator()(server_ptr) override;
+			bool operator()(server *) override;
 	};
 }
 

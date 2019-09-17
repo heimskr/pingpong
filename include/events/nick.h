@@ -6,8 +6,8 @@
 
 namespace pingpong {
 	/**
-	 * Represents a nick change. In this event, the user_ptr points to the user after their nick has been updated, while
-	 * the content contains the old nickname.
+	 * Represents a nick change. In this event, the user pointer points to the user after their nick has been updated,
+	 * while the content contains the old nickname.
 	 */
 	class nick_event: public user_event {
 		public:

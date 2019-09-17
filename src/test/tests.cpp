@@ -24,7 +24,7 @@ namespace tests {
 //		cout << "user.is_user(): " << user.is_user() << "\n";
 	}
 
-	void test_commands(server_ptr serv) {
+	void test_commands(server *serv) {
 		user_command(serv, "some_user", "Some Name").send();
 		nick_command(serv, "somenick").send();
 		privmsg_command(serv, "#channel", "Hello, world!").send();
@@ -45,7 +45,7 @@ namespace tests {
 	}
 
 	void test_events(server &serv) {
-		server_ptr ptr = &serv;
+		server *ptr = &serv;
 
 		events::listen<join_event>([&](auto *ev) {
 			cout << "join1(" << *ev->who << " -> " << *ev->chan << ")\n";
