@@ -39,7 +39,7 @@ namespace pingpong {
 			std::shared_ptr<channel> chan = serv->get_channel(chanstr);
 
 			if ((!serv->last_message || serv->last_message->get_name() != "_NUMERIC"
-			    || dynamic_cast<numeric_message *>(serv->last_message.get())->number != 353) && chan) {
+			    || std::dynamic_pointer_cast<numeric_message>(serv->last_message)->number != 353) && chan) {
 				// If the previous message was something other than a NAMES reply, reset the current user list.
 				chan->users.clear();
 			} else if (!chan) {
@@ -123,7 +123,10 @@ namespace pingpong {
 	bool numeric_message::is_numeric(const char *str) {
 		if (!std::isdigit(str[0])) return false;
 		char *ptr;
-		strtol(str, &ptr, 10);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+		long number = strtol(str, &ptr, 10);
+#pragma GCC diagnostic pop
 		return !*ptr;
 	}
 

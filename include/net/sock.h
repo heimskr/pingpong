@@ -14,7 +14,7 @@ namespace pingpong::net {
 			struct addrinfo *info;
 			int net_fd = -1, control_read = -1, control_write = -1;
 			bool connected = false;
-			fd_set fds;
+			fd_set fds = {0};
 
 			enum class control_message: char {close='C'};
 
