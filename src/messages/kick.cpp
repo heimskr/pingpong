@@ -7,7 +7,7 @@ namespace pingpong {
 		return who->name + " kicked " + whom->name + " from " + chan->name + " [" + content + "]";
 	}
 
-	bool kick_message::operator()(server_ptr serv) {
+	bool kick_message::operator()(server_ptr) {
 		*chan -= whom;
 		events::dispatch<names_updated_event>(chan);
 		events::dispatch<kick_event>(who, whom, chan, content);

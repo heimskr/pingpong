@@ -10,11 +10,6 @@ namespace pingpong {
 		return os;
 	}
 
-	user & user::operator+=(channel_ptr chan) {
-		channels.insert(chan);
-		return *this;
-	}
-
 	hat user::get_hat(char ch) {
 		if (ch == static_cast<char>(hat::voiced)) return hat::voiced;
 		if (ch == static_cast<char>(hat::halfop)) return hat::halfop;

@@ -43,7 +43,7 @@ clean:
 
 build/%.o: src/%.cpp
 	@ mkdir -p "$(shell dirname "$@")"
-	$(CC) $(strip $(SDKFLAGS) $(strip $(CPPFLAGS)) $(strip $(CXXFLAGS))) -c $< -o $@
+	$(CC) $(strip $(SDKFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c) $< -o $@
 
 DEPFILE  = .dep
 DEPTOKEN = "\# MAKEDEPENDS"

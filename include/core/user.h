@@ -1,10 +1,13 @@
 #ifndef PINGPONG_CORE_USER_H_
 #define PINGPONG_CORE_USER_H_
 
+#include <memory>
+#include <set>
 #include <string>
 #include <unordered_set>
 
 #include "core/ppdefs.h"
+#include "core/pputil.h"
 #include "core/server.h"
 
 namespace pingpong {
@@ -12,14 +15,19 @@ namespace pingpong {
 		public:
 			std::string name;
 
-			server_ptr serv = nullptr;
-			std::unordered_set<channel_ptr> channels = {};
+			pingpong::server *serv = nullptr;
+			std::set<std::weak_ptr<channel>, weakptr_compare<channel>> channels = {};
 
-			user(const std::string &name_, server_ptr serv_): name(name_), serv(serv_) {}
+			user(const std::string &name_, server *serv_): name(name_), serv(serv_) {}
 
 			void rename(const std::string &);
 			operator std::string() const { return name; }
-			user & operator+=(channel_ptr);
+			
+			template <typename T>
+			user & operator+=(T chan) {
+				channels.insert(std::weak_ptr<channel>(chan));
+				return *this;
+			}
 
 			friend std::ostream & operator<<(std::ostream &os, const user &who);
 
