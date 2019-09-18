@@ -9,6 +9,12 @@ const fs = require("fs");
 const yikes = (...a) => { console.error(...a); process.exit(1); };
 
 const [,, ...args] = process.argv;
+
+if ((args[0] || "").match(/^(types|help)$/i)) {
+	console.log("Supported types:", ["command", "core", "event", "lib", "message"].map(x => `\x1b[1m${x}\x1b[0m`).join(", "));
+	process.exit(0);
+}
+
 if (args.length < 2 || !args[1]) {
 	yikes("Usage: new.js [type] [name]");
 }
@@ -95,7 +101,9 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	const ircText = fs.readFileSync(ircPath, "utf8");
 	if (ircText.indexOf(`add_ctor<${cls}>`) == -1) {
 		fs.writeFileSync(ircPath,
-			ircText.replace(/(void irc::init_messages\(\) {)/, `$1\n\t\tmessage::add_ctor<${cls}>();`));
+			ircText.replace(/(void irc::init_messages\(\) {)/, `$1\n\t\tmessage::add_ctor<${cls}>();`)
+			       .replace(/(#include "events\/server_status.h"\n)/, `$1\n#include "messages/${name}.h"`));
+
 	}
 
 } else if (type.match(/^(ev?|ev(en)?t)(-\w+)?$/i)) {
@@ -173,11 +181,17 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 }
 
 if (sourcetext) {
-	fs.writeFileSync(`${sourcebase}/${sourcename}`, sourcetext);
+	const fn = `${sourcebase}/${sourcename}`;
+	if (fs.existsSync(fn))
+		return console.error(`Error: \x1b[1m${fn}\x1b[0m already exists.`);
+	fs.writeFileSync(fn, sourcetext);
 }
 
 if (headertext) {
-	fs.writeFileSync(`${headerbase}/${headername}`, headertext);
+	const fn = `${headerbase}/${headername}`;
+	if (fs.existsSync(fn))
+		return console.error(`Error: \x1b[1m${fn}\x1b[0m already exists.`);
+	fs.writeFileSync(fn, headertext);
 }
 
 if (allDir) {
