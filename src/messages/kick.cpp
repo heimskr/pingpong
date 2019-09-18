@@ -8,7 +8,7 @@ namespace pingpong {
 	}
 
 	bool kick_message::operator()(server *) {
-		*chan -= whom;
+		chan->remove_user(whom);
 		events::dispatch<names_updated_event>(chan);
 		events::dispatch<kick_event>(who, whom, chan, content);
 		return true;

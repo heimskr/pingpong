@@ -1,7 +1,9 @@
 #include "messages/sourced.h"
 
 namespace pingpong {
-	sourced_message::sourced_message(const pingpong::line &line_): message(line_) {
+	sourced_message::sourced_message(const pingpong::line &line_):
+	message(line_), local(""), who(line_.serv->get_user(line_.source, true)) {
+		serv = line_.serv;
 		const std::string &raw = line_.parameters;
 
 		if (raw.empty())
@@ -16,9 +18,9 @@ namespace pingpong {
 		} else {
 			// Other messages look like "PRIVMSG #chan :Hello".
 			content = raw.substr(raw.find(':') + 1);
-			chan = line_.serv->get_channel(raw.substr(0, raw.find(' ')));
+			where   = raw.substr(0, raw.find(' '));
+			if (where.empty())
+				throw std::runtime_error("Source is empty in sourced_message");
 		}
-
-		who = line_.serv->get_user(line_.source.nick, true);
 	}
 }

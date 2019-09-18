@@ -2,6 +2,10 @@
 
 namespace pingpong {
 	notice_message::operator std::string() const {
-		return "[" + (chan? chan->name : "?") + "] -" + (who? who->name : "?") + "- " + content;
+		if (line.source.is_server())
+			return "[" + line.source.nick + "] " + content;
+
+		const std::string name = who? who->name : "?";
+		return "[" + (is_user()? name : where) + "] -" + name + "- " + content;
 	}
 }

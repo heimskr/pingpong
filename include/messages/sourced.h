@@ -3,16 +3,21 @@
 
 #include <string>
 
+#include "core/local.h"
 #include "message.h"
 
 namespace pingpong {
-	class sourced_message: public message {
+	class sourced_message: public message, public local {
 		public:
-			std::shared_ptr<channel> chan = nullptr;
-			std::shared_ptr<user> who = nullptr;
+			server *serv;
+			std::shared_ptr<user> who;
 			std::string content;
 
 			sourced_message(const pingpong::line &line_);
+
+			/** If the source of this message is a private conversation between two users, this returns a pointer to
+			 *  you. */
+			using local::is_user;
 	};
 }
 

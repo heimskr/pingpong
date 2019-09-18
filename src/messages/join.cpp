@@ -7,25 +7,23 @@
 #include "messages/join.h"
 
 namespace pingpong {
-	join_message::join_message(const pingpong::line &line_): sourced_message(line_) {
-		chan = line_.serv->get_channel(content, true);
-		content = "";
-	}
-
 	join_message::operator std::string() const {
-		return who->name + " joined " + chan->name;
+		return who + " joined " + chan;
 	}
 
 	bool join_message::operator()(server *serv) {
-		if (!serv->has_channel(chan->name))
-			*serv += chan->name;
-
-		if (!chan->has_user(who)) {
-			*chan += who;
-			events::dispatch<names_updated_event>(chan);
-		}
+		if (chan.empty() || chan.front() != '#')
+			throw std::runtime_error("Invalid channel for join_message");
 		
-		events::dispatch<join_event>(who, chan);
+		std::shared_ptr<user> userptr = serv->get_user(who, true);
+		std::shared_ptr<channel> chanptr = serv->get_channel(chan, true);
+
+		if (!chanptr->has_user(userptr)) {
+			chanptr->add_user(userptr);
+			events::dispatch<names_updated_event>(chanptr);
+		}
+
+		events::dispatch<join_event>(userptr, chanptr);
 		return true;
 	}
 }

@@ -56,12 +56,6 @@ namespace pingpong {
 
 			~server();
 
-			/** Adds a channel. */
-			server & operator+=(const std::string &);
-
-			/** Removes a channel. */
-			server & operator-=(const std::string &);
-
 			/** Sends a raw string to the server. */
 			void quote(const std::string &);
 
@@ -71,9 +65,18 @@ namespace pingpong {
 			/** Returns the current nickname. */
 			const std::string & get_nick() const { return nick; }
 
+			/** Returns the server's status. */
 			stage get_status() const { return status; }
 
+			/** Stringifies the server's status. */
 			std::string status_string() const;
+
+			/** Adds a channel. Returns false if the channel was already present in the server. */
+			bool add_channel(const std::string &);
+
+			/** Removes a channel from the server if possible and returns whether the channel was successfully removed.
+			 */
+			bool remove_channel(const std::string &);
 
 			/** Returns whether the user is in a given channel. */
 			bool has_channel(const std::string &) const;
@@ -89,6 +92,9 @@ namespace pingpong {
 
 			/** Retrieves a user pointer by name. */
 			std::shared_ptr<user> get_user(const std::string &, bool create = false);
+
+			/** Retrieves a user pointer by mask. */
+			std::shared_ptr<user> get_user(const mask &, bool create = false);
 
 			/** Renames a user. */
 			void rename_user(const std::string &old_nick, const std::string &new_nick);

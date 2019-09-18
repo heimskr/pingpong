@@ -30,6 +30,12 @@ namespace pingpong {
 			/** Returns whether the channel is associated with a server (it really should be...). */
 			bool has_server() const;
 
+			/** Adds a user to the channel. */
+			bool add_user(std::shared_ptr<user>);
+
+			/** Removes a user from the channel if possible and returns whether the user was successfully removed. */
+			bool remove_user(std::shared_ptr<user>);
+
 			/** Renames a user in the channel. */
 			bool rename_user(const std::string &, const std::string &);
 
@@ -44,8 +50,6 @@ namespace pingpong {
 
 			operator std::string() const;
 			std::shared_ptr<user> operator[](const std::string &);
-			channel & operator+=(std::shared_ptr<user>);
-			channel & operator-=(std::shared_ptr<user>);
 			bool operator==(const std::string &) const;
 			bool operator!=(const std::string &) const;
 			bool operator==(const channel &) const;

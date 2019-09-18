@@ -76,35 +76,6 @@ namespace pingpong {
 		last_message = msg;
 	}
 
-	server & server::operator+=(const std::string &chan) {
-		if (!has_channel(chan)) {
-			channels.push_back(std::make_shared<channel>(chan, this));
-		} else {
-			YIKES("Channel already exists: " << chan << "\r\n");
-		}
-
-		return *this;
-	}
-
-	server & server::operator-=(const std::string &chan) {
-		std::shared_ptr<channel> cptr = get_channel(chan, false);
-		if (cptr) {
-			auto iter = std::find(channels.begin(), channels.end(), cptr);
-			if (iter == channels.end()) {
-				DBG(ansi::color::red << "Channel pointer is inexplicably missing from server " << ansi::bold(hostname)
-					<< ": " << chan);
-				return *this;
-			}
-			
-			DBG("Removing channel " << chan);
-			channels.erase(iter);
-		} else {
-			YIKES("Channel not in list: " << chan << "\n");
-		}
-
-		return *this;
-	}
-
 	void server::quote(const std::string &str) {
 		if (!stream) {
 			YIKES("server::quote" >> ansi::style::bold << ": Stream not ready");
@@ -136,6 +107,36 @@ namespace pingpong {
 		return "unknown";
 	}
 
+	bool server::add_channel(const std::string &chan) {
+		if (!has_channel(chan)) {
+			channels.push_back(std::make_shared<channel>(chan, this));
+			return true;
+		}
+
+		DBG("Channel already exists: " << chan << "\r\n");
+		return false;
+	}
+
+	bool server::remove_channel(const std::string &chan) {
+		std::shared_ptr<channel> cptr = get_channel(chan, false);
+		if (cptr) {
+			auto iter = std::find(channels.begin(), channels.end(), cptr);
+			if (iter == channels.end()) {
+				DBG(ansi::color::red << "Channel pointer is inexplicably missing from server " << ansi::bold(hostname)
+					<< ": " << chan);
+				return false;
+			}
+			
+			DBG("Removing channel " << chan);
+			channels.erase(iter);
+		} else {
+			DBG("Channel not in list: " << chan << "\n");
+			return false;
+		}
+
+		return true;
+	}
+
 	bool server::has_channel(const std::string &chanstr) const {
 		for (std::shared_ptr<channel> chan: channels) {
 			if (chan->name == chanstr)
@@ -162,7 +163,7 @@ namespace pingpong {
 		if (!has_channel(chanstr)) {
 			if (!create)
 				return nullptr;
-			*this += chanstr;
+			add_channel(chanstr);
 		}
 
 		for (std::shared_ptr<channel> chan: channels) {
@@ -189,6 +190,18 @@ namespace pingpong {
 
 		return nullptr;
 	}
+
+	std::shared_ptr<user> server::get_user(const mask &mask_, bool create) {
+		if (mask_.is_server()) {
+			// If the host and user are empty, then it's presumably a message from the server (it'll look like
+			// {nick="irc.example.com", user="", host=""}) and we return nullptr because there's no actual user here.
+			return nullptr;
+		}
+
+		// Otherwise, pass it off to another overload.
+		return get_user(mask_.nick, create);
+	}
+
 
 	void server::rename_user(const std::string &old_nick, const std::string &new_nick) {
 		if (old_nick == nick)

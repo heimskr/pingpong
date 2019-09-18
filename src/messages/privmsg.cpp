@@ -5,11 +5,11 @@
 
 namespace pingpong {
 	privmsg_message::operator std::string() const {
-		return "[" + (chan? chan->name : "?") + "] <" + (who? who->name : "?") + "> " + content;
+		return "[" + where + "] <" + who->name + "> " + content;
 	}
 
 	bool privmsg_message::operator()(server *) {
-		events::dispatch<privmsg_event>(who, chan, content);
+		events::dispatch<privmsg_event>(who, where, content);
 		return true;
 	}
 }

@@ -3,6 +3,8 @@
 #include "messages/line.h"
 #include "core/mask.h"
 
+#include "lib/ansi.h"
+
 namespace pingpong {
 	line::line(server *serv_, const std::string &in): original(in), serv(serv_), source(mask("", "", "")) {
 		size_t index = 0;
@@ -24,6 +26,8 @@ namespace pingpong {
 		index = in_.find(' ');
 		command    = in_.substr(0, index);
 		parameters = in_.substr(index + 1);
+
+		DBG(std::string(*this));
 	}
 	
 	line::operator std::string() const {

@@ -7,19 +7,19 @@
 
 namespace pingpong {
 	part_message::operator std::string() const {
-		std::string start = line.source.nick + " left " + chan->name;
-		if (content.empty()) {
-			return start;
-		}
-
-		return start + " [" + content + "]";
+		return who->name + " left " + where + (content.empty()? "" : " [" + content + "]");
 	}
 
 	bool part_message::operator()(server *serv) {
+		if (where.empty() || where.front() != '#')
+			throw std::runtime_error("Invalid channel for part_message");
+		
+		std::shared_ptr<channel> chan = serv->get_channel(where, true);
+
 		if (who->is_self()) {
-			*serv -= chan->name;
+			serv->remove_channel(where);
 		} else {
-			*chan -= who;
+			chan->remove_user(who);
 			events::dispatch<names_updated_event>(chan);
 		}
 

@@ -3,12 +3,16 @@
 
 #include "core/server.h"
 #include "messages/message.h"
-#include "messages/sourced.h"
 
 namespace pingpong {
-	class join_message: public sourced_message {
+	class join_message: public message {
 		public:
-			join_message(const pingpong::line &line_);
+			server *serv;
+			std::string who;
+			std::string chan;
+
+			join_message(const pingpong::line &line_):
+				message(line_), serv(line_.serv), who(line_.source.nick), chan(line_.parameters.substr(1)) {}
 
 			static constexpr auto get_name = []() -> std::string { return "JOIN"; };
 

@@ -19,6 +19,25 @@ namespace pingpong {
 		return serv != nullptr;
 	}
 
+	bool channel::add_user(std::shared_ptr<user> user) {
+		if (!has_user(user)) {
+			users.push_back(user);
+			return true;
+		}
+
+		return false;
+	}
+
+	bool channel::remove_user(std::shared_ptr<user> user) {
+		auto iter = std::find(users.begin(), users.end(), user);
+		if (iter != users.end()) {
+			users.erase(iter);
+			return true;
+		}
+
+		return false;
+	}
+
 	bool channel::rename_user(const std::string &old_nick, const std::string &new_nick) {
 		// It's possible that the user has already been renamed in server::rename_user.
 		if (!has_user(new_nick)) {
@@ -62,19 +81,6 @@ namespace pingpong {
 		}
 
 		return nullptr;
-	}
-
-	channel & channel::operator+=(std::shared_ptr<user> user) {
-		if (!has_user(user))
-			users.push_back(user);
-		return *this;
-	}
-
-	channel & channel::operator-=(std::shared_ptr<user> user) {
-		auto iter = std::find(users.begin(), users.end(), user);
-		if (iter != users.end())
-			users.erase(iter);
-		return *this;
 	}
 
 	bool channel::operator==(const std::string &str) const {

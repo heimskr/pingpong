@@ -3,26 +3,21 @@
 
 #include <string>
 
+#include "core/local.h"
 #include "command.h"
 
 namespace pingpong {
-	class privmsg_command: public command {
+	class privmsg_command: public command, public local {
 		public:
-			std::string destination, message;
+			std::string message;
 
-			privmsg_command(server *serv_, std::string destination_, std::string message_);
+			privmsg_command(server *serv_, std::string where_, std::string message_);
 
-			privmsg_command(std::shared_ptr<channel> destination_, std::string message_):
-				privmsg_command(destination_->serv, destination_->name, message_) {}
+			privmsg_command(std::shared_ptr<channel> chan, std::string message_):
+				privmsg_command(chan->serv, chan->name, message_) {}
 
-			privmsg_command(std::shared_ptr<user> destination_, std::string message_):
-				privmsg_command(destination_->serv, destination_->name, message_) {}
-
-			bool is_user() const;
-			bool is_channel() const;
-
-			std::shared_ptr<user> get_user() const;
-			std::shared_ptr<channel> get_channel() const;
+			privmsg_command(std::shared_ptr<user> user, std::string message_):
+				privmsg_command(user->serv, user->name, message_) {}
 
 			operator std::string() const override;
 			virtual void send() override;

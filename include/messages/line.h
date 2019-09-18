@@ -11,6 +11,7 @@ namespace pingpong {
 		std::string tags, command, parameters;
 		mask source;
 
+		line() = delete;
 		line(server *serv, const std::string &);
 
 		operator std::string() const;

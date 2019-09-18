@@ -34,6 +34,10 @@ namespace pingpong {
 		return nick.empty() && user.empty() && host.empty();
 	}
 
+	bool mask::is_server() const {
+		return !nick.empty() && user.empty() && host.empty();
+	}
+
 	mask::operator std::string() const {
 		if (is_full())
 			return nick + "!" + user + "@" + host;
