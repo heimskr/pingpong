@@ -1,8 +1,6 @@
 #ifndef COMMANDS_COMMAND_H_
 #define COMMANDS_COMMAND_H_
 
-#include <memory>
-
 #include "core/pputil.h"
 #include "core/server.h"
 
