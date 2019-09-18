@@ -1,6 +1,6 @@
 COMPILER		 = g++
 CFLAGS			:= -std=c++17 -g -ggdb -O0 -Wall -Wextra
-LDFLAGS			:=
+LDFLAGS			:= -pthread
 CC				 = $(COMPILER) $(strip $(CFLAGS) $(CHECKFLAGS))
 CHECKFLAGS		:=
 MKBUILD			:= mkdir -p build
