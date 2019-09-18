@@ -161,7 +161,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	sourcename = `core/${name}.cpp`;
 	headername = `core/${name}.h`;
 
-	headertext = `
+	headertext = prepare(`
 	%	#ifndef PINGPONG_CORE_${name.toUpperCase()}_H_
 	%	#define PINGPONG_CORE_${name.toUpperCase()}_H_
 	%	
@@ -169,14 +169,14 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%		
 	%	}
 	%	
-	%	#endif`.substr(1);
+	%	#endif`);
 
-	sourcetext = `
+	sourcetext = prepare(`
 	%	#include "core/${name}.h"
 	%
 	%	namespace pingpong {
 	%		
-	%	}`.substr(1);
+	%	}`);
 
 } else {
 	console.error("Unknown type:", type);
