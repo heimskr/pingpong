@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+
+/*
+ * Types = command, core, event, lib, message
+ */
+
 const fs = require("fs");
 
 const yikes = (...a) => { console.error(...a); process.exit(1); };
@@ -19,45 +24,39 @@ let allDir, sourcename, headername, sourcetext, headertext;
 const sourcebase = "src", headerbase = "include";
 
 if (type.match(/^(com(mands?)?|cmd)$/i)) {
+
 	sourcename = `commands/${name}.cpp`;
 	headername = `commands/${name}.h`;
 	const cls = `${name}_command`;
 
-	headertext = `
-#ifndef COMMANDS_${name.toUpperCase()}_H_
-#define COMMANDS_${name.toUpperCase()}_H_
+	headertext = prepare(`
+	%	#ifndef PINGPONG_COMMANDS_${name.toUpperCase()}_H_
+	%	#define PINGPONG_COMMANDS_${name.toUpperCase()}_H_
+	%	
+	%	#include "command.h"
+	%	
+	%	namespace pingpong {
+	%		class ${cls}: public command {
+	%			public:
+	%				
+	%				operator std::string() const override;
+	%				virtual void send() override;
+	%		};
+	%	}
+	%	
+	%	#endif`);
 
-#include <string>
+	sourcetext = prepare(`
+	%	#include "commands/${name}.h"
+	%	
+	%	namespace pingpong {
+	%		${cls}::operator std::string() const {
+	%			
+	%		}
+	%	}`);
 
-#include "command.h"
-
-namespace pingpong {
-	class ${cls}: public command {
-		public:
-			using command::command;
-
-
-			operator std::string() const override;
-	};
-}
-
-#endif
-`.substr(1);
-
-	sourcetext = `
-#include <string>
-
-#include "commands/${name}.h"
-
-namespace pingpong {
-	${cls}::operator std::string() const {
-		
-	}
-}
-`.substr(1);
-
-	updateModule(allDir = "commands", name);
 } else if (type.match(/^(mes(sages?)?|msg|m)(-\w+)?$/i)) {
+
 	const base = type.match(/-/)? type.replace(/^.+-/, "") : null;
 	const parent = base? `${base}_message` : "message";
 
@@ -65,38 +64,32 @@ namespace pingpong {
 	headername = `messages/${name}.h`;
 	const cls = `${name}_message`;
 
-	headertext = `
-#ifndef MESSAGES_${name.toUpperCase()}_H_
-#define MESSAGES_${name.toUpperCase()}_H_
+	headertext = prepare(`
+	%	#ifndef PINGPONG_MESSAGES_${name.toUpperCase()}_H_
+	%	#define PINGPONG_MESSAGES_${name.toUpperCase()}_H_
+	%	
+	%	#include "message.h"
+	%	${base? `#include "${base}.h"\n` : ""}
+	%	namespace pingpong {
+	%		class ${cls}: public ${parent} {
+	%			public:
+	%				using ${parent}::${parent};
+	%				static constexpr auto get_name = []() -> std::string { return "${args[2] || name.toUpperCase()}"; };
+	%	
+	%				operator std::string() const override;
+	%		};
+	%	}
+	%	
+	%	#endif`);
 
-#include <string>
-
-#include "message.h"
-${base? `#include "${base}.h"\n` : ""}
-namespace pingpong {
-	class ${cls}: public ${parent} {
-		public:
-			using ${parent}::${parent};
-			static constexpr auto get_name = []() -> std::string { return "${args[2] || name.toUpperCase()}"; };
-
-			operator std::string() const override;
-	};
-}
-
-#endif
-`.substr(1);
-
-	sourcetext = `
-#include <string>
-
-#include "messages/${name}.h"
-
-namespace pingpong {
-	${cls}::operator std::string() const {
-		
-	}
-}
-`.substr(1);
+	sourcetext = prepare(`
+	%	#include "messages/${name}.h"
+	%	
+	%	namespace pingpong {
+	%		${cls}::operator std::string() const {
+	%			
+	%		}
+	%	}`);
 
 	const ircPath = sourcebase + "/core/irc.cpp";
 	const ircText = fs.readFileSync(ircPath, "utf8");
@@ -105,81 +98,75 @@ namespace pingpong {
 			ircText.replace(/(void irc::init_messages\(\) {)/, `$1\n\t\tmessage::add_ctor<${cls}>();`));
 	}
 
-	updateModule(allDir = "messages", name);
 } else if (type.match(/^(ev?|ev(en)?t)(-\w+)?$/i)) {
+
 	const base = type.match(/-/)? type.replace(/^.+-/, "") : null;
 	const parent = base? `${base}_event` : "event";
 
 	headername = `events/${name}.h`;
 	const cls = `${name}_event`;
 
-	headertext = `
-#ifndef EVENTS_${name.toUpperCase()}_H_
-#define EVENTS_${name.toUpperCase()}_H_
-
-#include <string>
-
-#include "event.h"
-${base? `#include "${base}.h"\n` : ""}
-namespace pingpong {
-	class ${cls}: public ${parent} {
-		public:
-			using ${parent}::${parent};
-	};
-}
-
-#endif
-`.substr(1);
+	headertext = prepare(`
+	%	#ifndef PINGPONG_EVENTS_${name.toUpperCase()}_H_
+	%	#define PINGPONG_EVENTS_${name.toUpperCase()}_H_
+	%	
+	%	#include "events/event.h"
+	%	${base? `#include "${base}.h"\n` : ""}
+	%	namespace pingpong {
+	%		class ${cls}: public ${parent} {
+	%			public:
+	%				using ${parent}::${parent};
+	%		};
+	%	}
+	%	
+	%	#endif`);
 
 	allDir = "events";
+
 } else if (type.match(/^l(ib(rary)?)?$/i)) {
+
 	sourcename = `lib/${name}.cpp`;
 	headername = `lib/${name}.h`;
 
-	headertext = `
-#ifndef LIB_${name.toUpperCase()}_H_
-#define LIB_${name.toUpperCase()}_H_
+	headertext = prepare(`
+	%	#ifndef PINGPONG_LIB_${name.toUpperCase()}_H_
+	%	#define PINGPONG_LIB_${name.toUpperCase()}_H_
+	%	
+	%	namespace pingpong {
+	%		
+	%	}
+	%	
+	%	#endif`);
 
-namespace pingpong {
-	
-}
+	sourcetext = prepare(`
+	%	#include "lib/${name}.h"
+	%	
+	%	namespace pingpong {
+	%		
+	%	}`);
 
-#endif
-`.substr(1);
-
-	sourcetext = `
-#include "lib/${name}.h"
-
-namespace pingpong {
-
-}
-`.substr(1);
-
-	updateModule("lib", name);
 } else if (type.match(/^core$/i)) {
+
 	sourcename = `core/${name}.cpp`;
 	headername = `core/${name}.h`;
 
 	headertext = `
-#ifndef CORE_${name.toUpperCase()}_H_
-#define CORE_${name.toUpperCase()}_H_
-
-namespace pingpong {
-	
-}
-
-#endif
-`.substr(1);
+	%	#ifndef PINGPONG_CORE_${name.toUpperCase()}_H_
+	%	#define PINGPONG_CORE_${name.toUpperCase()}_H_
+	%	
+	%	namespace pingpong {
+	%		
+	%	}
+	%	
+	%	#endif`.substr(1);
 
 	sourcetext = `
-#include "core/${name}.h"
+	%	#include "core/${name}.h"
+	%
+	%	namespace pingpong {
+	%		
+	%	}`.substr(1);
 
-namespace pingpong {
-
-}
-`.substr(1);
-
-	updateModule(allDir = "core", name);
 } else {
 	console.error("Unknown type:", type);
 	yikes(`Expected "command" | "core" | "lib" | "message" | "event"`);
@@ -200,9 +187,7 @@ if (allDir) {
 	}
 }
 
-function updateModule(type, name) {
-	const moduleText = fs.readFileSync(`${sourcebase}/${type}/module.mk`, "utf8");
-	if (moduleText.indexOf(`${sourcebase}/${type}/${name}.cpp`) == -1) {
-		fs.writeFileSync(`${sourcebase}/${type}/module.mk`, moduleText.replace(/\s+$/, ` ${sourcebase}/${type}/${name}.cpp\n`));
-	}
+function prepare(text) {
+	// Remove the initial newline and then the extra tabs and add a trailing newline..
+	return text.substr(1).replace(/^\t+%\t?/gm, "") + "\n";
 }
