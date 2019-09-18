@@ -98,12 +98,15 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	}`);
 
 	const ircPath = sourcebase + "/core/irc.cpp";
-	const ircText = fs.readFileSync(ircPath, "utf8");
+	let ircText = fs.readFileSync(ircPath, "utf8");
 	if (ircText.indexOf(`add_ctor<${cls}>`) == -1) {
 		fs.writeFileSync(ircPath,
-			ircText.replace(/(void irc::init_messages\(\) {)/, `$1\n\t\tmessage::add_ctor<${cls}>();`)
-			       .replace(/(#include "events\/server_status.h"\n)/, `$1\n#include "messages/${name}.h"`));
+			ircText = ircText.replace(/(void irc::init_messages\(\) {)/, `$1\n\t\tmessage::add_ctor<${cls}>();`));
+	}
 
+	if (ircText.indexOf(`"messages/${name}.h"`) == -1) {
+		fs.writeFileSync(ircPath,
+			ircText = ircText.replace(/(#include "events\/server_status.h"\n)/, `$1\n#include "messages/${name}.h"`));
 	}
 
 } else if (type.match(/^(ev?|ev(en)?t)(-\w+)?$/i)) {
