@@ -3,7 +3,8 @@
 
 #include <unordered_set>
 
-#include "message.h"
+#include "core/modeset.h"
+#include "messages/message.h"
 
 namespace pingpong {
 	class mode_message: public message {
@@ -12,19 +13,6 @@ namespace pingpong {
 			void validate_modes(const std::string &, const pingpong::line &);
 
 		public:
-			enum class mode_type {self, channel};
-			
-			/** There are two types of mode changes: user modes and channel modes. This indicates which type applies. */
-			mode_type type;
-
-			/** The raw string of mode changes, such as "-v+o". */
-			std::string modes;
-
-			/** A set of all modes indicated as added by the message. */
-			std::unordered_set<char> added = {};
-
-			/** A set of all modes indicated as removed by the message. */
-			std::unordered_set<char> removed = {};
 
 			mode_message(const pingpong::line &line_);
 

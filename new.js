@@ -39,7 +39,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#ifndef PINGPONG_COMMANDS_${name.toUpperCase()}_H_
 	%	#define PINGPONG_COMMANDS_${name.toUpperCase()}_H_
 	%	
-	%	#include "command.h"
+	%	#include "commands/command.h"
 	%	
 	%	namespace pingpong {
 	%		class ${cls}: public command {
@@ -74,7 +74,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#ifndef PINGPONG_MESSAGES_${name.toUpperCase()}_H_
 	%	#define PINGPONG_MESSAGES_${name.toUpperCase()}_H_
 	%	
-	%	#include "message.h"
+	%	#include "messages/message.h"
 	%	${base? `#include "${base}.h"\n` : ""}
 	%	namespace pingpong {
 	%		class ${cls}: public ${parent} {
@@ -122,7 +122,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#define PINGPONG_EVENTS_${name.toUpperCase()}_H_
 	%	
 	%	#include "events/event.h"
-	%	${base? `#include "${base}.h"\n` : ""}
+	%	${base? `#include "events/${base}.h"\n` : ""}
 	%	namespace pingpong {
 	%		class ${cls}: public ${parent} {
 	%			public:
