@@ -20,8 +20,6 @@ namespace tests {
 	void test_channel() {
 		channel chan("#programming");
 		channel user("NickServ");
-//		cout << "chan.is_user(): " << chan.is_user() << "\n";
-//		cout << "user.is_user(): " << user.is_user() << "\n";
 	}
 
 	void test_commands(server *serv) {
@@ -35,7 +33,7 @@ namespace tests {
 	void test_network(server &serv) {
 		serv.start();
 		serv.set_nick("pingpong");
-		serv.worker->join();
+		serv.worker.join();
 	}
 
 	void test_mask() {

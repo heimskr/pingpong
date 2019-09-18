@@ -18,19 +18,14 @@ endif
 .PHONY: all test clean depend mkbuild
 all: Makefile
 
-# Peter Miller, "Recursive Make Considered Harmful" (http://aegis.sourceforge.net/auug97.pdf)
-MODULES			:= core commands events messages lib test
-COMMONSRC		:=
-CFLAGS			+= -Iinclude
-LIBS			:=
-SRC				:=
-include $(patsubst %,src/%/module.mk,$(MODULES))
-SRC				+= $(COMMONSRC)
-COMMONOBJ		:= $(patsubst src/%.cpp,build/%.o, $(filter %.cpp,$(COMMONSRC)))
-OBJ				:= $(patsubst src/%.cpp,build/%.o, $(filter %.cpp,$(SRC)))
-sinclude $(patsubst %,src/%/targets.mk,$(MODULES))
 
-all: $(COMMONOBJ)
+SOURCES			:= $(shell find -L src -name '*.cpp' | sed -nE '/(tests?|test_.+)\.cpp$$/!p')
+OBJECTS			:= $(patsubst src/%.cpp,build/%.o, $(SOURCES))
+
+sinclude $(shell find src -name 'targets.mk')
+
+
+all: $(OBJECTS) build/tests
 
 test: build/tests
 	./build/tests
@@ -43,7 +38,7 @@ clean:
 
 build/%.o: src/%.cpp
 	@ mkdir -p "$(shell dirname "$@")"
-	$(CC) $(strip $(SDKFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c) $< -o $@
+	$(CC) $(strip $(SDKFLAGS) $(CPPFLAGS) $(CXXFLAGS) -Iinclude -c) $< -o $@
 
 DEPFILE  = .dep
 DEPTOKEN = "\# MAKEDEPENDS"
