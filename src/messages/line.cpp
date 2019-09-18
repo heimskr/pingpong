@@ -26,8 +26,6 @@ namespace pingpong {
 		index = in_.find(' ');
 		command    = in_.substr(0, index);
 		parameters = in_.substr(index + 1);
-
-		DBG(std::string(*this));
 	}
 	
 	line::operator std::string() const {
