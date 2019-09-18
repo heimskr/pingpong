@@ -31,4 +31,8 @@ namespace pingpong {
 	line::operator std::string() const {
 		return "T[" + tags + "], S[" + std::string(source) + "], C[" + command + "], P[" + parameters + "]";
 	}
+
+	std::ostream & operator<<(std::ostream &os, const line &line_) {
+		return os << std::string(line_);
+	}
 }

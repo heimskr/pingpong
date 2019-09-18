@@ -15,6 +15,7 @@ namespace pingpong {
 		line(server *serv, const std::string &);
 
 		operator std::string() const;
+		friend std::ostream & operator<<(std::ostream &, const line &);
 	};
 }
 

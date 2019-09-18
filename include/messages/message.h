@@ -4,6 +4,7 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <stdexcept>
 #include <string>
 
 #include "core/server.h"
@@ -45,6 +46,17 @@ namespace pingpong {
 			template <typename T>
 			bool is() {
 				return bool(dynamic_cast<T *>(this));
+			}
+	};
+
+	class bad_message: public std::exception {
+		public:
+			const line original;
+
+			bad_message(const line &original_): original(original_) {}
+
+			const char * what() const noexcept {
+				return "Malformed message";
 			}
 	};
 }
