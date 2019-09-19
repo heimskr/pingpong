@@ -3,7 +3,7 @@
 
 namespace pingpong {
 	enum class numeric_type: int {
-		channel_mode_is  = 324, // "#channel +modes"                -- The modes for a channel.
+		channel_modes    = 324, // "#channel +modes"                -- The modes for a channel.
 		channel_creation = 329, // "#channel \d+"                   -- Channel creation time.
 		channel_topic    = 332, // "#channel :topic"                -- Channel topic.
 		topic_modified   = 333, // "#channel someone \d+"           -- Who last changed a channel's topic and when.
