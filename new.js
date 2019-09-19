@@ -15,11 +15,13 @@ const options = minimist(process.argv.slice(2), {
 	alias: {
 		s: "nosrc",
 		h: "noheader",
+		o: "overwrite"
 	},
-	boolean: ["nosrc", "noheader"],
+	boolean: ["nosrc", "noheader", "overwrite"],
 	default: {
 		nosrc: false,
 		noheader: false,
+		overwrite: false,
 	}
 });
 
@@ -29,7 +31,7 @@ if ((args[0] || "").match(/^(types|help)$/i)) {
 }
 
 if (args.length < 2 || !args[1]) {
-	yikes("Usage: new.js [type] [name] [-s/--nosrc] [-h/--noheader]");
+	yikes("Usage: new.js [type] [name] [-s/--nosrc] [-h/--noheader] [-o/--overwrite]");
 }
 
 const [type, name] = args;
@@ -135,12 +137,10 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#ifndef PINGPONG_EVENTS_${name.toUpperCase()}_H_
 	%	#define PINGPONG_EVENTS_${name.toUpperCase()}_H_
 	%	
-	%	#include "events/event.h"
-	%	${base? `#include "events/${base}.h"\n` : ""}
+	%	${["sourced", "targeted"].includes(base)? `#include "events/${base}.h"\n` : `#include "events/event.h"\n`}
 	%	namespace pingpong {
-	%		class ${cls}: public ${parent} {
-	%			public:
-	%				using ${parent}::${parent};
+	%		struct ${cls}: public ${parent} {
+	%			using ${parent}::${parent};
 	%		};
 	%	}
 	%	
@@ -222,7 +222,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 
 if (sourcetext && !options.nosrc) {
 	const fn = `${sourcebase}/${sourcename}`;
-	if (fs.existsSync(fn)) {
+	if (fs.existsSync(fn) && !options.overwrite) {
 		console.error(`Error: \x1b[1m${fn}\x1b[0m already exists.`);
 	} else {
 		fs.writeFileSync(fn, sourcetext);
@@ -232,7 +232,7 @@ if (sourcetext && !options.nosrc) {
 
 if (headertext && !options.noheader) {
 	const fn = `${headerbase}/${headername}`;
-	if (fs.existsSync(fn)) {
+	if (fs.existsSync(fn) && !options.overwrite) {
 		console.error(`Error: \x1b[1m${fn}\x1b[0m already exists.`);
 	} else {
 		fs.writeFileSync(fn, headertext);
