@@ -1,4 +1,6 @@
 #include "events/mode.h"
+#include "events/hat_updated.h"
+
 #include "messages/mode.h"
 
 namespace pingpong {
@@ -48,6 +50,9 @@ namespace pingpong {
 			if (util::is_valid_nick(mset.extra)) {
 				// If the extra data in the modeset is a nickname, then presumably we need to add or remove a hat.
 				// I'm not sure what other situations could cause this situation.
+				// TODO: try to remember all modes for every user in the channel, not just the last seen hat.
+				// Right now, when a hat is removed, it's assumed the user ends up with no hat, but this isn't always
+				// true; if someone is +ho and you deop them, their hat won't disappear but will change from @ to %.
 				std::shared_ptr<user> who = serv->get_user(mset.extra, true);
 				std::map<std::shared_ptr<user>, hat> &chan_hats = chan->hats;
 				const auto hat_end = hat_map.end();
@@ -73,17 +78,12 @@ namespace pingpong {
 						// (If the new hat were a lower rank, it wouldn't affect the highest hat; if it were higher
 						// rank, our info's out of date anyway.)
 						if (add && old_hat < new_hat) {
-							DBG("Upgrading " << who->name << " from "
-								<< ansi::wrap(std::string(1, static_cast<char>(old_hat)), ansi::style::underline)
-								<< " to "
-								<< ansi::wrap(std::string(1, static_cast<char>(new_hat)), ansi::style::underline)
-								<< " in " << chan->name);
-							chan_hats.insert({who, new_hat});
-						} else if (!add && old_hat == new_hat) {
-							DBG("Removing hat "
-								<< ansi::wrap(std::string(1, static_cast<char>(old_hat)), ansi::style::underline)
-								<< " from " << who->name << " in " << chan->name);
 							chan_hats.erase(who);
+							chan_hats.insert({who, new_hat});
+							events::dispatch<hat_updated_event>(who, chan, old_hat, new_hat);
+						} else if (!add && old_hat == new_hat) {
+							chan_hats.erase(who);
+							events::dispatch<hat_updated_event>(who, chan, old_hat, new_hat);
 						}
 					}
 
