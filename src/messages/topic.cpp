@@ -1,3 +1,4 @@
+#include "events/topic.h"
 #include "events/topic_updated.h"
 #include "messages/topic.h"
 
@@ -14,6 +15,7 @@ namespace pingpong {
 		topicset old_topic = chan->topic;
 		chan->topic = content;
 		events::dispatch<topic_updated_event>(chan, old_topic, chan->topic);
+		events::dispatch<topic_event>(chan, serv, content);
 
 		return true;
 	}
