@@ -19,8 +19,6 @@ namespace pingpong {
 			pingpong::server *serv = nullptr;
 			std::set<std::weak_ptr<channel>, weakptr_compare<channel>> channels = {};
 
-			std::unordered_set<char> modes;
-
 			user(const std::string &name_, server *serv_): name(name_), serv(serv_) {}
 
 			void rename(const std::string &);
