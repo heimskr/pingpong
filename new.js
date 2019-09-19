@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /*
- * Types = command, core, event, lib, message
+ * Types = command, core, event, lib, message, numeric
  */
 
 const fs = require("fs");
@@ -11,7 +11,7 @@ const yikes = (...a) => { console.error(...a); process.exit(1); };
 const [,, ...args] = process.argv;
 
 if ((args[0] || "").match(/^(types|help)$/i)) {
-	console.log("Supported types:", ["command", "core", "event", "lib", "message"].map(x => `\x1b[1m${x}\x1b[0m`).join(", "));
+	console.log("Supported types:", ["command", "core", "event", "lib", "message", "numeric"].map(x => `\x1b[1m${x}\x1b[0m`).join(", "));
 	process.exit(0);
 }
 
@@ -152,6 +152,20 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	
 	%	namespace pingpong {
 	%		
+	%	}`);
+
+} else if (type.match(/^n(um(eric)?)?$/i)) {
+
+	sourcename = `numerics/${name}.cpp`;
+
+	sourcetext = prepare(`
+	%	#include "messages/numeric.h"
+	%
+	%	namespace pingpong {
+	%		bool numeric_message::handle_${name}(server *serv) {
+	%			
+	%			return true;
+	%		}
 	%	}`);
 
 } else if (type.match(/^core$/i)) {
