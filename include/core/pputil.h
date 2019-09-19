@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <chrono>
+#include <string>
 
 namespace pingpong {
 	/**
@@ -11,12 +12,17 @@ namespace pingpong {
 	class util {
 		private:
 			static std::chrono::system_clock::duration now();
+			static constexpr const char *nick_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+				"-_[]{}\\`|";
 
 		public:
 			static long timestamp();
 			static long millistamp();
 			static long microstamp();
 			static long nanostamp();
+
+			/** Returns true if all the characters in a string are valid for nicknames. */
+			static bool is_valid_nick(const std::string &);
 	};
 
 	template <typename T>

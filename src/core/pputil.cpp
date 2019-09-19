@@ -20,4 +20,8 @@ namespace pingpong {
 	long util::nanostamp() {
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(now()).count();
 	}
+
+	bool util::is_valid_nick(const std::string &str) {
+		return !str.empty() && str.find_first_not_of(nick_chars) == std::string::npos;
+	}
 }

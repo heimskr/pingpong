@@ -84,8 +84,8 @@ namespace pingpong {
 	};
 
 	/** For events local to one user in one channel on one server, such as joins.
-	 * This can also be used for things like quits, which are specific to a user and server but not to a channel, by
-	 * leaving the channel pointer null. */
+	 *  This can also be used for things like quits, which are specific to a user and server but not to a channel, by
+	 *  leaving the channel pointer null. */
 	struct user_event: public channel_event {
 		std::shared_ptr<user> who;
 
