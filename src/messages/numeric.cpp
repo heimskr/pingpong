@@ -1,3 +1,4 @@
+#include <cctype>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -14,16 +15,22 @@
 
 namespace pingpong {
 	numeric_message::numeric_message(pingpong::line line_): message(line_) {
-		if (!is_numeric(line_.command.c_str(), number))
+		int uncasted = 0;
+		if (!is_numeric(line_.command.c_str(), uncasted))
 			throw std::invalid_argument("Expected a numeric command");
+
+		type = static_cast<numeric_type>(uncasted);
+
+		if (types.count(type) == 0)
+			DBG("Unknown numeric message type:" << uncasted);
 	}
 
 	numeric_message::operator std::string() const {
-		return "[" + std::to_string(number) + "] " + line.original;
+		return "[" + to_string() + "] " + line.original;
 	}
 
 	bool numeric_message::operator()(server *serv) {
-		if (number == 353) {
+		if (*this == 353) {
 			names parsed;
 			try {
 				parsed = numeric_message::parse353(line.parameters);
@@ -39,7 +46,7 @@ namespace pingpong {
 			std::shared_ptr<channel> chan = serv->get_channel(chanstr);
 
 			if ((!serv->last_message || serv->last_message->get_name() != "_NUMERIC"
-			    || std::dynamic_pointer_cast<numeric_message>(serv->last_message)->number != 353) && chan) {
+			    || *std::dynamic_pointer_cast<numeric_message>(serv->last_message) != 353) && chan) {
 				// If the previous message was something other than a NAMES reply, reset the current user list.
 				chan->users.clear();
 			} else if (!chan) {
@@ -119,7 +126,9 @@ namespace pingpong {
 	}
 	
 	bool numeric_message::is_numeric(const char *str) {
-		if (!std::isdigit(str[0])) return false;
+		if (!std::isdigit(str[0]))
+			return false;
+
 		char *ptr;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"
@@ -128,8 +137,10 @@ namespace pingpong {
 		return !*ptr;
 	}
 
-	bool numeric_message::is_numeric(const char *str, long &l) {
-		if (!std::isdigit(str[0])) return false;
+	bool numeric_message::is_numeric(const char *str, int &l) {
+		if (!std::isdigit(str[0]))
+			return false;
+
 		char *ptr;
 		long result = strtol(str, &ptr, 10);
 		if (*ptr)
@@ -137,4 +148,17 @@ namespace pingpong {
 		l = result;
 		return true;
 	}
+
+	bool numeric_message::operator==(int number) const { return to_int() == number; }
+	bool numeric_message::operator!=(int number) const { return to_int() != number; }
+	bool numeric_message::operator==(numeric_type type_) const { return type == type_; }
+	bool numeric_message::operator!=(numeric_type type_) const { return type != type_; }
+
+	std::unordered_set<numeric_type> numeric_message::types = {
+		numeric_type::channel_mode_is, numeric_type::names_reply, numeric_type::no_such_nick
+	};
 }
+
+/**
+ * 401 you someone :No such nick/channel
+ */
