@@ -80,7 +80,9 @@ namespace pingpong {
 		public:
 			std::shared_ptr<channel> chan;
 
-			channel_event(const std::shared_ptr<channel> &, const std::string & = "");
+			channel_event(const std::shared_ptr<channel> &, server *, const std::string & = "");
+			channel_event(const std::shared_ptr<channel> &chan_, const std::string &content_ = ""):
+				channel_event(chan_, chan_? chan_->serv : nullptr, content_) {}
 	};
 
 	/** For events local to one user in one channel on one server, such as joins.

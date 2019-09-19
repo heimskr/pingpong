@@ -208,8 +208,8 @@ namespace pingpong {
 			if (!create)
 				return nullptr;
 			std::shared_ptr<user> new_user = std::make_shared<user>(name, this);
-			events::dispatch<user_appeared_event>(new_user);
 			users.push_back(new_user);
+			events::dispatch<user_appeared_event>(new_user);
 			return new_user;
 		}
 

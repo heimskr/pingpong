@@ -8,14 +8,14 @@
 namespace pingpong {
 	std::multimap<std::string, listener_fn> events::listeners;
 
-	channel_event::channel_event(const std::shared_ptr<channel> &chan_, const std::string &content_):
-	server_event(chan_? chan_->serv : nullptr, content_), chan(chan_) {
+	channel_event::channel_event(const std::shared_ptr<channel> &chan_, server *serv_, const std::string &content_):
+	server_event(serv_, content_), chan(chan_) {
 		if (chan && !chan->has_server())
 			throw std::invalid_argument("Channel is not associated with a server in channel_event");
 	}
 
 	user_event::user_event(const std::shared_ptr<user> &who_, const std::shared_ptr<channel> &chan_,
-	const std::string &content_): channel_event(chan_, content_), who(who_) {
+	const std::string &content_): channel_event(chan_, who_->serv, content_), who(who_) {
 		if (chan_ && who_->serv != chan_->serv)
 			throw std::invalid_argument("User and channel are associated with different servers in user_event");
 	}
