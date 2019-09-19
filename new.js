@@ -4,11 +4,24 @@
  * Types = command, core, event, lib, message, numeric
  */
 
-const fs = require("fs");
+const fs = require("fs"),
+      minimist = require("minimist");
 
 const yikes = (...a) => { console.error(...a); process.exit(1); };
 
 const [,, ...args] = process.argv;
+
+const options = minimist(process.argv.slice(2), {
+	alias: {
+		s: "nosrc",
+		h: "noheader",
+	},
+	boolean: ["nosrc", "noheader"],
+	default: {
+		nosrc: false,
+		noheader: false,
+	}
+});
 
 if ((args[0] || "").match(/^(types|help)$/i)) {
 	console.log("Supported types:", ["command", "core", "event", "lib", "message", "numeric"].map(x => `\x1b[1m${x}\x1b[0m`).join(", "));
@@ -16,7 +29,7 @@ if ((args[0] || "").match(/^(types|help)$/i)) {
 }
 
 if (args.length < 2 || !args[1]) {
-	yikes("Usage: new.js [type] [name]");
+	yikes("Usage: new.js [type] [name] [-s/--nosrc] [-h/--noheader]");
 }
 
 const [type, name] = args;
@@ -26,6 +39,7 @@ if (!name.match(/^[\w_\d]+$/i)) {
 }
 
 let sourcename, headername, sourcetext, headertext;
+let afterWrite = () => {};
 
 const sourcebase = "src", headerbase = "include";
 
@@ -168,6 +182,17 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%		}
 	%	}`);
 
+	afterWrite = () => {
+		let numeric_h   = fs.readFileSync("include/messages/numeric.h", "utf8");
+		let numeric_cpp = fs.readFileSync("src/messages/numeric.cpp",   "utf8");
+
+		numeric_h = numeric_h.replace(/(\n\t};\n}\n\n#endif)/, `\n\t\t\tbool handle_${name}(server *);$1`);
+		numeric_cpp = numeric_cpp.replace(/(default: return true;)/, `case numeric_type::${name}: return handle_${name}(serv);\n\t\t\t$1`);
+
+		fs.writeFileSync("include/messages/numeric.h", numeric_h);
+		fs.writeFileSync("src/messages/numeric.cpp", numeric_cpp);
+	};
+
 } else if (type.match(/^core$/i)) {
 
 	sourcename = `core/${name}.cpp`;
@@ -195,23 +220,27 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	yikes(`Expected "command" | "core" | "lib" | "message" | "event"`);
 }
 
-if (sourcetext) {
+if (sourcetext && !options.nosrc) {
 	const fn = `${sourcebase}/${sourcename}`;
 	if (fs.existsSync(fn)) {
 		console.error(`Error: \x1b[1m${fn}\x1b[0m already exists.`);
 	} else {
 		fs.writeFileSync(fn, sourcetext);
+		console.log(`Wrote to \x1b[1m${fn}\x1b[0m.`);
 	}
 }
 
-if (headertext) {
+if (headertext && !options.noheader) {
 	const fn = `${headerbase}/${headername}`;
 	if (fs.existsSync(fn)) {
 		console.error(`Error: \x1b[1m${fn}\x1b[0m already exists.`);
 	} else {
 		fs.writeFileSync(fn, headertext);
+		console.log(`Wrote to \x1b[1m${fn}\x1b[0m.`);
 	}
 }
+
+afterWrite();
 
 function prepare(text) {
 	// Remove the initial newline and then the extra tabs and add a trailing newline..
