@@ -155,7 +155,14 @@ namespace pingpong {
 	bool numeric_message::operator!=(numeric_type type_) const { return type != type_; }
 
 	std::unordered_set<numeric_type> numeric_message::types = {
-		numeric_type::channel_mode_is, numeric_type::names_reply, numeric_type::no_such_nick
+		numeric_type::channel_mode_is,
+		numeric_type::channel_topic,
+		numeric_type::topic_modified,
+		numeric_type::names_reply,
+		numeric_type::motd,
+		numeric_type::motd_start,
+		numeric_type::motd_end,
+		numeric_type::no_such_nick
 	};
 }
 
