@@ -25,7 +25,7 @@ if (!name.match(/^[\w_\d]+$/i)) {
 	yikes("Invalid name:", name);
 }
 
-let allDir, sourcename, headername, sourcetext, headertext;
+let sourcename, headername, sourcetext, headertext;
 
 const sourcebase = "src", headerbase = "include";
 
@@ -132,8 +132,6 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	
 	%	#endif`);
 
-	allDir = "events";
-
 } else if (type.match(/^l(ib(rary)?)?$/i)) {
 
 	sourcename = `lib/${name}.cpp`;
@@ -185,22 +183,19 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 
 if (sourcetext) {
 	const fn = `${sourcebase}/${sourcename}`;
-	if (fs.existsSync(fn))
-		return console.error(`Error: \x1b[1m${fn}\x1b[0m already exists.`);
-	fs.writeFileSync(fn, sourcetext);
+	if (fs.existsSync(fn)) {
+		console.error(`Error: \x1b[1m${fn}\x1b[0m already exists.`);
+	} else {
+		fs.writeFileSync(fn, sourcetext);
+	}
 }
 
 if (headertext) {
 	const fn = `${headerbase}/${headername}`;
-	if (fs.existsSync(fn))
-		return console.error(`Error: \x1b[1m${fn}\x1b[0m already exists.`);
-	fs.writeFileSync(fn, headertext);
-}
-
-if (allDir) {
-	const allText = fs.readFileSync(`${headerbase}/${allDir}/all.h`, "utf8");
-	if (allText.indexOf(`#include "${name}.h"`) == -1) {
-		fs.writeFileSync(`${headerbase}/${allDir}/all.h`, allText.replace(/(\n#endif)/, `#include "${name}.h"\n$1`));
+	if (fs.existsSync(fn)) {
+		console.error(`Error: \x1b[1m${fn}\x1b[0m already exists.`);
+	} else {
+		fs.writeFileSync(fn, headertext);
 	}
 }
 
