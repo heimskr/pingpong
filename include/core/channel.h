@@ -9,10 +9,11 @@
 #include <string>
 #include <unordered_set>
 
-#include "core/user.h"
 #include "core/ppdefs.h"
 #include "core/moded.h"
 #include "core/server.h"
+#include "core/topicset.h"
+#include "core/user.h"
 
 namespace pingpong {
 	class user;
@@ -25,8 +26,7 @@ namespace pingpong {
 			server *serv;
 			std::list<std::shared_ptr<user>> users;
 			std::map<std::shared_ptr<user>, hat> hats;
-			std::string topic {};
-			long topic_changed {-1};
+			topicset topic;
 
 			channel(std::string, server *);
 			channel(std::string);
