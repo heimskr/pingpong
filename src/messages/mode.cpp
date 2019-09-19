@@ -11,14 +11,23 @@ namespace pingpong {
 			if (middle == std::string::npos)
 				throw bad_message(line);
 			
-			mset = {modeset::mode_type::self, line.parameters.substr(middle + 2)};
+			mset = {modeset::mode_type::self, line.parameters.substr(middle + 2), ""};
 		} else {
 			// This is presumably a channel mode change. The parameters should look like "#chan -S".
 			middle = line.parameters.find(' ');
 			if (middle == std::string::npos)
 				throw bad_message(line);
 
-			mset = {modeset::mode_type::channel, line.parameters.substr(middle + 1)};
+			// Bans are in the form "+b nick!user@host", with an extra mask after the mode.
+			std::string modestr {line.parameters.substr(middle + 1)};
+			std::string extra;
+			size_t space = modestr.find(' ');
+			if (space != std::string::npos) {
+				extra.assign(modestr, space + 1, std::string::npos);
+				modestr.erase(space);
+			}
+
+			mset = modeset(modeset::mode_type::channel, modestr, extra);
 		}
 
 		where = line.parameters.substr(0, middle);

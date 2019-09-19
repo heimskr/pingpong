@@ -11,19 +11,24 @@ namespace pingpong {
 			enum class mode_type {self, channel};
 			
 			/** There are two types of mode changes: user modes and channel modes. This indicates which type applies. */
-			mode_type type;
+			mode_type type {mode_type::self};
 
 			/** The raw string of mode changes, such as "-v+o". */
 			std::string modes;
 
+			/** A string of extra data for things like bans. */
+			std::string extra;
+
 			/** A set of all modes indicated as added by the message. */
-			std::unordered_set<char> added = {};
+			std::unordered_set<char> added {};
 
 			/** A set of all modes indicated as removed by the message. */
-			std::unordered_set<char> removed = {};
+			std::unordered_set<char> removed {};
 
-			modeset() {}
-			modeset(mode_type type_, const std::string modes_): type(type_), modes(modes_) {}
+			modeset() = default;
+
+			modeset(mode_type type_, const std::string &modes_, const std::string &extra_ = ""):
+				type(type_), modes(modes_), extra(extra_) {}
 
 			/** Processes the modes string: fills in the added/removed sets. Throws std::invalid_argument if the line is
 			 *  malformed. */

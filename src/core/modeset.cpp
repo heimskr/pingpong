@@ -69,6 +69,12 @@ namespace pingpong {
 			out.push_back('-');
 		out.insert(out.end(), removed.begin(), removed.end());
 
+		if (!extra.empty()) {
+			if (!out.empty())
+				out.push_back(' ');
+			out += extra;
+		}
+
 		return out;
 	}
 }
