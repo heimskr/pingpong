@@ -10,18 +10,13 @@ namespace pingpong {
 	/**
 	 * Represents a message to a user or a channel.
 	 */
-	class privmsg_event: public server_event, public local {
+	class privmsg_event: public local_event {
 		public:
-			enum class type {channel, user};
 			std::shared_ptr<user> speaker;
 
-			privmsg_event(std::shared_ptr<user> speaker_, std::string where_, const std::string &message_);
-
-			privmsg_event(std::shared_ptr<user> speaker_, std::shared_ptr<user> whom, const std::string &message_):
-				privmsg_event(speaker_, whom->name, message_) {}
-
-			privmsg_event(std::shared_ptr<user> speaker_, std::shared_ptr<channel> chan, const std::string &message_):
-				privmsg_event(speaker_, chan->name, message_) {}
+			template <typename T>
+			privmsg_event(const std::shared_ptr<user> &speaker_, const T &where_, const std::string &message_):
+				local_event(speaker_->serv, where_, message_), speaker(speaker_) {}
 	};
 }
 

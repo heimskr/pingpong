@@ -15,14 +15,13 @@ namespace pingpong {
 	class local {
 		protected:
 			local(const std::string &where_): where(where_) {}
+			local(std::shared_ptr<user> user_): local(user_->name) {}
+			local(std::shared_ptr<channel> chan_): local(chan_->name) {}
+
 			inline void check_destination() const;
 
 		public:
 			std::string where;
-
-			local(const std::string &where_): where(where_) {}
-			local(std::shared_ptr<user> user_): local(user_->name) {}
-			local(std::shared_ptr<channel> chan_): local(chan_->name) {}
 
 			bool is_user() const;
 			bool is_channel() const;

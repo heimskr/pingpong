@@ -9,14 +9,13 @@
 
 #include "core/channel.h"
 #include "core/debug.h"
+#include "core/local.h"
+#include "core/pputil.h"
 #include "core/server.h"
 #include "core/user.h"
-#include "core/pputil.h"
 
 namespace pingpong {
 	class event {
-		private:
-
 		protected:
 			bool is_empty = false;
 			event(bool empty, const std::string &content_): is_empty(empty), content(content_) {}
@@ -76,34 +75,45 @@ namespace pingpong {
 			server_event(server *serv_, const std::string &content_ = ""): event(false, content_), serv(serv_) {}
 	};
 
-	// For events local to one channel on one server, such as topic changes.
+	/** For events local to one channel on one server, such as topic changes. */
 	class channel_event: public server_event {
 		public:
 			std::shared_ptr<channel> chan;
 
-			channel_event(std::shared_ptr<channel>, server *, const std::string & = "");
-			channel_event(std::shared_ptr<channel>, const std::string & = "");
+			channel_event(const std::shared_ptr<channel> &, server *, const std::string & = "");
+			channel_event(const std::shared_ptr<channel> &, const std::string & = "");
 	};
 
-	// For events local to one user in one channel on one server, such as joins and privmsgs.
-	// This can also be used for things like quits, which are specific to a user and server but not to a channel, by
-	// leaving the channel pointer null.
+	/** For events local to one user in one channel on one server, such as joins.
+	 * This can also be used for things like quits, which are specific to a user and server but not to a channel, by
+	 * leaving the channel pointer null. */
 	class user_event: public channel_event {
 		public:
 			std::shared_ptr<user> who;
 
-			user_event(std::shared_ptr<user>, std::shared_ptr<channel>, const std::string & = "");
-			user_event(std::shared_ptr<user> who_, server *serv_, const std::string &content_ = ""):
+			user_event(const std::shared_ptr<user> &, const std::shared_ptr<channel> &, const std::string & = "");
+			user_event(const std::shared_ptr<user> &who_, server *serv_, const std::string &content_ = ""):
 				user_event(who_, static_cast<std::shared_ptr<channel>>(nullptr), content_) { serv = serv_; }
 	};
 
-	// For events local to two users in one channel on one server, such as kicks.
+	/** For events local on one server to either a user or a channel, such as privmsgs. */
+	class local_event: public server_event, public local {
+		public:
+			template <typename T>
+			local_event(server *serv_, const T &where_, const std::string &content_ = ""):
+				server_event(serv_, content_), local(where_) {}
+	};
+
+	/** For events local to two users in one channel on one server, such as kicks. */
 	class targeted_event: public user_event {
 		public:
 			std::shared_ptr<user> whom;
 
-			targeted_event(std::shared_ptr<user>, std::shared_ptr<user>, std::shared_ptr<channel>, const std::string & = "");
-			targeted_event(std::shared_ptr<user> who_, std::shared_ptr<user> whom_, server *serv_, const std::string &content_ = ""):
+			targeted_event(const std::shared_ptr<user> &, const std::shared_ptr<user> &,
+				const std::shared_ptr<channel> &, const std::string & = "");
+
+			targeted_event(std::shared_ptr<user> who_, const std::shared_ptr<user> &whom_, server *serv_,
+			const std::string &content_ = ""):
 				targeted_event(who_, whom_, static_cast<std::shared_ptr<channel>>(nullptr), content_) { serv = serv_; }
 	};
 }
