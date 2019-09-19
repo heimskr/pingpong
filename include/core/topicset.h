@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "core/user.h"
-
 namespace pingpong {
+	class user;
+
 	struct topicset {
 		std::string text;
 		std::string modified_by;

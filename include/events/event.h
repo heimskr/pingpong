@@ -74,7 +74,7 @@ namespace pingpong {
 		server_event(server *serv_, const std::string &content_ = ""): event(false, content_), serv(serv_) {}
 	};
 
-	/** For events local to one channel on one server, such as topic changes. */
+	/** For events local to one channel on one server. */
 	struct channel_event: public server_event {
 		std::shared_ptr<channel> chan;
 

@@ -87,7 +87,7 @@ namespace pingpong {
 
 
 	std::unordered_set<numeric_type> numeric_message::types = {
-		numeric_type::channel_mode_is,
+		numeric_type::channel_modes,
 		numeric_type::channel_topic,
 		numeric_type::topic_modified,
 		numeric_type::names_reply,
