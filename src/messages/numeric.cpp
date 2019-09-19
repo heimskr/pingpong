@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "core/debug.h"
+#include "core/parse_error.h"
 
 #include "events/event.h"
 #include "events/names_updated.h"
@@ -20,9 +21,6 @@ namespace pingpong {
 			throw std::invalid_argument("Expected a numeric command");
 
 		type = static_cast<numeric_type>(uncasted);
-
-		if (types.count(type) == 0)
-			DBG("Unknown numeric message type:" << uncasted);
 	}
 
 	numeric_message::operator std::string() const {
@@ -34,6 +32,10 @@ namespace pingpong {
 			case numeric_type::names_reply: return handle_names_reply(serv);
 			default: return true;
 		}
+	}
+
+	bool numeric_message::is_known() const {
+		return 0 < types.count(type);
 	}
 	
 	bool numeric_message::is_numeric(const char *str) {
@@ -64,6 +66,23 @@ namespace pingpong {
 	bool numeric_message::operator!=(int number) const { return to_int() != number; }
 	bool numeric_message::operator==(numeric_type type_) const { return type == type_; }
 	bool numeric_message::operator!=(numeric_type type_) const { return type != type_; }
+
+
+// Private static methods
+
+
+	std::tuple<std::string, std::string, std::string> numeric_message::parse_ssc(const std::string &str) {
+		size_t space = str.find(' ');
+		size_t space_colon = str.find(" :");
+		if (space >= space_colon)
+			throw parse_error("Expected space before space-colon");
+
+		return {str.substr(0, space), str.substr(space + 1, space_colon - space - 1), str.substr(space_colon + 2)};
+	}
+
+
+// Public static fields
+
 
 	std::unordered_set<numeric_type> numeric_message::types = {
 		numeric_type::channel_mode_is,

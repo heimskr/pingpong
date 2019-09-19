@@ -7,6 +7,7 @@
 
 #include "core/channel.h"
 #include "core/numeric_type.h"
+#include "messages/line.h"
 #include "messages/message.h"
 #include "messages/sourced.h"
 
@@ -22,8 +23,13 @@ namespace pingpong {
 
 			static names parse_names_reply(const std::string &);
 
-		public:
+			/** Parses a message of the form "word word :text" (space + space-colon). */
+			static std::tuple<std::string, std::string, std::string> parse_ssc(const std::string &);
+			static std::tuple<std::string, std::string, std::string> parse_ssc(const pingpong::line &line_) {
+				return parse_ssc(line_.parameters);
+			}
 
+		public:
 			numeric_type type;
 
 			numeric_message(pingpong::line);
@@ -32,6 +38,9 @@ namespace pingpong {
 
 			operator std::string() const override;
 			bool operator()(server *) override;
+
+			/** Returns whether the numeric message type is recognized. */
+			bool is_known() const;
 
 			static bool is_numeric(const char *);
 			static bool is_numeric(const char *, int &);
