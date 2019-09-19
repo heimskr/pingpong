@@ -117,24 +117,52 @@ namespace pingpong {
 		return false;
 	}
 
-	bool server::remove_channel(const std::string &chan) {
-		std::shared_ptr<channel> cptr = get_channel(chan, false);
-		if (cptr) {
-			auto iter = std::find(channels.begin(), channels.end(), cptr);
-			if (iter == channels.end()) {
-				DBG(ansi::color::red << "Channel pointer is inexplicably missing from server " << ansi::bold(hostname)
-					<< ": " << chan);
-				return false;
-			}
-			
-			DBG("Removing channel " << chan);
-			channels.erase(iter);
-		} else {
-			DBG("Channel not in list: " << chan << "\n");
+	bool server::remove_channel(const std::shared_ptr<channel> &chan) {
+		if (!chan)
+			return false;
+
+		auto iter = std::find(channels.begin(), channels.end(), chan);
+		if (iter == channels.end()) {
+			DBG(ansi::color::red << "Channel pointer is inexplicably missing from server " << ansi::bold(hostname) << ": " << chan->name);
 			return false;
 		}
 
+		DBG("Removing channel " << chan->name);
+		channels.erase(iter);
+
 		return true;
+	}
+
+	bool server::remove_channel(const std::string &chan) {
+		std::shared_ptr<channel> cptr = get_channel(chan, false);
+		if (cptr)
+			return remove_channel(cptr);
+		DBG("Channel not in list: " << chan << "\n");
+		return false;
+	}
+
+	bool server::remove_user(const std::shared_ptr<user> &whom) {
+		if (!whom)
+			return false;
+
+		auto iter = std::find(users.begin(), users.end(), whom);
+		if (iter == users.end()) {
+			DBG(ansi::color::red << "User pointer is inexplicably missing from server " << ansi::bold(hostname) << ": " << whom);
+			return false;
+		}
+
+		DBG("Removing user " << whom->name);
+		users.erase(iter);
+
+		return true;
+	}
+
+	bool server::remove_user(const std::string &whom) {
+		std::shared_ptr<user> uptr = get_user(whom, false);
+		if (uptr)
+			return remove_user(uptr);
+		DBG("User not in list: " << whom << "\n");
+		return false;
 	}
 
 	bool server::has_channel(const std::string &chanstr) const {

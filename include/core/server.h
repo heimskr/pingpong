@@ -74,9 +74,17 @@ namespace pingpong {
 			/** Adds a channel. Returns false if the channel was already present in the server. */
 			bool add_channel(const std::string &);
 
-			/** Removes a channel from the server if possible and returns whether the channel was successfully removed.
-			 */
+			/** Removes a channel from the server if possible and returns whether it was successfully removed. */
+			bool remove_channel(const std::shared_ptr<channel> &);
+
+			/** Removes a channel from the server if possible and returns whether it was successfully removed. */
 			bool remove_channel(const std::string &);
+
+			/** Removes a user from the server if possible ande returns whether they were successfully removed. */
+			bool remove_user(const std::shared_ptr<user> &);
+
+			/** Removes a user from the server if possible ande returns whether they were successfully removed. */
+			bool remove_user(const std::string &);
 
 			/** Returns whether the user is in a given channel. */
 			bool has_channel(const std::string &) const;
