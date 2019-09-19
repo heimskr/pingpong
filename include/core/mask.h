@@ -8,8 +8,10 @@ namespace pingpong {
 		public:
 			std::string nick, user, host;
 
-			mask(std::string nick_, std::string user_, std::string host_): nick(nick_), user(user_), host(host_) {}
-			mask(std::string combined);
+			mask(const std::string &nick_, const std::string &user_, const std::string &host_):
+				nick(nick_), user(user_), host(host_) {}
+
+			mask(const std::string &combined);
 
 			bool is_full() const;
 			bool is_empty() const;

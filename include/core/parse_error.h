@@ -2,6 +2,7 @@
 #define PINGPONG_CORE_PARSE_ERROR_H_
 
 #include <stdexcept>
+#include <string>
 
 namespace pingpong {
 	struct parse_error: public std::exception {

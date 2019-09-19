@@ -3,23 +3,27 @@
 #include <string>
 
 #include "core/mask.h"
+#include "core/parse_error.h"
 
 namespace pingpong {
-	mask::mask(std::string combined) {
-		size_t bang, at, length = combined.size();
+	mask::mask(const std::string &combined) {
+		const size_t length = combined.size();
+		const size_t bang = combined.find('!');
 
-		bang = combined.find('!');
 		if (bang == std::string::npos) {
 			if (combined.find('@') != std::string::npos)
-				throw std::invalid_argument("Couldn't find hostname separator in mask");
+				throw parse_error("Couldn't find hostname separator in mask");
 			nick = combined;
 			return;
 		}
 
-		at = combined.find('@');
-		if (at == length) throw std::invalid_argument("Couldn't find hostname separator in mask");
+		const size_t at = combined.find('@');
+
+		if (at == length)
+			throw parse_error("Couldn't find hostname separator in mask");
+
 		if (at < bang)
-			throw std::invalid_argument("Hostname separator came before username separator in mask");
+			throw parse_error("Hostname separator came before username separator in mask");
 
 		nick = combined.substr(0, bang);
 		user = combined.substr(bang + 1, at - bang - 1);
