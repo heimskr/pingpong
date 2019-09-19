@@ -7,7 +7,11 @@ namespace pingpong {
 	}
 
 	bool quit_message::operator()(server *serv) {
-		events::dispatch<quit_event>(who, serv, content);
+		if (serv != who->serv)
+			throw std::runtime_error("Invalid server for user");
+
+		serv->remove_user(who);
+		events::dispatch<quit_event>(who, content);
 		return true;
 	}
 }

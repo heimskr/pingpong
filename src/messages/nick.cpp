@@ -7,8 +7,11 @@ namespace pingpong {
 	}
 
 	bool nick_message::operator()(server *serv) {
+		if (serv != who->serv)
+			throw std::runtime_error("Invalid server for user");
+
 		serv->rename_user(line.source.nick, content);
-		events::dispatch<nick_event>(who, get_server(), line.source.nick);
+		events::dispatch<nick_event>(who, line.source.nick);
 		return true;
 	}
 }

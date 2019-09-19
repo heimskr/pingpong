@@ -80,7 +80,6 @@ namespace pingpong {
 		public:
 			std::shared_ptr<channel> chan;
 
-			channel_event(const std::shared_ptr<channel> &, server *, const std::string & = "");
 			channel_event(const std::shared_ptr<channel> &, const std::string & = "");
 	};
 
@@ -92,8 +91,8 @@ namespace pingpong {
 			std::shared_ptr<user> who;
 
 			user_event(const std::shared_ptr<user> &, const std::shared_ptr<channel> &, const std::string & = "");
-			user_event(const std::shared_ptr<user> &who_, server *serv_, const std::string &content_ = ""):
-				user_event(who_, static_cast<std::shared_ptr<channel>>(nullptr), content_) { serv = serv_; }
+			user_event(const std::shared_ptr<user> &who_, const std::string &content_ = ""):
+				user_event(who_, nullptr, content_) {}
 	};
 
 	/** For events local on one server to either a user or a channel, such as privmsgs. */

@@ -18,6 +18,7 @@
 #include "events/names_updated.h"
 #include "events/raw.h"
 #include "events/server_status.h"
+#include "events/user_appeared.h"
 
 namespace pingpong {
 	server::~server() {
@@ -207,6 +208,7 @@ namespace pingpong {
 			if (!create)
 				return nullptr;
 			std::shared_ptr<user> new_user = std::make_shared<user>(name, this);
+			events::dispatch<user_appeared_event>(new_user);
 			users.push_back(new_user);
 			return new_user;
 		}
@@ -240,7 +242,7 @@ namespace pingpong {
 
 		for (std::shared_ptr<channel> chan: channels) {
 			chan->rename_user(old_nick, new_nick);
-			events::dispatch<names_updated_event>(chan, this);
+			events::dispatch<names_updated_event>(chan);
 		}
 	}
 
