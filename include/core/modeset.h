@@ -28,6 +28,12 @@ namespace pingpong {
 			/** Processes the modes string: fills in the added/removed sets. Throws std::invalid_argument if the line is
 			 *  malformed. */
 			void process() noexcept(false);
+
+			/** Returns whether the type is one of the defined types. This should never return false. */
+			bool is_type_valid() const noexcept;
+
+			/** Returns a string indicating the added and removed modes in the standard notation (e.g., "-S+n"). */
+			operator std::string() const;
 	};
 }
 

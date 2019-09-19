@@ -52,4 +52,17 @@ namespace pingpong {
 		if (was_pm)
 			throw std::invalid_argument("Last character in modeset was a plus or minus");
 	}
+
+	bool modeset::is_type_valid() const noexcept {
+		return type == mode_type::self || type == mode_type::channel;
+	}
+
+	modeset::operator std::string() const {
+		std::string out {"+"};
+		out.reserve(2 + added.size() + removed.size());
+		out.insert(out.end(), added.begin(), added.end());
+		out.push_back('-');
+		out.insert(out.end(), removed.begin(), removed.end());
+		return out;
+	}
 }
