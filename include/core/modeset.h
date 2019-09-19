@@ -37,7 +37,11 @@ namespace pingpong {
 			/** Returns whether the type is one of the defined types. This should never return false. */
 			bool is_type_valid() const noexcept;
 
-			/** Returns a string indicating the added and removed modes in the standard notation (e.g., "-S+n"). */
+			/** Returns a string indicating the added and removed modes in the standard notation (e.g., "-S+n"), without
+			 *  extra data like masks (for bans). */
+			std::string mode_str() const;
+
+			/** Returns the modestring with any extra data appended. */
 			operator std::string() const;
 	};
 }

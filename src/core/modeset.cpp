@@ -57,7 +57,7 @@ namespace pingpong {
 		return type == mode_type::self || type == mode_type::channel;
 	}
 
-	modeset::operator std::string() const {
+	std::string modeset::mode_str() const {
 		std::string out;
 		out.reserve(2 + added.size() + removed.size());
 
@@ -68,6 +68,11 @@ namespace pingpong {
 		if (!removed.empty())
 			out.push_back('-');
 		out.insert(out.end(), removed.begin(), removed.end());
+		return out;
+	}
+
+	modeset::operator std::string() const {
+		std::string out {mode_str()};
 
 		if (!extra.empty()) {
 			if (!out.empty())
