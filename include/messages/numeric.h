@@ -20,6 +20,8 @@ namespace pingpong {
 			inline int to_int() const { return static_cast<int>(type); }
 			inline std::string to_string() const { return std::to_string(to_int()); }
 
+			static names parse_names_reply(const std::string &);
+
 		public:
 
 			numeric_type type;
@@ -33,12 +35,13 @@ namespace pingpong {
 
 			static bool is_numeric(const char *);
 			static bool is_numeric(const char *, int &);
-			static names parse353(const std::string &);
 
 			bool operator==(int n) const;
 			bool operator!=(int n) const;
 			bool operator==(numeric_type type_) const;
 			bool operator!=(numeric_type type_) const;
+
+			bool handle_names_reply(server *); // 353
 	};
 }
 
