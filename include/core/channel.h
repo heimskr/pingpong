@@ -25,6 +25,8 @@ namespace pingpong {
 			server *serv;
 			std::list<std::shared_ptr<user>> users;
 			std::map<std::shared_ptr<user>, hat> hats;
+			std::string topic {};
+			long topic_changed {-1};
 
 			channel(std::string, server *);
 			channel(std::string);
