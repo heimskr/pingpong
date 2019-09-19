@@ -61,11 +61,9 @@ namespace pingpong {
 				if (any)
 					events::dispatch<names_updated_event>(chan);
 			}
-
-			return true;
 		}
 
-		return false;
+		return true;
 	}
 
 	numeric_message::names numeric_message::parse353(const std::string &params) {

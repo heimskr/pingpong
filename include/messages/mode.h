@@ -1,13 +1,13 @@
 #ifndef PINGPONG_MESSAGES_MODE_H_
 #define PINGPONG_MESSAGES_MODE_H_
 
-#include <unordered_set>
-
+#include "core/local.h"
 #include "core/modeset.h"
+
 #include "messages/message.h"
 
 namespace pingpong {
-	class mode_message: public message {
+	class mode_message: public message, public local {
 		private:
 			/** Validates the string of additions/removals with a touch of paranoia. */
 			void validate_modes(const std::string &, const pingpong::line &);
