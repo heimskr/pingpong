@@ -1,7 +1,4 @@
 #include <cctype>
-#include <stdexcept>
-#include <string>
-#include <tuple>
 #include <vector>
 
 #include "core/debug.h"
@@ -23,13 +20,18 @@ namespace pingpong {
 		type = static_cast<numeric_type>(uncasted);
 	}
 
+
+// Public instance methods
+
+
 	numeric_message::operator std::string() const {
 		return "[" + to_string() + "] " + line.original;
 	}
 
 	bool numeric_message::operator()(server *serv) {
 		switch (type) {
-			case numeric_type::names_reply: return handle_names_reply(serv);
+			case numeric_type::channel_topic: return handle_channel_topic(serv); // 332
+			case numeric_type::names_reply:   return handle_names_reply(serv);   // 353
 			default: return true;
 		}
 	}

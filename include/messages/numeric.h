@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <unordered_set>
 
 #include "core/channel.h"
@@ -50,7 +51,8 @@ namespace pingpong {
 			bool operator==(numeric_type type_) const;
 			bool operator!=(numeric_type type_) const;
 
-			bool handle_names_reply(server *); // 353
+			bool handle_channel_topic(server *); // 332
+			bool handle_names_reply(server *);   // 353
 	};
 }
 
