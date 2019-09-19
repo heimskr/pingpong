@@ -58,11 +58,17 @@ namespace pingpong {
 	}
 
 	modeset::operator std::string() const {
-		std::string out {"+"};
+		std::string out;
 		out.reserve(2 + added.size() + removed.size());
+
+		if (!added.empty())
+			out.push_back('+');
 		out.insert(out.end(), added.begin(), added.end());
-		out.push_back('-');
+
+		if (!removed.empty())
+			out.push_back('-');
 		out.insert(out.end(), removed.begin(), removed.end());
+
 		return out;
 	}
 }
