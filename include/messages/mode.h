@@ -20,12 +20,9 @@ namespace pingpong {
 
 			mode_message(const pingpong::line &line_);
 
-			/** Applies the changes to the relevant channel (for channel mode changes) or to you (for user mode
-			 *  changes). Returns true if the changes were successfully applied. */
-			bool apply();
-
 			static constexpr auto get_name = []() -> std::string { return "MODE"; };
 			operator std::string() const override;
+			bool operator()(server *) override;
 	};
 }
 

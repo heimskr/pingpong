@@ -28,7 +28,7 @@ namespace pingpong {
 		}
 	}
 
-	bool mode_message::apply() {
+	bool mode_message::operator()(server *) {
 		if (mset.type == modeset::mode_type::channel) {
 			if (!chan)
 				return false;
