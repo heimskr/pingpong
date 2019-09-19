@@ -99,6 +99,12 @@ namespace pingpong {
 			/** Renames a user. */
 			void rename_user(const std::string &old_nick, const std::string &new_nick);
 
+			/** Sorts the list of channels by name. */
+			void sort_channels();
+
+			/** Returns whether the server is in a valid state. */
+			bool is_active() const;
+
 			/** Retrieves the pointer for the user of the client. */
 			std::shared_ptr<user> get_self();
 

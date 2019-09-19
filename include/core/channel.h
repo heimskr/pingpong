@@ -7,15 +7,17 @@
 #include <mutex>
 #include <ostream>
 #include <string>
+#include <unordered_set>
 
 #include "core/user.h"
 #include "core/ppdefs.h"
+#include "core/moded.h"
 #include "core/server.h"
 
 namespace pingpong {
 	class user;
 
-	class channel {
+	class channel: public moded {
 		public:
 			enum class visibility: char {pub='=', priv='*', secret='@'};
 

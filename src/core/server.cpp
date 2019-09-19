@@ -216,6 +216,16 @@ namespace pingpong {
 		}
 	}
 
+	void server::sort_channels() {
+		channels.sort([&](std::weak_ptr<channel> left, std::weak_ptr<channel> right) -> bool {
+			return left.lock()->name < right.lock()->name;
+		});
+	}
+
+	bool server::is_active() const {
+		return status != stage::dead && status != stage::unconnected;
+	}
+
 	std::shared_ptr<user> server::get_self() {
 		if (nick.empty())
 			throw std::runtime_error("Can't get self: no nick for server");
