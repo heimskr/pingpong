@@ -8,12 +8,9 @@
 
 namespace pingpong {
 	class mode_message: public message, public local {
-		private:
-			/** Validates the string of additions/removals with a touch of paranoia. */
-			void validate_modes(const std::string &, const pingpong::line &);
-
 		public:
 			modeset mset;
+			std::shared_ptr<user> who;
 
 			/** If the mode change is for a channel, this stores a pointer to the channel. */
 			std::shared_ptr<pingpong::channel> chan;

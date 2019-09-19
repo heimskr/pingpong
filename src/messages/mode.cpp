@@ -22,6 +22,7 @@ namespace pingpong {
 		}
 
 		where = line.parameters.substr(0, middle);
+		who = line.serv->get_user(line.source, true);
 
 		try {
 			mset.process();
@@ -38,7 +39,7 @@ namespace pingpong {
 			line.serv->get_self()->apply_modes(mset.removed, mset.added);
 		}
 
-		events::dispatch<mode_event>(serv, where, mset);
+		events::dispatch<mode_event>(serv, where, who, mset);
 		return true;
 	}
 
