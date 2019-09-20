@@ -24,6 +24,15 @@ namespace pingpong {
 
 			static names parse_names_reply(const std::string &);
 
+			// Note: in methods like parse_ssc/parse_ss, the first word will be your nickname—that seems to be common to
+			// all (or most?) numeric messages.
+
+			/** Parses a message of the form "word word text" (space + space). */
+			static std::tuple<std::string, std::string, std::string> parse_ss(const std::string &);
+			static std::tuple<std::string, std::string, std::string> parse_ss(const pingpong::line &line_) {
+				return parse_ss(line_.parameters);
+			}
+
 			/** Parses a message of the form "word word :text" (space + space-colon). */
 			static std::tuple<std::string, std::string, std::string> parse_ssc(const std::string &);
 			static std::tuple<std::string, std::string, std::string> parse_ssc(const pingpong::line &line_) {
@@ -51,6 +60,7 @@ namespace pingpong {
 			bool operator==(numeric_type type_) const;
 			bool operator!=(numeric_type type_) const;
 
+			bool handle_channel_modes(server *); // 324
 			bool handle_channel_topic(server *); // 332
 			bool handle_names_reply(server *);   // 353
 	};

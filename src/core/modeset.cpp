@@ -3,7 +3,8 @@
 #include "lib/ansi.h"
 
 namespace pingpong {
-	void modeset::process() noexcept(false) {
+	modeset::modeset(mode_type type_, const std::string &modes_, const std::string &extra_):
+	type(type_), modes(modes_), extra(extra_) {
 		if (modes.empty())
 			throw std::invalid_argument("Mode string is empty in modeset");
 

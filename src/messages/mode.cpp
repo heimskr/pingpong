@@ -6,6 +6,10 @@
 namespace pingpong {
 	mode_message::mode_message(const pingpong::line &line_): message(line_), local("") {
 		size_t middle;
+
+		modeset::mode_type mset_type = modeset::mode_type::self;
+		std::string mset_main {}, mset_extra {};
+
 		if (line.source.is_server() && line.source.nick == line.serv->get_nick()) {
 			// If the server notifies you of a user mode change, the mask is just your nick without a user or host.
 			// The parameters will look like "pingpong :+iwx".
@@ -13,7 +17,7 @@ namespace pingpong {
 			if (middle == std::string::npos)
 				throw bad_message(line);
 			
-			mset = {modeset::mode_type::self, line.parameters.substr(middle + 2), ""};
+			mset_main = line.parameters.substr(middle + 2);
 			where = line.parameters.substr(0, middle);
 		} else {
 			// This is presumably a channel mode change. The parameters should look like "#chan -S".
@@ -32,13 +36,16 @@ namespace pingpong {
 
 			where = line.parameters.substr(0, middle);
 			chan = line.serv->get_channel(where, true);
-			mset = modeset(modeset::mode_type::channel, modestr, extra);
+
+			mset_type = modeset::mode_type::self;
+			mset_main = modestr;
+			mset_extra = extra;
 		}
 
 		who = line.serv->get_user(line.source, true);
 
 		try {
-			mset.process();
+			mset = {mset_type, mset_main, mset_extra};
 		} catch (const std::invalid_argument &err) {
 			DBG("Couldn't parse \"" << mset.modes << "\" as a modestring: " << err.what());
 			throw bad_message(line);

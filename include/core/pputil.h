@@ -23,6 +23,9 @@ namespace pingpong {
 
 			/** Returns true if all the characters in a string are valid for nicknames. */
 			static bool is_valid_nick(const std::string &);
+
+			static std::string & rtrim(std::string &);
+			static std::string rtrim(const std::string &);
 	};
 
 	template <typename T>

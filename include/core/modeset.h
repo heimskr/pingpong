@@ -27,12 +27,8 @@ namespace pingpong {
 
 			modeset() = default;
 
-			modeset(mode_type type_, const std::string &modes_, const std::string &extra_ = ""):
-				type(type_), modes(modes_), extra(extra_) {}
-
-			/** Processes the modes string: fills in the added/removed sets. Throws std::invalid_argument if the line is
-			 *  malformed. */
-			void process() noexcept(false);
+			/** Throws std::invalid_argument if the line is malformed. */
+			modeset(mode_type type_, const std::string &modes_, const std::string &extra_ = "") noexcept(false);
 
 			/** Returns whether the type is one of the defined types. This should never return false. */
 			bool is_type_valid() const noexcept;

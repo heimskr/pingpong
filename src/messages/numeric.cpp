@@ -30,6 +30,7 @@ namespace pingpong {
 
 	bool numeric_message::operator()(server *serv) {
 		switch (type) {
+			case numeric_type::channel_modes: return handle_channel_modes(serv); // 324
 			case numeric_type::channel_topic: return handle_channel_topic(serv); // 332
 			case numeric_type::names_reply:   return handle_names_reply(serv);   // 353
 			default: return true;
@@ -73,13 +74,28 @@ namespace pingpong {
 // Private static methods
 
 
+	std::tuple<std::string, std::string, std::string> numeric_message::parse_ss(const std::string &str) {
+		size_t first = str.find(' ');
+		size_t second = str.find(' ', first + 1);
+
+		try {
+			return {str.substr(0, first), str.substr(first + 1, second - first - 1), str.substr(second + 1)};
+		} catch (const std::out_of_range &) {
+			return {"", "", ""};
+		}
+	}
+
 	std::tuple<std::string, std::string, std::string> numeric_message::parse_ssc(const std::string &str) {
 		size_t space = str.find(' ');
 		size_t space_colon = str.find(" :");
 		if (space >= space_colon)
 			throw parse_error("Expected space before space-colon");
 
-		return {str.substr(0, space), str.substr(space + 1, space_colon - space - 1), str.substr(space_colon + 2)};
+		try {
+			return {str.substr(0, space), str.substr(space + 1, space_colon - space - 1), str.substr(space_colon + 2)};
+		} catch (const std::out_of_range &) {
+			return {"", "", ""};
+		}
 	}
 
 

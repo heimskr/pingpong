@@ -1,3 +1,5 @@
+#include <cctype>
+
 #include "core/pputil.h"
 
 namespace pingpong {
@@ -23,5 +25,15 @@ namespace pingpong {
 
 	bool util::is_valid_nick(const std::string &str) {
 		return !str.empty() && str.find_first_not_of(nick_chars) == std::string::npos;
+	}
+
+	std::string & util::rtrim(std::string &str) {
+		str.erase(std::find_if(str.rbegin(), str.rend(), [](char c) { return !std::isspace(c); }).base(), str.end());
+		return str;
+	}
+
+	std::string util::rtrim(const std::string &str) {
+		std::string copy = str;
+		return rtrim(copy);
 	}
 }
