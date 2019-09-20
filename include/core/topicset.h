@@ -1,6 +1,7 @@
 #ifndef PINGPONG_CORE_TOPICSET_H_
 #define PINGPONG_CORE_TOPICSET_H_
 
+#include <memory>
 #include <string>
 
 namespace pingpong {
