@@ -31,7 +31,7 @@ if ((args[0] || "").match(/^(types|help)$/i)) {
 }
 
 if (args.length < 2 || !args[1]) {
-	yikes("Usage: new.js [type] [name] [-s/--nosrc] [-h/--noheader] [-o/--overwrite]");
+	yikes("Usage: new.js [type=command,core,event,lib,message,numeric] [name] [-s/--nosrc] [-h/--noheader] [-o/--overwrite]");
 }
 
 const [type, name] = args;

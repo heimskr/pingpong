@@ -2,6 +2,7 @@
 #include <string>
 
 #include "commands/join.h"
+#include "commands/mode.h"
 
 namespace pingpong {
 	join_command::join_command(server *serv_, std::vector<join_pair> pairs_): command(serv_), pairs(pairs_) {}
@@ -51,5 +52,11 @@ namespace pingpong {
 		}
 
 		throw std::runtime_error("Invalid join command");
+	}
+
+	void join_command::send() {
+		command::send();
+		for (const join_pair &pair: pairs)
+			mode_command(pair.first, serv).send();
 	}
 }
