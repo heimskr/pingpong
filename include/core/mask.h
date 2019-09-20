@@ -6,7 +6,9 @@
 namespace pingpong {
 	class mask {
 		public:
-			std::string nick, user, host;
+			std::string nick {}, user {}, host {};
+
+			mask() = default;
 
 			mask(const std::string &nick_, const std::string &user_, const std::string &host_):
 				nick(nick_), user(user_), host(host_) {}

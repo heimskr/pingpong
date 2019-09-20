@@ -8,6 +8,7 @@
 
 #include "core/ppdefs.h"
 #include "core/pputil.h"
+#include "core/mask.h"
 #include "core/moded.h"
 #include "core/server.h"
 
@@ -15,6 +16,7 @@ namespace pingpong {
 	class user: public moded {
 		public:
 			std::string name;
+			mask info {};
 
 			pingpong::server *serv = nullptr;
 			std::set<std::weak_ptr<channel>, weakptr_compare<channel>> channels = {};
@@ -34,7 +36,7 @@ namespace pingpong {
 
 			static hat get_hat(char);
 			static hat get_hat(const std::string &);
-			bool is_self() const;;
+			bool is_self() const;
 
 			bool operator==(const user &) const;
 	};
