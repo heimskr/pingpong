@@ -9,23 +9,23 @@ namespace pingpong {
 	/**
 	 * Contains miscellaneous utility functions for pingpong.
 	 */
-	class util {
-		private:
-			static std::chrono::system_clock::duration now();
-			static constexpr const char *nick_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-				"-_[]{}\\`|";
+	struct util {
+		static constexpr const char *nick_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+			"-_[]{}\\`|";
+		static constexpr const char *flag_chars = "+-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-		public:
-			static long timestamp();
-			static long millistamp();
-			static long microstamp();
-			static long nanostamp();
+		static std::chrono::system_clock::duration now();
 
-			/** Returns true if all the characters in a string are valid for nicknames. */
-			static bool is_valid_nick(const std::string &);
+		static long timestamp();
+		static long millistamp();
+		static long microstamp();
+		static long nanostamp();
 
-			static std::string & rtrim(std::string &);
-			static std::string rtrim(const std::string &);
+		/** Returns true if all the characters in a string are valid for nicknames. */
+		static bool is_valid_nick(const std::string &);
+
+		static std::string & rtrim(std::string &);
+		static std::string rtrim(const std::string &);
 	};
 
 	template <typename T>
