@@ -8,6 +8,10 @@ namespace pingpong {
 		if (modes.empty())
 			throw std::invalid_argument("Mode string is empty in modeset");
 
+		// It's possible to have a modeset with no additions or removals—it will be simply "+".
+		if (modes == "+")
+			return;
+
 		// The first character has to be a plus or a minus.
 		const char front = modes.front();
 		if (front != '-' && front != '+')
