@@ -4,8 +4,12 @@
 #include "events/command.h"
 	
 namespace pingpong {
+	std::function<bool(command &)> command::before_send = [](command &) { return true; };
+
 	void command::send() {
-		events::dispatch<command_event>(serv, this);
-		serv->quote(std::string(*this));
+		if (before_send(*this)) {
+			events::dispatch<command_event>(serv, this);
+			serv->quote(std::string(*this));
+		}
 	}
 }
