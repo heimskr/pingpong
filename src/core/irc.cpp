@@ -75,7 +75,7 @@ namespace pingpong {
 	}
 
 	std::string irc::create_id(const std::string &hostname) {
-		if (has_server(hostname))
+		if (!has_server(hostname))
 			return hostname;
 
 		std::string next_name;
