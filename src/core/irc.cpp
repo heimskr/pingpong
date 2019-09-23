@@ -27,17 +27,32 @@ namespace pingpong {
 	std::string irc::default_realname = "PingPong IRC";
 
 	irc::~irc() {
-		for (server *serv: servers)
-			delete serv;
+		for (const std::pair<std::string, server *> &server_pair: servers)
+			delete server_pair.second;
 	}
 
 	server * irc::get_server(const std::string &id) const {
-		for (server *serv: servers) {
-			if (serv->id == id)
-				return serv;
+		if (servers.count(id) == 0)
+			return nullptr;
+
+		return servers.at(id);
+	}
+
+	bool irc::has_server(const std::string &id) const {
+		return servers.count(id) != 0;
+	}
+
+	bool irc::has_server(server *serv) const {
+		return !get_key(serv).empty();
+	}
+
+	std::string irc::get_key(server *serv) const {
+		for (const std::pair<std::string, server *> &server_pair: servers) {
+			if (server_pair.second == serv)
+				return server_pair.first;
 		}
 
-		return nullptr;
+		return "";
 	}
 
 	void irc::init() {
@@ -59,12 +74,36 @@ namespace pingpong {
 		message::add_ctor<privmsg_message>();
 	}
 
+	std::string irc::create_id(const std::string &hostname) {
+		if (has_server(hostname))
+			return hostname;
+
+		std::string next_name;
+		for (int suffix = 2;; ++suffix) {
+			next_name = hostname + std::to_string(suffix);
+			if (!has_server(next_name))
+				return next_name;
+		}
+	}
+
 	irc & irc::operator+=(server *serv) {
-		if (servers.count(serv) == 0) {
-			servers.insert(serv);
+		if (!has_server(serv)) {
+			std::string id = create_id(serv->hostname);
+			serv->id = id;
+			servers.insert({id, serv});
+			server_order.push_back(serv);
 			if (!active_server)
 				active_server = serv;
 			events::dispatch<server_status_event>(serv);
+		}
+
+		return *this;
+	}
+
+	irc & irc::operator-=(server *serv) {
+		if (has_server(serv)) {
+			servers.erase(get_key(serv));
+			server_order.remove(serv);
 		}
 
 		return *this;

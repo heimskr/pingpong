@@ -11,8 +11,8 @@
 
 namespace pingpong {
 	void debug::print_all(const irc &obj) {
-		for (server *serv: obj.servers) {
-			if (!serv) {
+		for (const server *serv: obj.server_order) {
+			if (serv == nullptr) {
 				DBG(ansi::red("null") << ansi::endl);
 				continue;
 			}

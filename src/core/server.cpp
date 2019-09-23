@@ -25,24 +25,9 @@ namespace pingpong {
 		cleanup();
 	}
 
-	bool server::start() {
-		std::unique_lock<std::mutex> ulock(status_mux);
 
-		if (status == stage::dead)        cleanup();
-		if (status != stage::unconnected) throw std::runtime_error("Can't connect: server not unconnected");
+// Private instance methods
 
-		sock   = std::make_shared<net::sock>(hostname, port);
-		sock->connect();
-		buffer = std::make_shared<net::socket_buffer>(sock.get());
-		stream = std::make_shared<std::iostream>(buffer.get());
-
-		status = stage::setuser;
-		events::dispatch<server_status_event>(this);
-
-		worker = std::thread(&server::work, this);
-
-		return true;
-	}
 
 	void server::work() {
 		signal(SIGPIPE, SIG_IGN);
@@ -75,6 +60,29 @@ namespace pingpong {
 		if (!(*msg)(this))
 			events::dispatch<message_event>(this, msg);
 		last_message = msg;
+	}
+
+
+// Public instance methods
+
+
+	bool server::start() {
+		std::unique_lock<std::mutex> ulock(status_mux);
+
+		if (status == stage::dead)        cleanup();
+		if (status != stage::unconnected) throw std::runtime_error("Can't connect: server not unconnected");
+
+		sock   = std::make_shared<net::sock>(hostname, port);
+		sock->connect();
+		buffer = std::make_shared<net::socket_buffer>(sock.get());
+		stream = std::make_shared<std::iostream>(buffer.get());
+
+		status = stage::setuser;
+		events::dispatch<server_status_event>(this);
+
+		worker = std::thread(&server::work, this);
+
+		return true;
 	}
 
 	void server::quote(const std::string &str) {

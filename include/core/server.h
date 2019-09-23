@@ -41,6 +41,7 @@ namespace pingpong {
 				dead         // After the server has disconnected.
 			};
 
+			std::string id;
 			std::string hostname;
 			int port;
 			std::list<std::shared_ptr<channel>> channels {};
@@ -51,8 +52,11 @@ namespace pingpong {
 			std::mutex status_mux;
 			stage status = stage::unconnected;
 
-			server(irc *parent_, std::string hostname_, int port_ = irc::default_port):
-				parent(parent_), hostname(hostname_), port(port_) {}
+			server(irc *parent_, const std::string &id_, const std::string &hostname_, int port_ = irc::default_port):
+				parent(parent_), id(id_), hostname(hostname_), port(port_) {}
+
+			server(irc *parent_, const std::string &hostname_, int port_ = irc::default_port):
+				server(parent_, parent_->create_id(hostname_), hostname_, port_) {}
 
 			~server();
 
