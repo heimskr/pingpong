@@ -20,7 +20,7 @@ namespace pingpong {
 			join_command(server *, std::vector<channel>);
 
 			operator std::string() const override;
-			void send() override;
+			bool send() override;
 	};
 }
 

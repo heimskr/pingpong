@@ -54,9 +54,13 @@ namespace pingpong {
 		throw std::runtime_error("Invalid join command");
 	}
 
-	void join_command::send() {
-		command::send();
-		for (const join_pair &pair: pairs)
-			mode_command(pair.first, serv).send();
+	bool join_command::send() {
+		if (command::send()) {
+			for (const join_pair &pair: pairs)
+				mode_command(pair.first, serv).send();
+			return true;
+		}
+
+		return false;
 	}
 }

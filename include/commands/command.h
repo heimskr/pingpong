@@ -15,11 +15,12 @@ namespace pingpong {
 			server *serv;
 			long sent_time = util::timestamp();
 
-
 			command(server *serv_): serv(serv_) {}
 			virtual operator std::string() const = 0;
 
-			virtual void send();
+			/** Tries to send the command. Returns true if the command was sent. Implementations should run before_send
+			 *  to check whether it's okay to send the command with the base class's implementation. */
+			virtual bool send();
 
 			virtual bool is_silent() const { return false; }
 	};

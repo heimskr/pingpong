@@ -8,9 +8,13 @@ namespace pingpong {
 		return "USER " + username + " 0 * :" + realname;
 	}
 
-	void user_command::send() {
-		command::send();
-		if (serv->status == server::stage::setuser)
-			serv->status = server::stage::setnick;
+	bool user_command::send() {
+		if (command::send()) {
+			if (serv->status == server::stage::setuser)
+				serv->status = server::stage::setnick;
+			return true;
+		}
+
+		return false;
 	}
 }

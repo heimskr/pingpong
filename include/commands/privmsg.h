@@ -20,7 +20,7 @@ namespace pingpong {
 				privmsg_command(user->serv, user->name, message_) {}
 
 			operator std::string() const override;
-			virtual void send() override;
+			virtual bool send() override;
 	};
 }
 

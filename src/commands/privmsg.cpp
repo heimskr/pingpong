@@ -14,17 +14,21 @@ namespace pingpong {
 		return "PRIVMSG " + where + " :" + message;
 	}
 
-	void privmsg_command::send() {
-		command::send();
+	bool privmsg_command::send() {
+		if (command::send()) {
+			if (is_channel()) {
+				std::shared_ptr<channel> chan = get_channel(serv);
+				if (chan)
+					events::dispatch<privmsg_event>(serv->get_self(), chan, message);
+				else
+					events::dispatch<error_event>("Can't send message: channel is null", false);
+			} else {
+				events::dispatch<privmsg_event>(serv->get_self(), get_user(serv), message);
+			}
 
-		if (is_channel()) {
-			std::shared_ptr<channel> chan = get_channel(serv);
-			if (chan)
-				events::dispatch<privmsg_event>(serv->get_self(), chan, message);
-			else
-				events::dispatch<error_event>("Can't send message: channel is null", false);
-		} else {
-			events::dispatch<privmsg_event>(serv->get_self(), get_user(serv), message);
+			return true;
 		}
+
+		return false;
 	}
 }
