@@ -31,6 +31,15 @@ namespace pingpong {
 			delete serv;
 	}
 
+	server * irc::get_server(const std::string &id) const {
+		for (server *serv: servers) {
+			if (serv->id == id)
+				return serv;
+		}
+
+		return nullptr;
+	}
+
 	void irc::init() {
 		init_messages();
 	}

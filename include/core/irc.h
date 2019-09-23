@@ -26,6 +26,9 @@ namespace pingpong {
 			irc(std::string user, std::string real): username(user), realname(real) {}
 			irc(): irc(default_user, default_realname) {}
 			~irc();
+
+			/** Finds and returns the server with a given ID or nullptr if none is found. */
+			server * get_server(const std::string &id) const;
 			
 			std::unique_lock<std::mutex> lock_console() { return std::unique_lock(console_mux); }
 			void init();
