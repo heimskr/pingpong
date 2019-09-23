@@ -71,7 +71,7 @@ namespace pingpong {
 	}
 
 	channel::operator std::string() const {
-		return serv->hostname + "/" + name;
+		return serv->id + "/" + name;
 	}
 
 	std::shared_ptr<user> channel::operator[](const std::string &name) {

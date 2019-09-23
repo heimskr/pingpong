@@ -132,7 +132,8 @@ namespace pingpong {
 
 		auto iter = std::find(channels.begin(), channels.end(), chan);
 		if (iter == channels.end()) {
-			DBG(ansi::color::red << "Channel pointer is inexplicably missing from server " << ansi::bold(hostname) << ": " << chan->name);
+			DBG(ansi::color::red << "Channel pointer is inexplicably missing from server " << ansi::bold(id) << ": "
+				<< chan->name);
 			return false;
 		}
 
@@ -156,7 +157,8 @@ namespace pingpong {
 
 		auto iter = std::find(users.begin(), users.end(), whom);
 		if (iter == users.end()) {
-			DBG(ansi::color::red << "User pointer is inexplicably missing from server " << ansi::bold(hostname) << ": " << whom);
+			DBG(ansi::color::red << "User pointer is inexplicably missing from server " << ansi::bold(id) << ": "
+				<< whom);
 			return false;
 		}
 
