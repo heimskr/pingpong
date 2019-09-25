@@ -57,8 +57,6 @@ namespace pingpong {
 		
 			template <typename T>
 			ansi::ansistream & operator<<(const T &value) { return dbg << value; }
-			ansi::ansistream & dbgout()  { return dbg << " >> "_d; }
-			ansi::ansistream & dbgin()   { return dbg << "<<  "_d; }
 	};
 }
 
