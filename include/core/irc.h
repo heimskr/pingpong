@@ -19,7 +19,6 @@ namespace pingpong {
 			static std::string default_nick, default_user, default_realname;
 
 			std::string username, realname;
-			static ansi::ansistream dbg;
 
 			/** A map of server IDs to server instances. */
 			std::map<std::string, server *> servers {};
@@ -54,9 +53,6 @@ namespace pingpong {
 
 			irc & operator+=(server *);
 			irc & operator-=(server *);
-		
-			template <typename T>
-			ansi::ansistream & operator<<(const T &value) { return dbg << value; }
 	};
 }
 
