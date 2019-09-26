@@ -28,7 +28,9 @@ namespace pingpong {
 	}
 
 	std::string & util::rtrim(std::string &str) {
-		str.erase(std::find_if(str.rbegin(), str.rend(), [](char c) { return !std::isspace(c); }).base(), str.end());
+		str.erase(std::find_if(str.rbegin(), str.rend(), [](char c) {
+			return !std::isspace(c) && c != '\n' && c != '\r' && c != '\t';
+		}).base(), str.end());
 		return str;
 	}
 
