@@ -1,18 +1,21 @@
 #ifndef PINGPONG_CORE_IRC_H_
 #define PINGPONG_CORE_IRC_H_
 
+#include <functional>
 #include <list>
 #include <map>
 #include <memory>
 #include <mutex>
+#include <utility>
 
 #include "core/ppdefs.h"
 #include "lib/ansi.h"
 
 namespace pingpong {
 	class irc {
+		using connect_wrapper = std::function<void(const std::function<void()> &)>;
 		private:
-			std::mutex console_mux = std::mutex();
+			std::mutex console_mutex, servers_mutex;
 
 		public:
 			static constexpr int default_port = 6667;
@@ -43,10 +46,15 @@ namespace pingpong {
 			/** If this server contains a given server pointer, this function returns its key. Otherwise, it returns an
 			 *  empty string. */
 			std::string get_key(server *) const;
-			
-			std::unique_lock<std::mutex> lock_console() { return std::unique_lock(console_mux); }
+
+			std::pair<std::string, long> connect(const std::string &where, const std::string &nick, long port = 6667,
+				connect_wrapper wrapper = {});
+
 			void init();
 			void init_messages();
+
+			std::unique_lock<std::mutex> lock_console() { return std::unique_lock(console_mutex); }
+			std::unique_lock<std::mutex> lock_servers() { return std::unique_lock(servers_mutex); }
 
 			/** Creates a unique ID for a server, a hostname. */
 			std::string create_id(const std::string &hostname);
