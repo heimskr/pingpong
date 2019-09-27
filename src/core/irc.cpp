@@ -92,9 +92,9 @@ namespace pingpong {
 		// connect() is a blocking operation, and it can take a while if the host is unavailable for some reason. A
 		// thread is necessary to prevent the connection attempt from holding up whatever thread called irc::connect()
 		// while it waits for connect() to time out.
-		std::thread([&](std::string hostname_copy, long port_copy) {
-			wrapper([&]() {
-				pingpong::server *serv = new pingpong::server(this, hostname_copy, port_copy);
+		std::thread([=, this]() {
+			wrapper([=, this]() {
+				pingpong::server *serv = new pingpong::server(this, hostname, port);
 				try {
 					serv->start();
 					serv->set_nick(nick);
@@ -104,7 +104,7 @@ namespace pingpong {
 					throw;
 				}
 			});
-		}, hostname, port).detach();
+		}).detach();
 
 		return {hostname, port};
 	}
