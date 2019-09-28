@@ -1,11 +1,12 @@
 #include "core/pputil.h"
 #include "core/modeset.h"
+
 #include "messages/numeric.h"
 
 namespace pingpong {
 	bool numeric_message::handle_channel_modes(server *serv) {
-		std::string _, chan_name, mode_str;
-		std::tie(_, chan_name, mode_str) = parse_ss(line);
+		std::string chan_name, mode_str;
+		std::tie(std::ignore, chan_name, mode_str) = parse_ss(line);
 
 		try {
 			modeset mset {modeset::mode_type::channel, util::rtrim(mode_str)};

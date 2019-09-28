@@ -5,8 +5,8 @@
 namespace pingpong {
 	/** Parses a channel topic message like "#channel :topic" */
 	bool numeric_message::handle_channel_topic(server *serv) {
-		std::string _, chan_name, topic_text;
-		std::tie(_, chan_name, topic_text) = parse_ssc(line);
+		std::string chan_name, topic_text;
+		std::tie(std::ignore, chan_name, topic_text) = parse_ssc(line);
 
 		std::shared_ptr<channel> chan = serv->get_channel(chan_name, true);
 		if (chan->topic.text != topic_text) {
