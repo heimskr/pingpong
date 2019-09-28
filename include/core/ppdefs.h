@@ -30,6 +30,8 @@ namespace pingpong {
 	};
 }
 
-long int strtol(const char *, char **, int base); // suppresses an incorrect VS Code error
+#ifdef VSCODE
+long strtol(const char *, char **, int); // suppresses an incorrect VS Code error
+#endif
 
 #endif
