@@ -1,5 +1,5 @@
 #include <cstring>
-#include <errno.h>
+#include <cerrno>
 #include <sys/types.h>
 #include <sys/select.h>
 #include <sys/socket.h>
@@ -23,7 +23,7 @@ namespace pingpong::net {
 
 		int status = getaddrinfo(hostname.c_str(), std::to_string(port).c_str(), &hints, &info);
 		if (status != 0)
-			throw resolution_error(status);
+			throw resolution_error(errno);
 	}
 	
 	sock::~sock() {
@@ -35,14 +35,14 @@ namespace pingpong::net {
 		int status = ::connect(net_fd, info->ai_addr, info->ai_addrlen);
 		if (status != 0) {
 			DBG("connect(): " << strerror(errno));
-			throw net_error(status);
+			throw net_error(errno);
 		}
 
 		int control_pipe[2];
 		status = pipe(control_pipe);
 		if (status != 0) {
 			DBG("pipe(): " << strerror(errno));
-			throw net_error(status);
+			throw net_error(errno);
 		}
 
 		control_read = control_pipe[0];
@@ -74,7 +74,7 @@ namespace pingpong::net {
 		int status = select(FD_SETSIZE, &fds_copy, NULL, NULL, NULL);
 		if (status < 0) {
 			DBG("select status: " << strerror(status));
-			throw net_error(status);
+			throw net_error(errno);
 		}
 			
 		if (FD_ISSET(net_fd, &fds_copy)) {
@@ -84,7 +84,7 @@ namespace pingpong::net {
 			status = ::read(control_read, &message, 1);
 			if (status < 0) {
 				DBG("control_fd status: " << strerror(status));
-				throw net_error(status);
+				throw net_error(errno);
 			}
 
 			if (message == control_message::close) {
