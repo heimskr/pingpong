@@ -37,7 +37,7 @@ namespace pingpong {
 			where = line.parameters.substr(0, middle);
 			chan = line.serv->get_channel(where, true);
 
-			mset_type = modeset::mode_type::self;
+			mset_type = modeset::mode_type::channel;
 			mset_main = modestr;
 			mset_extra = extra;
 		}

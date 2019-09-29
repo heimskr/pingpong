@@ -7,6 +7,9 @@
 #include "messages/message.h"
 
 namespace pingpong {
+	/**
+	 * Received whenever someone changes the mode in a channel or when your usermode is changed.
+	 */
 	class mode_message: public message, public local {
 		public:
 			modeset mset;
