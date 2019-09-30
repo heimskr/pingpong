@@ -55,7 +55,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#ifndef PINGPONG_COMMANDS_${name.toUpperCase()}_H_
 	%	#define PINGPONG_COMMANDS_${name.toUpperCase()}_H_
 	%	
-	%	#include "commands/command.h"
+	%	#include "pingpong/commands/command.h"
 	%	
 	%	namespace pingpong {
 	%		class ${cls}: public command {
@@ -69,7 +69,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#endif`);
 
 	sourcetext = prepare(`
-	%	#include "commands/${name}.h"
+	%	#include "pingpong/commands/${name}.h"
 	%	
 	%	namespace pingpong {
 	%		${cls}::operator std::string() const {
@@ -209,7 +209,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#endif`);
 
 	sourcetext = prepare(`
-	%	#include "core/${name}.h"
+	%	#include "pingpong/core/${name}.h"
 	%
 	%	namespace pingpong {
 	%		
