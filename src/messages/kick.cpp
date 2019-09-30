@@ -1,6 +1,6 @@
-#include "events/kick.h"
-#include "events/names_updated.h"
-#include "messages/kick.h"
+#include "pingpong/events/kick.h"
+#include "pingpong/events/names_updated.h"
+#include "pingpong/messages/kick.h"
 
 namespace pingpong {
 	kick_message::operator std::string() const {

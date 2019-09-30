@@ -1,6 +1,6 @@
 #include <stdexcept>
 
-#include "core/local.h"
+#include "pingpong/core/local.h"
 
 namespace pingpong {
 	inline void local::check_destination() const {

@@ -1,6 +1,6 @@
 #include <set>
 
-#include "core/moded.h"
+#include "pingpong/core/moded.h"
 
 namespace pingpong {
 	size_t moded::apply_modes(const std::unordered_set<char> remove, const std::unordered_set<char> add) {

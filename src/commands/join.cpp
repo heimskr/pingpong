@@ -1,8 +1,8 @@
 #include <stdexcept>
 #include <string>
 
-#include "commands/join.h"
-#include "commands/mode.h"
+#include "pingpong/commands/join.h"
+#include "pingpong/commands/mode.h"
 
 namespace pingpong {
 	join_command::join_command(server *serv_, std::vector<join_pair> pairs_): command(serv_), pairs(pairs_) {}

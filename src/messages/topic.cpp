@@ -1,6 +1,6 @@
-#include "events/topic.h"
-#include "events/topic_updated.h"
-#include "messages/topic.h"
+#include "pingpong/events/topic.h"
+#include "pingpong/events/topic_updated.h"
+#include "pingpong/messages/topic.h"
 
 namespace pingpong {
 	topic_message::operator std::string() const {

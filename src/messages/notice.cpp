@@ -1,4 +1,4 @@
-#include "messages/notice.h"
+#include "pingpong/messages/notice.h"
 
 namespace pingpong {
 	notice_message::operator std::string() const {

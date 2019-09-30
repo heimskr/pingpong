@@ -1,4 +1,4 @@
-#include "commands/kick.h"
+#include "pingpong/commands/kick.h"
 
 namespace pingpong {
 	kick_command::operator std::string() const {

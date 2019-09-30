@@ -1,4 +1,4 @@
-#include "messages/error.h"
+#include "pingpong/messages/error.h"
 
 namespace pingpong {
 	error_message::operator std::string() const {

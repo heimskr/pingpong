@@ -1,15 +1,15 @@
 #include <cctype>
 #include <vector>
 
-#include "core/debug.h"
-#include "core/parse_error.h"
+#include "pingpong/core/debug.h"
+#include "pingpong/core/parse_error.h"
 
-#include "events/event.h"
-#include "events/names_updated.h"
+#include "pingpong/events/event.h"
+#include "pingpong/events/names_updated.h"
 
-#include "messages/numeric.h"
+#include "pingpong/messages/numeric.h"
 
-#include "lib/ansi.h"
+#include "lib/formicine/ansi.h"
 
 namespace pingpong {
 	numeric_message::numeric_message(pingpong::line line_): message(line_) {

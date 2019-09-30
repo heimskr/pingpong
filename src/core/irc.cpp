@@ -3,27 +3,27 @@
 
 #include <cstring>
 
-#include "core/irc.h"
-#include "core/server.h"
+#include "pingpong/core/irc.h"
+#include "pingpong/core/server.h"
 
-#include "events/server_status.h"
+#include "pingpong/events/server_status.h"
 
-#include "messages/topic.h"
-#include "messages/error.h"
-#include "messages/join.h"
-#include "messages/kick.h"
-#include "messages/mode.h"
-#include "messages/nick.h"
-#include "messages/notice.h"
-#include "messages/numeric.h"
-#include "messages/quit.h"
-#include "messages/part.h"
-#include "messages/ping.h"
-#include "messages/privmsg.h"
+#include "pingpong/messages/topic.h"
+#include "pingpong/messages/error.h"
+#include "pingpong/messages/join.h"
+#include "pingpong/messages/kick.h"
+#include "pingpong/messages/mode.h"
+#include "pingpong/messages/nick.h"
+#include "pingpong/messages/notice.h"
+#include "pingpong/messages/numeric.h"
+#include "pingpong/messages/quit.h"
+#include "pingpong/messages/part.h"
+#include "pingpong/messages/ping.h"
+#include "pingpong/messages/privmsg.h"
 
-#include "net/resolution_error.h"
+#include "pingpong/net/resolution_error.h"
 
-#include "lib/ansi.h"
+#include "lib/formicine/ansi.h"
 
 namespace pingpong {
 	std::string irc::default_nick = "pingpong";

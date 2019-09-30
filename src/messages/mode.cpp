@@ -1,7 +1,7 @@
-#include "events/mode.h"
-#include "events/hat_updated.h"
+#include "pingpong/events/mode.h"
+#include "pingpong/events/hat_updated.h"
 
-#include "messages/mode.h"
+#include "pingpong/messages/mode.h"
 
 namespace pingpong {
 	mode_message::mode_message(const pingpong::line &line_): message(line_), local("") {

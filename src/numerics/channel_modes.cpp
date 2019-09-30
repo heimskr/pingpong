@@ -1,7 +1,7 @@
-#include "core/pputil.h"
-#include "core/modeset.h"
+#include "pingpong/core/util.h"
+#include "pingpong/core/modeset.h"
 
-#include "messages/numeric.h"
+#include "pingpong/messages/numeric.h"
 
 namespace pingpong {
 	bool numeric_message::handle_channel_modes(server *serv) {

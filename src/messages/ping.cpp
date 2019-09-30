@@ -1,8 +1,8 @@
 #include <string>
 
-#include "commands/pong.h"
-#include "events/server_status.h"
-#include "messages/ping.h"
+#include "pingpong/commands/pong.h"
+#include "pingpong/events/server_status.h"
+#include "pingpong/messages/ping.h"
 
 namespace pingpong {
 	ping_message::operator std::string() const {

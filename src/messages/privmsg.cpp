@@ -1,7 +1,7 @@
 #include <string>
 
-#include "events/privmsg.h"
-#include "messages/privmsg.h"
+#include "pingpong/events/privmsg.h"
+#include "pingpong/messages/privmsg.h"
 
 namespace pingpong {
 	privmsg_message::operator std::string() const {

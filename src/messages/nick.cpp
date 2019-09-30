@@ -1,5 +1,5 @@
-#include "events/nick.h"
-#include "messages/nick.h"
+#include "pingpong/events/nick.h"
+#include "pingpong/messages/nick.h"
 
 namespace pingpong {
 	nick_message::operator std::string() const {

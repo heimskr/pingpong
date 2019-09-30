@@ -1,10 +1,10 @@
 #include <iostream>
 #include <string>
 
-#include "core/server.h"
-#include "events/join.h"
-#include "events/names_updated.h"
-#include "messages/join.h"
+#include "pingpong/core/server.h"
+#include "pingpong/events/join.h"
+#include "pingpong/events/names_updated.h"
+#include "pingpong/messages/join.h"
 
 namespace pingpong {
 	join_message::operator std::string() const {

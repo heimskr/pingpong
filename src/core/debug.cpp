@@ -1,13 +1,14 @@
 #include <iostream>
 #include <string>
 
-#include "core/debug.h"
-#include "core/ppdefs.h"
-#include "core/irc.h"
-#include "core/channel.h"
-#include "core/server.h"
-#include "core/user.h"
-#include "lib/ansi.h"
+#include "pingpong/core/debug.h"
+#include "pingpong/core/defs.h"
+#include "pingpong/core/irc.h"
+#include "pingpong/core/channel.h"
+#include "pingpong/core/server.h"
+#include "pingpong/core/user.h"
+
+#include "lib/formicine/ansi.h"
 
 namespace pingpong {
 	void debug::print_all(const irc &obj) {

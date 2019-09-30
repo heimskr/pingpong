@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "messages/targeted.h"
+#include "pingpong/messages/targeted.h"
 
 namespace pingpong {
 	targeted_message::targeted_message(const pingpong::line &line_): message(line_) {

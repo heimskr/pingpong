@@ -3,9 +3,9 @@
 #include <stdexcept>
 #include <string>
 
-#include "core/ppdefs.h"
-#include "core/channel.h"
-#include "core/server.h"
+#include "pingpong/core/defs.h"
+#include "pingpong/core/channel.h"
+#include "pingpong/core/server.h"
 
 namespace pingpong {
 	channel::channel(std::string name_, server *serv_): name(name_), serv(serv_) {

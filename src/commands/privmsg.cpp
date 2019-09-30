@@ -1,7 +1,7 @@
-#include "commands/privmsg.h"
+#include "pingpong/commands/privmsg.h"
 
-#include "events/error.h"
-#include "events/privmsg.h"
+#include "pingpong/events/error.h"
+#include "pingpong/events/privmsg.h"
 
 namespace pingpong {
 	privmsg_command::privmsg_command(server *serv_, std::string where_, std::string message_):

@@ -6,19 +6,19 @@
 
 #include <signal.h>
 
-#include "core/debug.h"
-#include "core/server.h"
+#include "pingpong/core/debug.h"
+#include "pingpong/core/server.h"
 
-#include "commands/user.h"
-#include "commands/nick.h"
-#include "commands/pong.h"
+#include "pingpong/commands/user.h"
+#include "pingpong/commands/nick.h"
+#include "pingpong/commands/pong.h"
 
-#include "events/bad_line.h"
-#include "events/message.h"
-#include "events/names_updated.h"
-#include "events/raw.h"
-#include "events/server_status.h"
-#include "events/user_appeared.h"
+#include "pingpong/events/bad_line.h"
+#include "pingpong/events/message.h"
+#include "pingpong/events/names_updated.h"
+#include "pingpong/events/raw.h"
+#include "pingpong/events/server_status.h"
+#include "pingpong/events/user_appeared.h"
 
 namespace pingpong {
 	server::~server() {

@@ -2,16 +2,16 @@
 #include <iostream>
 #include <string>
 
-#include "core/channel.h"
-#include "core/server.h"
+#include "pingpong/core/channel.h"
+#include "pingpong/core/server.h"
 
-#include "commands/join.h"
-#include "commands/nick.h"
-#include "commands/privmsg.h"
-#include "commands/user.h"
+#include "pingpong/commands/join.h"
+#include "pingpong/commands/nick.h"
+#include "pingpong/commands/privmsg.h"
+#include "pingpong/commands/user.h"
 
-#include "events/event.h"
-#include "events/join.h"
+#include "pingpong/events/event.h"
+#include "pingpong/events/join.h"
 
 using namespace std;
 using namespace pingpong;

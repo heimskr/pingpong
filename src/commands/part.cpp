@@ -1,4 +1,4 @@
-#include "commands/part.h"
+#include "pingpong/commands/part.h"
 
 namespace pingpong {
 	part_command::operator std::string() const {

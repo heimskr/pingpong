@@ -1,4 +1,4 @@
-#include "messages/sourced.h"
+#include "pingpong/messages/sourced.h"
 
 namespace pingpong {
 	sourced_message::sourced_message(const pingpong::line &line_):

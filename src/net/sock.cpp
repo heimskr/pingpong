@@ -6,11 +6,11 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-#include "net/sock.h"
-#include "net/net_error.h"
-#include "net/resolution_error.h"
+#include "pingpong/net/sock.h"
+#include "pingpong/net/net_error.h"
+#include "pingpong/net/resolution_error.h"
 
-#include "lib/ansi.h"
+#include "lib/formicine/ansi.h"
 
 namespace pingpong::net {
 	int sock::sock_count = 0;

@@ -2,10 +2,10 @@
 #include <utility>
 #include <vector>
 
-#include "events/event.h"
-#include "events/names_updated.h"
+#include "pingpong/events/event.h"
+#include "pingpong/events/names_updated.h"
 
-#include "messages/numeric.h"
+#include "pingpong/messages/numeric.h"
 
 namespace pingpong {
 	bool numeric_message::handle_names_reply(server *serv) {

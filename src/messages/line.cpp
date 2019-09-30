@@ -1,9 +1,9 @@
 #include <string>
 
-#include "messages/line.h"
-#include "core/mask.h"
+#include "pingpong/messages/line.h"
+#include "pingpong/core/mask.h"
 
-#include "lib/ansi.h"
+#include "lib/formicine/ansi.h"
 
 namespace pingpong {
 	line::line(server *serv_, const std::string &in): original(in), serv(serv_), source(mask("", "", "")) {

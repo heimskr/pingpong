@@ -4,10 +4,10 @@
 #include <cstring>
 #include <string>
 
-#include "net/socket_buffer.h"
-#include "net/net_error.h"
+#include "pingpong/net/socket_buffer.h"
+#include "pingpong/net/net_error.h"
 
-#include "lib/ansi.h"
+#include "lib/formicine/ansi.h"
 
 namespace pingpong::net {
 	socket_buffer::socket_buffer(sock *source_, size_t buffer_size_, size_t putback_size_):

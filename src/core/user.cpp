@@ -1,4 +1,4 @@
-#include "core/user.h"
+#include "pingpong/core/user.h"
 
 namespace pingpong {
 	void user::rename(const std::string &new_name) {

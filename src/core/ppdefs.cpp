@@ -1,4 +1,4 @@
-#include "core/ppdefs.h"
+#include "pingpong/core/defs.h"
 
 namespace pingpong {
 	std::unordered_map<char, hat> hat_map {

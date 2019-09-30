@@ -1,5 +1,5 @@
-#include "events/quit.h"
-#include "messages/quit.h"
+#include "pingpong/events/quit.h"
+#include "pingpong/messages/quit.h"
 
 namespace pingpong {
 	quit_message::operator std::string() const {

@@ -2,8 +2,8 @@
 #include <stdexcept>
 #include <string>
 
-#include "core/mask.h"
-#include "core/parse_error.h"
+#include "pingpong/core/mask.h"
+#include "pingpong/core/parse_error.h"
 
 namespace pingpong {
 	mask::mask(const std::string &combined) {

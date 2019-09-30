@@ -1,9 +1,9 @@
 #include <string>
 
-#include "events/part.h"
-#include "events/names_updated.h"
+#include "pingpong/events/part.h"
+#include "pingpong/events/names_updated.h"
 
-#include "messages/part.h"
+#include "pingpong/messages/part.h"
 
 namespace pingpong {
 	part_message::operator std::string() const {

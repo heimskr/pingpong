@@ -1,6 +1,6 @@
-#include "core/modeset.h"
+#include "pingpong/core/modeset.h"
 
-#include "lib/ansi.h"
+#include "lib/formicine/ansi.h"
 
 namespace pingpong {
 	modeset::modeset(mode_type type_, const std::string &modes_, const std::string &extra_):

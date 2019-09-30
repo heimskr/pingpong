@@ -1,6 +1,6 @@
 #include <string>
 
-#include "commands/quit.h"
+#include "pingpong/commands/quit.h"
 
 namespace pingpong {
 	quit_command::operator std::string() const {

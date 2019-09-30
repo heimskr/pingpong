@@ -1,7 +1,7 @@
 #include <string>
 
-#include "commands/command.h"
-#include "events/command.h"
+#include "pingpong/commands/command.h"
+#include "pingpong/events/command.h"
 	
 namespace pingpong {
 	std::function<bool(command &)> command::before_send = [](command &) { return true; };

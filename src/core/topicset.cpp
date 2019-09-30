@@ -1,5 +1,5 @@
-#include "core/topicset.h"
-#include "core/user.h"
+#include "pingpong/core/topicset.h"
+#include "pingpong/core/user.h"
 
 namespace pingpong {
 	topicset & topicset::operator=(const std::string &str) {

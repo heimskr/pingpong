@@ -1,7 +1,7 @@
 #include <string>
 
-#include "commands/user.h"
-#include "core/server.h"
+#include "pingpong/commands/user.h"
+#include "pingpong/core/server.h"
 
 namespace pingpong {
 	user_command::operator std::string() const {

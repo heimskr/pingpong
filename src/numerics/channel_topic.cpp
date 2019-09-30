@@ -1,6 +1,6 @@
-#include "events/topic_updated.h"
+#include "pingpong/events/topic_updated.h"
 
-#include "messages/numeric.h"
+#include "pingpong/messages/numeric.h"
 
 namespace pingpong {
 	/** Parses a channel topic message like "#channel :topic" */
