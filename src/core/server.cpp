@@ -94,7 +94,7 @@ namespace pingpong {
 		auto l = parent->lock_console();
 		events::dispatch<raw_out_event>(this, str);
 
-		*stream << str + "\r\n";
+		*stream << str << "\r\n";
 		stream->flush();
 	}
 
