@@ -68,7 +68,7 @@ namespace pingpong {
 		const size_t length = str.length();
 		str += "\0\0\0\0\0"; // 🤫
 
-		bool in_color = false, in_bold = false, in_underline = false, in_italics = false;
+		bool in_color = false, bold = false, underline = false, italics = false, inverse = false;
 
 		for (size_t i = 0; i < length; ++i) {
 			char ch = str[i];
@@ -102,14 +102,21 @@ namespace pingpong {
 
 				in_color = !in_color;
 			} else if (ch == '\x02') {
-				out << (in_bold? "\e[22m" : "\e[1m");
-				in_bold = !in_bold;
+				out << (bold? ansi::style_resets.at(ansi::style::bold) :
+				              ansi::style_codes.at(ansi::style::bold));
+				bold = !bold;
+			} else if (ch == '\x16') {
+				out << (inverse? ansi::style_resets.at(ansi::style::inverse) :
+				                 ansi::style_codes.at(ansi::style::inverse));
+				inverse = !inverse;
 			} else if (ch == '\x1d') {
-				out << (in_italics? "\e[23m" : "\e[3m");
-				in_italics = !in_italics;
+				out << (italics? ansi::style_resets.at(ansi::style::italic) :
+				                 ansi::style_codes.at(ansi::style::italic));
+				italics = !italics;
 			} else if (ch == '\x1f') {
-				out << (in_underline? "\e[24m" : "\e[4m");
-				in_underline = !in_underline;
+				out << (underline? ansi::style_resets.at(ansi::style::underline) :
+				                   ansi::style_codes.at(ansi::style::underline));
+				underline = !underline;
 			} else {
 				out << ch;
 			}
