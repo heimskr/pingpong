@@ -68,7 +68,7 @@ namespace pingpong {
 		const size_t length = str.length();
 		str += "\0\0\0\0\0"; // 🤫
 
-		bool in_color = false, in_bold = false;
+		bool in_color = false, in_bold = false, in_underline = false;
 
 		for (size_t i = 0; i < length; ++i) {
 			char ch = str[i];
@@ -104,6 +104,9 @@ namespace pingpong {
 			} else if (ch == '\x02') {
 				out << (in_bold? "\e[22m" : "\e[1m");
 				in_bold = !in_bold;
+			} else if (ch == '\x1f') {
+				out << (in_underline? "\e[24m" : "\e[4m");
+				in_underline = !in_underline;
 			} else {
 				out << ch;
 			}
