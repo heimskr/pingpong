@@ -18,7 +18,7 @@ namespace pingpong {
 				continue;
 			}
 
-			ansi::out << ansi::style::underline << ansi::yeen(serv->id) << ansi::endl;
+			DBG(ansi::style::underline << ansi::yeen(serv->id));
 			for (std::shared_ptr<channel> chan: serv->channels) {
 				DBG("    " << ansi::magenta(ansi::bold(chan->name)));
 				for (std::shared_ptr<user> user: chan->users)
