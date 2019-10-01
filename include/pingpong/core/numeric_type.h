@@ -3,6 +3,7 @@
 
 namespace pingpong {
 	enum class numeric_type: int {
+		welcome          = 001, // varies                           -- The post-registration welcome message.
 		channel_modes    = 324, // "#channel +modes"                -- The modes for a channel.
 		channel_creation = 329, // "#channel \d+"                   -- Channel creation time.
 		channel_topic    = 332, // "#channel :topic"                -- Channel topic.

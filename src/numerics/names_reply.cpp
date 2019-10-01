@@ -2,7 +2,6 @@
 #include <utility>
 #include <vector>
 
-#include "pingpong/events/event.h"
 #include "pingpong/events/names_updated.h"
 
 #include "pingpong/messages/numeric.h"

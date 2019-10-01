@@ -60,6 +60,7 @@ namespace pingpong {
 			bool operator==(numeric_type type_) const;
 			bool operator!=(numeric_type type_) const;
 
+			bool handle_welcome(server *);       // 001
 			bool handle_channel_modes(server *); // 324
 			bool handle_channel_topic(server *); // 332
 			bool handle_names_reply(server *);   // 353
