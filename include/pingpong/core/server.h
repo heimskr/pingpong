@@ -131,6 +131,12 @@ namespace pingpong {
 
 			/** Returns a string representing the hostname and port (if not the default port) of the connection. */
 			operator std::string() const;
+
+			/** Places the names of all joined channels into a container, starting at a given iterator. */
+			template <typename Iter>
+			void channel_names(Iter begin) const {
+				std::transform(channels.begin(), channels.end(), begin, [](auto chan) { return chan->name; });
+			}
 	};
 }
 

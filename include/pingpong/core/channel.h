@@ -11,12 +11,12 @@
 
 #include "pingpong/core/defs.h"
 #include "pingpong/core/moded.h"
-#include "pingpong/core/server.h"
 #include "pingpong/core/topicset.h"
 #include "pingpong/core/user.h"
 
 namespace pingpong {
 	class user;
+	class server;
 
 	class channel: public moded {
 		public:
