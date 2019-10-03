@@ -10,9 +10,19 @@ namespace pingpong {
 		modeset::mode_type mset_type = modeset::mode_type::self;
 		std::string mset_main {}, mset_extra {};
 
-		if (line.source.is_server() && line.source.nick == line.serv->get_nick()) {
+		// is_server() is true sometimes because the line source looks like a server name, even though it's a nick.
+		// It doesn't actually indicate that the message source is the server.
+		if (line.source.is_server()) {
 			// If the server notifies you of a user mode change, the mask is just your nick without a user or host.
 			// The parameters will look like "pingpong :+iwx".
+
+			if (line.source.nick != line.serv->get_nick()) {
+				// The mode command, if the source is a nick, tells you what your current nick is. If it's different
+				// from what we were assuming, we need to take the source as your new nick.
+				line.serv->set_nick(line.source.nick, true);
+				line.serv->remove_user("?");
+			}
+
 			middle = line.parameters.find(" :");
 			if (middle == std::string::npos)
 				throw bad_message(line);

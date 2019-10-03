@@ -70,6 +70,7 @@ namespace pingpong {
 		try {
 			msg = pingpong::message::parse(line);
 		} catch (std::invalid_argument &err) {
+			DBG("Bad line: " << err.what());
 			events::dispatch<bad_line_event>(this, line.original);
 			throw;
 		}
@@ -122,10 +123,12 @@ namespace pingpong {
 		stream->flush();
 	}
 
-	void server::set_nick(const std::string &new_nick) {
-		if (nick.empty())
+	void server::set_nick(const std::string &new_nick, bool immediate) {
+		if (immediate) {
 			nick = new_nick;
-		nick_command(this, new_nick).send();
+		} else {
+			nick_command(this, new_nick).send();
+		}
 	}
 
 	server::stage server::get_status() {
@@ -282,8 +285,10 @@ namespace pingpong {
 
 
 	void server::rename_user(const std::string &old_nick, const std::string &new_nick) {
-		if (old_nick == nick)
+		if (old_nick == nick) {
 			nick = new_nick;
+			remove_user("?");
+		}
 
 		if (std::shared_ptr<user> uptr = get_user(old_nick, false))
 			uptr->name = new_nick;
@@ -305,9 +310,8 @@ namespace pingpong {
 	}
 
 	std::shared_ptr<user> server::get_self() {
-		if (nick.empty())
-			throw std::runtime_error("Can't get self: no nick for server");
-		return get_user(nick, true);
+		// If you don't have a nick yet, return a fake "?" user. Once you do have a nick, the fake user is removed.
+		return get_user(nick.empty()? "?" : nick, true);
 	}
 
 	void server::kill() {

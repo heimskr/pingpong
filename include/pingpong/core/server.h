@@ -65,7 +65,7 @@ namespace pingpong {
 			void quote(const std::string &);
 
 			/** Requests a nickname change. */
-			void set_nick(const std::string &);
+			void set_nick(const std::string &, bool immediate = false);
 
 			/** Returns the current nickname. */
 			const std::string & get_nick() const { return nick; }
