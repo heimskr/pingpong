@@ -41,19 +41,14 @@ namespace pingpong {
 			if (line.back() == '\r')
 				line.pop_back();
 
-			DBG("getline()");
 			try {
 				handle_line(pingpong::line(this, line));
 			} catch (std::invalid_argument &) {
 				// Already dealt with by dispatching a bad_line_event.
 			}
-
-			// line_done.notify_all();
 		}
 
-		DBG("getline is done.");
 		getline_mutex.unlock();
-		// line_done.notify_all();
 	}
 
 	void server::work_reap() {
@@ -63,16 +58,11 @@ namespace pingpong {
 		// If you were to directly call server::remove from error_message::operator(), the server would be deleted
 		// before the pingpong::line's destructor could be called.
 		std::unique_lock<std::mutex> death_lock {death_mutex};
-		// std::unique_lock<std::mutex> line_lock  {line_mutex};
-		DBG("Waiting for death");
 		death.wait(death_lock);
 		buffer->close();
-		DBG("Waiting for line_done");
 		getline_mutex.lock();
 		getline_mutex.unlock();
-		// line_done.wait(line_lock);
-		DBG("The reaper is done waiting.");
-		remove();
+		*parent -= this;
 	}
 
 	void server::handle_line(const pingpong::line &line) {
@@ -320,27 +310,16 @@ namespace pingpong {
 		return get_user(nick, true);
 	}
 
-	void server::kill(bool close) {
+	void server::kill() {
 		auto lock {lock_status()};
-		if (status == stage::dead) {
-			DBG("No perishing now.");
+		if (status == stage::dead)
 			return;
-		}
 
-		DBG("Time to perish.");
-		if (close)
-			buffer->close();
-			
+		buffer->close();
 		set_dead();
 	}
 
-	void server::remove() {
-		DBG("remove()");
-		*parent -= this;
-	}
-
 	void server::reap() {
-		DBG("reap()");
 		death.notify_all();
 	}
 

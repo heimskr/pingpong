@@ -6,8 +6,7 @@ namespace pingpong {
 	}
 
 	bool error_message::operator()(server *serv) {
-		// When sent to a client, the ERROR message indicates a disconnection.
-		DBG("error_message()()");
+		// When sent to a client, the ERROR message indicates a disconnection. It should remove the server.
 		serv->reap();
 		return true;
 	}

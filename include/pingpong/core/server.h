@@ -30,7 +30,6 @@ namespace pingpong {
 
 			std::condition_variable death;
 			std::mutex death_mutex, getline_mutex;
-			// std::lock_guard<std::mutex> getline_lock;
 
 			void work_read();
 			void work_reap();
@@ -132,10 +131,7 @@ namespace pingpong {
 			bool start();
 
 			/** Disconnects the server. */
-			void kill(bool close = true);
-
-			/** Tells the server's parent to remove it. */
-			void remove();
+			void kill();
 
 			/** Starts the process of removing a server. */
 			void reap();
