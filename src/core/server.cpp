@@ -213,7 +213,8 @@ namespace pingpong {
 		std::shared_ptr<user> uptr = get_user(whom, false);
 		if (uptr)
 			return remove_user(uptr);
-		DBG("User not in list: " << whom << "\n");
+		if (whom != "?")
+			DBG("User not in list: " << whom << "\n");
 		return false;
 	}
 
