@@ -12,6 +12,12 @@
 
 #include "lib/formicine/ansi.h"
 
+#ifdef VSCODE
+int errno;
+namespace std { void * memset(void *, int, size_t); }
+char * strerror(int);
+#endif
+
 namespace pingpong::net {
 	int sock::sock_count = 0;
 
@@ -58,6 +64,7 @@ namespace pingpong::net {
 	void sock::close() {
 		control_message message = control_message::close;
 		::write(control_write, &message, 1);
+		connected = false;
 	}
 
 	ssize_t sock::send(const void *data, size_t bytes) {
@@ -78,7 +85,11 @@ namespace pingpong::net {
 		}
 			
 		if (FD_ISSET(net_fd, &fds_copy)) {
-			return ::recv(net_fd, data, bytes, 0);
+			ssize_t bytes_read = ::recv(net_fd, data, bytes, 0);
+			if (bytes_read == 0)
+				close();
+
+			return bytes_read;
 		} else if (FD_ISSET(control_read, &fds_copy)) {
 			control_message message;
 			status = ::read(control_read, &message, 1);
