@@ -10,7 +10,11 @@ namespace pingpong {
 		if (serv != who->serv)
 			throw std::runtime_error("Invalid server for user");
 
-		serv->remove_user(who);
+		if (who == serv->get_self())
+			serv->reap();
+		else
+			serv->remove_user(who);
+
 		events::dispatch<quit_event>(who, content);
 		return true;
 	}

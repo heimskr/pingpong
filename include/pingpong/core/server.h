@@ -28,7 +28,12 @@ namespace pingpong {
 			irc *parent;
 			std::string nick;
 
-			void work();
+			std::condition_variable death;
+			std::mutex death_mutex, getline_mutex;
+			// std::lock_guard<std::mutex> getline_lock;
+
+			void work_read();
+			void work_reap();
 			void handle_line(const pingpong::line &);
 
 		public:
@@ -48,17 +53,14 @@ namespace pingpong {
 			std::list<std::shared_ptr<user>>    users    {};
 			std::shared_ptr<message> last_message;
 
-			std::thread worker;
-			std::mutex status_mux;
+			std::thread worker, reaper;
+			std::recursive_mutex status_mutex;
 			stage status = stage::unconnected;
 
-			server(irc *parent_, const std::string &id_, const std::string &hostname_, int port_ = irc::default_port):
-				parent(parent_), id(id_), hostname(hostname_), port(port_) {}
+			server(irc *parent_, const std::string &id_, const std::string &hostname_, int port_ = irc::default_port);
 
 			server(irc *parent_, const std::string &hostname_, int port_ = irc::default_port):
 				server(parent_, parent_->create_id(hostname_), hostname_, port_) {}
-
-			~server();
 
 			/** Sends a raw string to the server. */
 			void quote(const std::string &);
@@ -70,7 +72,10 @@ namespace pingpong {
 			const std::string & get_nick() const { return nick; }
 
 			/** Returns the server's status. */
-			stage get_status() const { return status; }
+			stage get_status();
+
+			/** Sets the server's status. */
+			void set_status(stage);
 
 			/** Stringifies the server's status. */
 			std::string status_string() const;
@@ -127,10 +132,22 @@ namespace pingpong {
 			bool start();
 
 			/** Disconnects the server. */
-			void cleanup();
+			void kill(bool close = true);
+
+			/** Tells the server's parent to remove it. */
+			void remove();
+
+			/** Starts the process of removing a server. */
+			void reap();
+
+			/** If the server's not already counted as dead, set its status to dead and dispatch an event. */
+			void set_dead();
 
 			/** Returns a string representing the hostname and port (if not the default port) of the connection. */
 			operator std::string() const;
+
+			/** Locks the mutex that protects the server status. */
+			std::unique_lock<std::recursive_mutex> lock_status();
 
 			/** Places the names of all joined channels into a container, starting at a given iterator. */
 			template <typename Iter>

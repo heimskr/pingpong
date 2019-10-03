@@ -5,6 +5,7 @@
 #include <thread>
 
 #include <signal.h>
+#include <unistd.h>
 
 #include "pingpong/core/debug.h"
 #include "pingpong/core/server.h"
@@ -21,15 +22,16 @@
 #include "pingpong/events/user_appeared.h"
 
 namespace pingpong {
-	server::~server() {
-		cleanup();
+	server::server(irc *parent_, const std::string &id_, const std::string &hostname_, int port_):
+	parent(parent_), id(id_), hostname(hostname_), port(port_) {
+		getline_mutex.lock();
 	}
 
 
 // Private instance methods
 
 
-	void server::work() {
+	void server::work_read() {
 		signal(SIGPIPE, SIG_IGN);
 		user_command(this, parent->username, parent->realname).send();
 
@@ -39,12 +41,38 @@ namespace pingpong {
 			if (line.back() == '\r')
 				line.pop_back();
 
+			DBG("getline()");
 			try {
 				handle_line(pingpong::line(this, line));
 			} catch (std::invalid_argument &) {
 				// Already dealt with by dispatching a bad_line_event.
 			}
+
+			// line_done.notify_all();
 		}
+
+		DBG("getline is done.");
+		getline_mutex.unlock();
+		// line_done.notify_all();
+	}
+
+	void server::work_reap() {
+		// Bad things happen if the reader tries to close the connection on its own, so it's necessary to use another
+		// thread to start the process of killing a server. The line_done condition variable causes the reaper to wait
+		// until the reader leaves its try block and the temporary pingpong::line's destructor is called.
+		// If you were to directly call server::remove from error_message::operator(), the server would be deleted
+		// before the pingpong::line's destructor could be called.
+		std::unique_lock<std::mutex> death_lock {death_mutex};
+		// std::unique_lock<std::mutex> line_lock  {line_mutex};
+		DBG("Waiting for death");
+		death.wait(death_lock);
+		buffer->close();
+		DBG("Waiting for line_done");
+		getline_mutex.lock();
+		getline_mutex.unlock();
+		// line_done.wait(line_lock);
+		DBG("The reaper is done waiting.");
+		remove();
 	}
 
 	void server::handle_line(const pingpong::line &line) {
@@ -67,20 +95,26 @@ namespace pingpong {
 
 
 	bool server::start() {
-		std::unique_lock<std::mutex> ulock(status_mux);
+		auto lock {lock_status()};
 
-		if (status == stage::dead)        cleanup();
-		if (status != stage::unconnected) throw std::runtime_error("Can't connect: server not unconnected");
+		if (status != stage::unconnected)
+			throw std::runtime_error("Can't connect: server not unconnected");
 
 		sock   = std::make_shared<net::sock>(hostname, port);
 		sock->connect();
 		buffer = std::make_shared<net::socket_buffer>(sock.get());
 		stream = std::make_shared<std::iostream>(buffer.get());
 
+		const stage old_status = status;
 		status = stage::setuser;
-		events::dispatch<server_status_event>(this);
+		if (status != old_status)
+			events::dispatch<server_status_event>(this);
 
-		worker = std::thread(&server::work, this);
+		worker = std::thread(&server::work_read, this);
+		worker.detach();
+		
+		reaper = std::thread(&server::work_reap, this);
+		reaper.detach();
 
 		return true;
 	}
@@ -102,6 +136,20 @@ namespace pingpong {
 		if (nick.empty())
 			nick = new_nick;
 		nick_command(this, new_nick).send();
+	}
+
+	server::stage server::get_status() {
+		auto lock {lock_status()};
+		return status;
+	}
+
+	void server::set_status(stage new_status) {
+		auto lock {lock_status()};
+		if (new_status != status) {
+			const stage old_status = status;
+			status = new_status;
+			events::dispatch<server_status_event>(this, old_status);
+		}
 	}
 
 	std::string server::status_string() const {
@@ -272,16 +320,44 @@ namespace pingpong {
 		return get_user(nick, true);
 	}
 
-	void server::cleanup() {
-		status = stage::dead;
-
-		if (worker.joinable()) {
-			buffer->close();
-			worker.join();
+	void server::kill(bool close) {
+		auto lock {lock_status()};
+		if (status == stage::dead) {
+			DBG("No perishing now.");
+			return;
 		}
+
+		DBG("Time to perish.");
+		if (close)
+			buffer->close();
+			
+		set_dead();
+	}
+
+	void server::remove() {
+		DBG("remove()");
+		*parent -= this;
+	}
+
+	void server::reap() {
+		DBG("reap()");
+		death.notify_all();
+	}
+
+	void server::set_dead() {
+		auto lock {lock_status()};
+		if (status == stage::dead)
+			return;
+		const stage old_status = status;
+		status = stage::dead;
+		events::dispatch<server_status_event>(this, old_status);
 	}
 
 	server::operator std::string() const {
 		return port != irc::default_port? hostname + ":" + std::to_string(port) : hostname;
+	}
+
+	std::unique_lock<std::recursive_mutex> server::lock_status() {
+		return std::unique_lock(status_mutex);
 	}
 }

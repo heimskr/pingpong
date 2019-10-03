@@ -31,6 +31,7 @@ namespace pingpong {
 	std::string irc::default_realname = "PingPong IRC";
 
 	irc::~irc() {
+		DBG("Deleting servers in ~irc().");
 		for (const std::pair<std::string, server *> &server_pair: servers)
 			delete server_pair.second;
 	}
@@ -158,8 +159,15 @@ namespace pingpong {
 
 	irc & irc::operator-=(server *serv) {
 		if (has_server(serv)) {
+			DBG("-=: " << serv);
 			servers.erase(get_key(serv));
 			server_order.remove(serv);
+			if (active_server == serv)
+				active_server = nullptr;
+			serv->kill();
+			DBG("Deleting.");
+			delete serv;
+			DBG("Deleted.");
 		}
 
 		return *this;

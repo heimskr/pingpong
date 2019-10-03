@@ -12,7 +12,14 @@ namespace pingpong {
 	 */
 	class server_status_event: public server_event {
 		public:
-			using server_event::server_event;
+			// Equal to the server's status at the time of dispatch if the previous status isn't known.
+			const server::stage prior_status;
+
+			server_status_event(server *serv_, server::stage prior_status_):
+				server_event(serv_), prior_status(prior_status_) {}
+
+			server_status_event(server *serv_):
+				server_status_event(serv_, serv_->get_status()) {}
 	};
 }
 

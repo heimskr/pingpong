@@ -62,9 +62,11 @@ namespace pingpong::net {
 	}
 
 	void sock::close() {
-		control_message message = control_message::close;
-		::write(control_write, &message, 1);
-		connected = false;
+		if (connected) {
+			control_message message = control_message::close;
+			::write(control_write, &message, 1);
+			connected = false;
+		}
 	}
 
 	ssize_t sock::send(const void *data, size_t bytes) {
@@ -98,9 +100,7 @@ namespace pingpong::net {
 				throw net_error(errno);
 			}
 
-			if (message == control_message::close) {
-				close();
-			} else {
+			if (message != control_message::close) {
 				DBG("Unknown control message: '" << static_cast<char>(message) << "'");
 			}
 

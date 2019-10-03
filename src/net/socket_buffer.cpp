@@ -9,6 +9,11 @@
 
 #include "lib/formicine/ansi.h"
 
+#if VSCODE
+#define EOF 0
+namespace std { void * memmove(void *dest, const void *src, std::size_t count); }
+#endif
+
 namespace pingpong::net {
 	socket_buffer::socket_buffer(sock *source_, size_t buffer_size_, size_t putback_size_):
 	source(source_), buffer_size(buffer_size_), putback_size(putback_size_) {
@@ -46,10 +51,10 @@ namespace pingpong::net {
 		if (gptr() < egptr())
 			return traits_type::to_int_type(*gptr());
 
-		int putback = std::min(putback_size, static_cast<size_t>(gptr() - eback()));
+		size_t putback = std::min(putback_size, static_cast<size_t>(gptr() - eback()));
 		std::memmove(buffer + putback_size - putback, gptr() - putback, putback);
 
-		int bytes_read;
+		ssize_t bytes_read;
 		try {
 			bytes_read = source->recv(buffer + putback_size, buffer_size - putback_size);
 		} catch (const net_error &err) {
