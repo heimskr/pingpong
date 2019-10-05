@@ -13,6 +13,7 @@
 #include "pingpong/commands/user.h"
 #include "pingpong/commands/nick.h"
 #include "pingpong/commands/pong.h"
+#include "pingpong/commands/quit.h"
 
 #include "pingpong/events/bad_line.h"
 #include "pingpong/events/message.h"
@@ -84,6 +85,13 @@ namespace pingpong {
 
 // Public instance methods
 
+
+	void server::quit(const std::string &message) {
+		if (message.empty())
+			pingpong::quit_command(this).send();
+		else
+			pingpong::quit_command(this, message).send();
+	}
 
 	bool server::start() {
 		auto lock {lock_status()};

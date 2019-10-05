@@ -127,6 +127,9 @@ namespace pingpong {
 			/** Returns the parent irc instance. */
 			irc * get_parent() { return parent; }
 
+			/** Quits the server. */
+			void quit(const std::string &message = "");
+
 			/** Connects to the server. */
 			bool start();
 
