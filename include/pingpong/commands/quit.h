@@ -14,6 +14,7 @@ namespace pingpong {
 			quit_command(server *serv_, const std::string &reason_ = ""): command(serv_), reason(reason_) {}
 
 			operator std::string() const override;
+			virtual bool send() override;
 	};
 }
 
