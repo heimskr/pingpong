@@ -13,11 +13,17 @@ namespace pingpong {
 		public:
 			std::vector<join_pair> pairs;
 
-			join_command(channel);
-			join_command(server *, std::string);
-			join_command(server *, std::vector<join_pair>);
-			join_command(server *, std::vector<std::string>);
-			join_command(server *, std::vector<channel>);
+			join_command(server *serv_, const std::vector<join_pair> &pairs_):
+				command(serv_), pairs(pairs_) {}
+
+			join_command(const channel &chan):
+				join_command(chan.serv, {join_pair(chan, "")}) {}
+
+			join_command(server *serv_, const std::string &chan):
+				join_command(serv_, {join_pair(chan, "")}) {}
+
+			join_command(server *, const std::vector<std::string> &);
+			join_command(server *, const std::vector<channel> &);
 
 			operator std::string() const override;
 			bool send() override;

@@ -5,27 +5,15 @@
 #include "pingpong/commands/mode.h"
 
 namespace pingpong {
-	join_command::join_command(server *serv_, std::vector<join_pair> pairs_): command(serv_), pairs(pairs_) {}
-
-	join_command::join_command(channel chan): command(chan.serv) {
-		pairs = {{chan, ""}};
-	}
-
-	join_command::join_command(server *serv_, std::string chan): command(serv_) {
-		pairs = {{chan, ""}};
-	}
-
-	join_command::join_command(server *serv_, std::vector<std::string> chans): command(serv_) {
+	join_command::join_command(server *serv_, const std::vector<std::string> &chans): command(serv_) {
 		for (const std::string &chan: chans)
 			pairs.push_back({chan, ""});
 	}
 
-	join_command::join_command(server *serv_, std::vector<channel> chans): command(serv_) {
+	join_command::join_command(server *serv_, const std::vector<channel> &chans): command(serv_) {
 		for (const channel &chan: chans) {
-			if (chan.serv != serv_) {
+			if (chan.serv != serv_)
 				throw std::runtime_error("Can't join channels on multiple servers simultaneously");
-			}
-
 			pairs.push_back({chan, ""});
 		}
 	}
