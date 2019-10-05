@@ -9,7 +9,7 @@
 
 namespace pingpong {
 	channel::channel(std::string name_, server *serv_): name(name_), serv(serv_) {
-		if (name_.empty() || name_[0] != '#')
+		if (name_.empty() || (name_[0] != '#' && name_[0] != '&'))
 			throw std::invalid_argument("Invalid channel name");
 	}
 
