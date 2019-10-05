@@ -11,10 +11,10 @@ namespace pingpong {
 		std::string tags, command, parameters;
 		mask source;
 
-		line() = delete;
-		line(server *serv, const std::string &);
+		line(server *serv = nullptr, const std::string &original_ = "");
 
 		operator std::string() const;
+		operator bool() const;
 		friend std::ostream & operator<<(std::ostream &, const line &);
 	};
 }

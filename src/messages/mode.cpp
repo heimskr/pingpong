@@ -121,7 +121,7 @@ namespace pingpong {
 			line.serv->get_self()->apply_modes(mset.removed, mset.added);
 		}
 
-		events::dispatch<mode_event>(serv, where, who, mset);
+		events::dispatch<mode_event>(serv, where, who, mset, line);
 		return true;
 	}
 

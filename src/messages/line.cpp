@@ -32,6 +32,10 @@ namespace pingpong {
 		return "T[" + tags + "], S[" + std::string(source) + "], C[" + command + "], P[" + parameters + "]";
 	}
 
+	line::operator bool() const {
+		return serv && !original.empty();
+	}
+
 	std::ostream & operator<<(std::ostream &os, const line &line_) {
 		return os << std::string(line_);
 	}

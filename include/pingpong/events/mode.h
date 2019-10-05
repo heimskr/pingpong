@@ -13,14 +13,22 @@ namespace pingpong {
 		public:
 			modeset mset;
 			std::shared_ptr<pingpong::user> who;
+			pingpong::line line;
 
 			mode_event(server *serv, const std::string &where_, const std::shared_ptr<pingpong::user> &who_,
-			const modeset &mset_):
-				server_event(serv), local(where_), mset(mset_), who(who_) {}
+			const modeset &mset_, const pingpong::line &line_ = {}):
+				server_event(serv), local(where_), mset(mset_), who(who_), line(line_) {}
 
 			template <typename T>
-			mode_event(const T &where_, const std::shared_ptr<pingpong::user> &who_, const modeset &mset_):
-				server_event(where_->serv), local(where_), mset(mset_), who(who_) {}
+			mode_event(const T &where_, const std::shared_ptr<pingpong::user> &who_, const modeset &mset_,
+			const pingpong::line &line_):
+				server_event(where_->serv), local(where_), mset(mset_), who(who_), line(line_) {}
+
+			std::string get_name() const {
+				DBG("who: " << who);
+				DBG("line: " << std::string(line.source));
+				return who? who->name : (line? line.source.nick : "");
+			}
 	};
 }
 
