@@ -12,25 +12,33 @@ namespace pingpong {
 
 		// is_server() is true sometimes because the line source looks like a server name, even though it's a nick.
 		// It doesn't actually indicate that the message source is the server.
-		if (line.source.is_server()) {
-			// If the server notifies you of a user mode change, the mask is just your nick without a user or host.
-			// The parameters will look like "pingpong :+iwx".
+		const bool is_server = line.source.is_server();
+
+		// On some servers, the user/host are also filled in with yours. For these situtations, it's necessary to check
+		// whether your nick is setting modes on itself.
+		const bool is_self = line.parameters.substr(0, line.parameters.find(" :")) == line.source.nick;
+
+		if (is_server || is_self) {
+			// If the server notifies you of a user mode change, the mask includes your nick and sometimes your user and
+			// host. The parameters will look like "pingpong :+iwx".
+
+			middle = line.parameters.find(" :");
+			if (middle == std::string::npos)
+				throw bad_message(line);
 
 			if (line.source.nick != line.serv->get_nick()) {
 				// The mode command, if the source is a nick, tells you what your current nick is. If it's different
 				// from what we were assuming, we need to take the source as your new nick.
 				line.serv->set_nick(line.source.nick, true);
+				DBG("Removing fake user.");
 				line.serv->remove_user("?");
 			}
-
-			middle = line.parameters.find(" :");
-			if (middle == std::string::npos)
-				throw bad_message(line);
 			
 			mset_main = line.parameters.substr(middle + 2);
 			where = line.parameters.substr(0, middle);
 		} else {
 			// This is presumably a channel mode change. The parameters should look like "#chan -S".
+
 			middle = line.parameters.find(' ');
 			if (middle == std::string::npos)
 				throw bad_message(line);
