@@ -18,12 +18,29 @@ namespace pingpong {
 	}
 
 
+	bool hat_set::operator==(const hat_set &other) const {
+		return set == other.set;
+	}
+
 	bool hat_set::operator==(hat h) const {
 		return set.size() == 1 && set.count(h) == 1;
 	}
 
 	bool hat_set::operator==(char ch) const {
 		return *this == get_hat(ch);
+	}
+
+
+	bool hat_set::operator!=(const hat_set &other) const {
+		return !(*this == other);
+	}
+
+	bool hat_set::operator!=(hat h) const {
+		return !(*this == h);
+	}
+
+	bool hat_set::operator!=(char ch) const {
+		return !(*this == ch);
 	}
 
 
