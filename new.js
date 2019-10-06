@@ -43,7 +43,7 @@ if (!name.match(/^[\w_\d]+$/i)) {
 let sourcename, headername, sourcetext, headertext;
 let afterWrite = () => {};
 
-const sourcebase = "src", headerbase = "include";
+const sourcebase = "src", headerbase = "include/pingpong";
 
 if (type.match(/^(com(mands?)?|cmd)$/i)) {
 
@@ -90,8 +90,8 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#ifndef PINGPONG_MESSAGES_${name.toUpperCase()}_H_
 	%	#define PINGPONG_MESSAGES_${name.toUpperCase()}_H_
 	%	
-	%	#include "messages/message.h"
-	%	${base? `#include "${base}.h"\n` : ""}
+	%	#include "pingpong/messages/message.h"
+	%	${base? `#include "pingpong/messages/${base}.h"\n` : ""}
 	%	namespace pingpong {
 	%		class ${cls}: public ${parent} {
 	%			public:
@@ -105,7 +105,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#endif`);
 
 	sourcetext = prepare(`
-	%	#include "messages/${name}.h"
+	%	#include "pingpong/messages/${name}.h"
 	%	
 	%	namespace pingpong {
 	%		${cls}::operator std::string() const {
@@ -122,7 +122,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 
 	if (ircText.indexOf(`"messages/${name}.h"`) == -1) {
 		fs.writeFileSync(ircPath,
-			ircText = ircText.replace(/(#include "events\/server_status.h"\n)/, `$1\n#include "messages/${name}.h"`));
+			ircText = ircText.replace(/(#include "pingpong\/events\/server_status.h"\n)/, `$1\n#include "pingpong/messages/${name}.h"`));
 	}
 
 } else if (type.match(/^(ev?|ev(en)?t)(-\w+)?$/i)) {
@@ -137,7 +137,8 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#ifndef PINGPONG_EVENTS_${name.toUpperCase()}_H_
 	%	#define PINGPONG_EVENTS_${name.toUpperCase()}_H_
 	%	
-	%	${["sourced", "targeted"].includes(base)? `#include "events/${base}.h"\n` : `#include "events/event.h"\n`}
+	%	#include "pingpong/events/${["sourced", "targeted"].includes(base)? base : "event"}.h"
+	%	
 	%	namespace pingpong {
 	%		struct ${cls}: public ${parent} {
 	%			using ${parent}::${parent};
@@ -162,7 +163,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#endif`);
 
 	sourcetext = prepare(`
-	%	#include "lib/${name}.h"
+	%	#include "pingpong/lib/${name}.h"
 	%	
 	%	namespace pingpong {
 	%		
@@ -173,7 +174,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	sourcename = `numerics/${name}.cpp`;
 
 	sourcetext = prepare(`
-	%	#include "messages/numeric.h"
+	%	#include "pingpong/messages/numeric.h"
 	%
 	%	namespace pingpong {
 	%		bool numeric_message::handle_${name}(server *serv) {
@@ -183,13 +184,13 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	}`);
 
 	afterWrite = () => {
-		let numeric_h   = fs.readFileSync("include/messages/numeric.h", "utf8");
+		let numeric_h   = fs.readFileSync("include/pingpong/messages/numeric.h", "utf8");
 		let numeric_cpp = fs.readFileSync("src/messages/numeric.cpp",   "utf8");
 
 		numeric_h = numeric_h.replace(/(\n\t};\n}\n\n#endif)/, `\n\t\t\tbool handle_${name}(server *);$1`);
 		numeric_cpp = numeric_cpp.replace(/(default: return true;)/, `case numeric_type::${name}: return handle_${name}(serv);\n\t\t\t$1`);
 
-		fs.writeFileSync("include/messages/numeric.h", numeric_h);
+		fs.writeFileSync("include/pingpong/messages/numeric.h", numeric_h);
 		fs.writeFileSync("src/messages/numeric.cpp", numeric_cpp);
 	};
 
