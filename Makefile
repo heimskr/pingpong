@@ -46,8 +46,9 @@ DEPFLAGS = -f $(DEPFILE) -s $(DEPTOKEN)
 
 depend:
 	@ echo $(DEPTOKEN) > $(DEPFILE)
-	makedepend $(DEPFLAGS) -- $(CC) -- $(SRC) 2>/dev/null
+	makedepend $(DEPFLAGS) -- $(CC) -Iinclude -- $(SOURCES) 2>/dev/null
 	@ sed -i.sed 's/^src\//build\//' $(DEPFILE)
+	@ sed -i.sed '/\/usr\/include\//d' $(DEPFILE)
 	@ rm $(DEPFILE).bak $(DEPFILE).sed
 
 sinclude $(DEPFILE)
