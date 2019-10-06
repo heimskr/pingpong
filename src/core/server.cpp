@@ -10,10 +10,11 @@
 #include "pingpong/core/debug.h"
 #include "pingpong/core/server.h"
 
-#include "pingpong/commands/user.h"
+#include "pingpong/commands/cap.h"
 #include "pingpong/commands/nick.h"
 #include "pingpong/commands/pong.h"
 #include "pingpong/commands/quit.h"
+#include "pingpong/commands/user.h"
 
 #include "pingpong/events/bad_line.h"
 #include "pingpong/events/message.h"
@@ -34,7 +35,8 @@ namespace pingpong {
 
 	void server::work_read() {
 		signal(SIGPIPE, SIG_IGN);
-		user_command(this, parent->username, parent->realname).send();
+		negotiate_capabilities();
+		// user_command(this, parent->username, parent->realname).send();
 
 		std::string line;
 		while (std::getline(*stream, line)) {
@@ -82,6 +84,10 @@ namespace pingpong {
 		last_message = msg;
 	}
 
+	void server::negotiate_capabilities() {
+		cap_command(this, features::implemented).send();
+	}
+
 
 // Public instance methods
 
@@ -105,7 +111,7 @@ namespace pingpong {
 		stream = std::make_shared<std::iostream>(buffer.get());
 
 		const stage old_status = status;
-		status = stage::setuser;
+		status = stage::capneg;
 		if (status != old_status)
 			events::dispatch<server_status_event>(this);
 
@@ -156,6 +162,7 @@ namespace pingpong {
 	std::string server::status_string() const {
 		switch (status) {
 			case stage::unconnected: return "unconnected";
+			case stage::capneg: return "capneg";
 			case stage::setuser: return "setuser";
 			case stage::setnick: return "setnick";
 			case stage::ready: return "ready";
@@ -351,5 +358,13 @@ namespace pingpong {
 
 	std::unique_lock<std::recursive_mutex> server::lock_status() {
 		return std::unique_lock(status_mutex);
+	}
+
+	void server::add_feature(features::type feature) {
+		supported_features.insert(feature);
+	}
+
+	bool server::supports_feature(features::type feature) const {
+		return supported_features.count(feature) != 0;
 	}
 }

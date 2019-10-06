@@ -8,6 +8,8 @@
 
 #include "pingpong/events/server_status.h"
 
+#include "pingpong/messages/cap.h"
+#include "pingpong/messages/cap.h"
 #include "pingpong/messages/topic.h"
 #include "pingpong/messages/error.h"
 #include "pingpong/messages/join.h"
@@ -114,6 +116,7 @@ namespace pingpong {
 	}
 
 	void irc::init_messages() {
+		message::add_ctor<cap_message>();
 		message::add_ctor<topic_message>();
 		message::add_ctor<error_message>();
 		message::add_ctor<join_message>();

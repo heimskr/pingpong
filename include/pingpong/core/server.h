@@ -6,9 +6,11 @@
 #include <mutex>
 #include <string>
 #include <thread>
+#include <unordered_set>
 
 #include "pingpong/core/defs.h"
 #include "pingpong/core/channel.h"
+#include "pingpong/core/features.h"
 #include "pingpong/core/irc.h"
 
 #include "pingpong/messages/line.h"
@@ -28,20 +30,25 @@ namespace pingpong {
 			irc *parent;
 			std::string nick;
 
+			/** Contains features supported by the server, not features supported by Spjalla. */
+			std::unordered_set<features::type> supported_features;
+
 			std::condition_variable death;
 			std::mutex death_mutex, getline_mutex;
 
 			void work_read();
 			void work_reap();
 			void handle_line(const pingpong::line &);
+			void negotiate_capabilities();
 
 		public:
 			enum class stage {
 				// Connecting to an IRC server occurs in multiple stages.
 				unconnected, // At first, a socket hasn't even been connected yet.
-				setuser,     // Once the socket is connected, you need to send a USER message.
+				capneg,      // Once the socket is connected, you need to negotiate IRCv3 capabilities.
+				setuser,     // After capabilities are negotiated, you need to send a USER message.
 				setnick,     // After the USER message is sent, you need to declare your nickname.
-				ready,       // After the nickname has been successfully declared, the connection is ready.
+				ready,       // After the nickname is successfully declared, the connection is ready.
 				dead         // After the server has disconnected.
 			};
 
@@ -147,6 +154,12 @@ namespace pingpong {
 
 			/** Locks the mutex that protects the server status. */
 			std::unique_lock<std::recursive_mutex> lock_status();
+
+			/** Marks a feature as supported. */
+			void add_feature(features::type);
+
+			/** Returns whether the server supports a given feature. */
+			bool supports_feature(features::type) const;
 
 			/** Places the names of all joined channels into a container, starting at a given iterator. */
 			template <typename Iter>
