@@ -65,9 +65,14 @@ namespace pingpong {
 		return false;
 	}
 
-	hat channel::get_hat(std::shared_ptr<user> user) const {
+	hat_set & channel::get_hats(std::shared_ptr<user> user) {
 		auto iter = hats.find(user);
-		return iter == hats.end()? hat::none : iter->second;
+		if (iter == hats.end()) {
+			hats.insert({user, hat_set()});
+			return hats.at(user);
+		}
+
+		return iter->second;
 	}
 
 	channel::operator std::string() const {

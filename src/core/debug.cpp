@@ -22,7 +22,7 @@ namespace pingpong {
 			for (std::shared_ptr<channel> chan: serv->channels) {
 				DBG("    " << ansi::magenta(ansi::bold(chan->name)));
 				for (std::shared_ptr<user> user: chan->users)
-					DBG("        " << static_cast<char>(chan->hats[user]) << ansi::cyan(user->name));
+					DBG("        " << chan->hats[user] << ansi::cyan(user->name));
 			}
 		}
 	}

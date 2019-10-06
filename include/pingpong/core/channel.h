@@ -10,6 +10,7 @@
 #include <unordered_set>
 
 #include "pingpong/core/defs.h"
+#include "pingpong/core/hats.h"
 #include "pingpong/core/moded.h"
 #include "pingpong/core/topicset.h"
 #include "pingpong/core/user.h"
@@ -25,7 +26,7 @@ namespace pingpong {
 			std::string name;
 			server *serv;
 			std::list<std::shared_ptr<user>> users;
-			std::map<std::shared_ptr<user>, hat> hats;
+			std::map<std::shared_ptr<user>, hat_set> hats;
 			topicset topic;
 
 			channel(std::string, server *);
@@ -50,7 +51,7 @@ namespace pingpong {
 			bool has_user(const std::string &) const;
 
 			/** Returns the hat corresponding to a user if it's known, or the default hat otherwise. */
-			hat get_hat(std::shared_ptr<user> user) const;
+			hat_set & get_hats(std::shared_ptr<user> user);
 
 			operator std::string() const;
 			std::shared_ptr<user> operator[](const std::string &);

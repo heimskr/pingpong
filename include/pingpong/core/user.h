@@ -7,10 +7,10 @@
 #include <unordered_set>
 
 #include "pingpong/core/defs.h"
-#include "pingpong/core/util.h"
 #include "pingpong/core/mask.h"
 #include "pingpong/core/moded.h"
 #include "pingpong/core/server.h"
+#include "pingpong/core/util.h"
 
 namespace pingpong {
 	class user: public moded {
@@ -34,8 +34,6 @@ namespace pingpong {
 
 			friend std::ostream & operator<<(std::ostream &os, const user &who);
 
-			static hat get_hat(char);
-			static hat get_hat(const std::string &);
 			bool is_self() const;
 
 			bool operator==(const user &) const;

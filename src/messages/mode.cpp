@@ -1,5 +1,7 @@
+#include "pingpong/core/hats.h"
+
 #include "pingpong/events/mode.h"
-#include "pingpong/events/hat_updated.h"
+#include "pingpong/events/hats_updated.h"
 
 #include "pingpong/messages/mode.h"
 
@@ -74,42 +76,26 @@ namespace pingpong {
 		if (mset.type == modeset::mode_type::channel) {
 			if (util::is_valid_nick(mset.extra)) {
 				// If the extra data in the modeset is a nickname, then presumably we need to add or remove a hat.
-				// I'm not sure what other situations could cause this situation.
-				// TODO: try to remember all modes for every user in the channel, not just the last seen hat.
-				// Right now, when a hat is removed, it's assumed the user ends up with no hat, but this isn't always
-				// true; if someone is +ho and you deop them, their hat won't disappear but will change from @ to %.
+				// I'm not sure what other conditions could cause this situation.
 				std::shared_ptr<user> who = serv->get_user(mset.extra, true);
-				std::map<std::shared_ptr<user>, hat> &chan_hats = chan->hats;
-				const auto hat_end = hat_map.end();
+				const auto hat_end = hat_set::map.end();
 
 				bool add = true;
-
 				for (const std::unordered_set<char> &mset_set: {mset.added, mset.removed}) {
 					for (char c: mset_set) {
-						auto iter = hat_map.find(c);
+						auto iter = hat_set::map.find(c);
 						if (iter == hat_end)
 							continue;
 
-						hat new_hat = iter->second;
-
-						// Try to find the user's hat in this channel. If one can't be found, assume the user has none.
-						hat old_hat = hat::none;
-						auto old_iter = chan_hats.find(who);
-						if (old_iter != chan_hats.end())
-							old_hat = old_iter->second;
-
-						// If adding, we set the user's hat to the new hat if it outranks the old one.
-						// If removing, we unset the user's hat if the new hat is the same as the old one.
-						// (If the new hat were a lower rank, it wouldn't affect the highest hat; if it were higher
-						// rank, our info's out of date anyway.)
-						if (add && old_hat < new_hat) {
-							chan_hats.erase(who);
-							chan_hats.insert({who, new_hat});
-							events::dispatch<hat_updated_event>(who, chan, old_hat, new_hat);
-						} else if (!add && old_hat == new_hat) {
-							chan_hats.erase(who);
-							events::dispatch<hat_updated_event>(who, chan, old_hat, new_hat);
+						hat_set &set = chan->get_hats(who), old_set = set;
+						if (add) {
+							set += iter->second;
+						} else {
+							set -= iter->second;
 						}
+
+						if (set != old_set)
+							events::dispatch<hats_updated_event>(who, chan, old_set, set);
 					}
 
 					add = false;

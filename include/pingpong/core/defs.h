@@ -14,11 +14,6 @@ namespace pingpong {
 	class message;
 
 	enum class hat: char {none=' ', voiced='+', halfop='%', op='@', admin='&', owner='~'};
-	extern std::unordered_map<hat, int> hat_ranks;
-	extern std::unordered_map<char, hat> hat_map;
-
-	bool operator<(hat, hat);
-	bool operator>(hat, hat);
 
 	class user_exists_error: public std::exception {
 		public:

@@ -10,19 +10,6 @@ namespace pingpong {
 		return os;
 	}
 
-	hat user::get_hat(char ch) {
-		if (ch == static_cast<char>(hat::voiced)) return hat::voiced;
-		if (ch == static_cast<char>(hat::halfop)) return hat::halfop;
-		if (ch == static_cast<char>(hat::op))     return hat::op;
-		if (ch == static_cast<char>(hat::admin))  return hat::admin;
-		if (ch == static_cast<char>(hat::owner))  return hat::owner;
-		return hat::none;
-	}
-
-	hat user::get_hat(const std::string &str) {
-		return str.empty() || str[0] == ' '? hat::none : get_hat(str[0]);
-	}
-
 	bool user::is_self() const {
 		return serv && name == serv->get_nick();
 	}

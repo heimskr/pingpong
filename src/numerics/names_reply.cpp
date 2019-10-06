@@ -2,8 +2,8 @@
 #include <utility>
 #include <vector>
 
+#include "pingpong/core/hats.h"
 #include "pingpong/events/names_updated.h"
-
 #include "pingpong/messages/numeric.h"
 
 namespace pingpong {
@@ -96,7 +96,7 @@ namespace pingpong {
 				userstr.erase(0, space);
 			}
 
-			hat userhat = user::get_hat(to_add);
+			hat userhat = hat_set::get_hat(to_add);
 			if (userhat != hat::none)
 				to_add.erase(0, 1);
 			userlist.push_back({userhat, to_add});
