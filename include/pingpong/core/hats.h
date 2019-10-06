@@ -2,6 +2,7 @@
 #define PINGPONG_CORE_HATS_H_
 
 #include <ostream>
+#include <set>
 #include <unordered_set>
 #include <unordered_map>
 
@@ -20,12 +21,18 @@ namespace pingpong {
 		private:
 			std::unordered_set<hat> set;
 
-			static std::unordered_set<hat> all_hats;
+			static std::set<hat> all_hats;
 
 		public:
 			hat_set(): set({hat::none}) {}
 			hat_set(hat hat): set({hat}) {}
 			hat_set(const std::unordered_set<hat> &set_): set(set_) {}
+
+			/** Returns the highest ranked hat in the set. */
+			hat highest() const;
+
+			/** Returns the lowest ranked hat in the set. */
+			hat lowest() const;
 
 			/** Returns a string indicating all hats in the set, ordered from highest rank to lowest rank. */
 			operator std::string() const;

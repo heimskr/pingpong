@@ -3,7 +3,28 @@
 #include "pingpong/core/hats.h"
 
 namespace pingpong {
-	std::unordered_set<hat> hat_set::all_hats = {hat::owner, hat::admin, hat::op, hat::halfop, hat::voiced, hat::none};
+	std::set<hat> hat_set::all_hats = {hat::owner, hat::admin, hat::op, hat::halfop, hat::voiced, hat::none};
+
+	hat hat_set::highest() const {
+		for (hat h: all_hats) {
+			if (*this % h)
+				return h;
+		}
+
+		return hat::none;
+	}
+
+	hat hat_set::lowest() const {
+		if (*this == hat::none)
+			return hat::none;
+
+		for (auto iter = all_hats.rbegin(), end = all_hats.rend(); iter != end; ++iter) {
+			if (*this % *iter)
+				return *iter;
+		}
+
+		return hat::none;
+	}
 
 	hat_set::operator std::string() const {
 		if (*this == hat::none)
@@ -23,7 +44,7 @@ namespace pingpong {
 	}
 
 	bool hat_set::operator==(hat h) const {
-		return set.size() == 1 && set.count(h) == 1;
+		return (h == hat::none && set.empty()) || (set.size() == 1 && set.count(h) == 1);
 	}
 
 	bool hat_set::operator==(char ch) const {
