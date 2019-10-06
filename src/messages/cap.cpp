@@ -12,11 +12,13 @@ namespace pingpong {
 		const size_t colon = line.parameters.find(':');
 		const std::string sub = formicine::util::nth_word(line.parameters, 1);
 
-		if (colon == std::string::npos && sub == "ACK")
+		if (colon == std::string::npos && (sub == "ACK" || sub == "NAK"))
 			throw std::invalid_argument("No parameter list found in CAP command");
 		
 		if (sub == "ACK") {
 			ack(serv, formicine::util::split(line.parameters.substr(colon + 1), " ", true));
+		} else if (sub == "NAK") {
+			DBG("Denied features: " << line.parameters.substr(colon + 1));
 		}
 
 		return true;

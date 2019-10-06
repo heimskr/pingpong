@@ -8,17 +8,18 @@
 namespace pingpong {
 	struct features {
 		enum class type {
-			away_notify,      // Unimplemented
-			batch,            // Unimplemented
-			cap_notify,       // Unimplemented
-			chghost,          // Unimplemented
-			echo_message,     // Unimplemented
-			extended_join,    // Unimplemented
-			invite_notify,    // Unimplemented
-			labeled_response, // Unimplemented
-			message_ids,      // Unimplemented
+			away_notify,       // Unimplemented
+			batch,             // Unimplemented
+			cap_notify,        // Unimplemented
+			chghost,           // Unimplemented
+			echo_message,      // Unimplemented
+			extended_join,     // Unimplemented
+			invite_notify,     // Unimplemented
+			labeled_response,  // Unimplemented
+			message_ids,       // Unimplemented
 			multi_prefix,
-			server_time,      // Unimplemented
+			server_time,       // Unimplemented
+			userhost_in_names, // Unimplemented
 		};
 
 		static std::unordered_set<type> implemented;
