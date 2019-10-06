@@ -24,7 +24,6 @@ OBJECTS			:= $(patsubst src/%.cpp,build/%.o, $(SOURCES))
 
 sinclude $(shell find src -name 'targets.mk')
 
-
 all: $(OBJECTS) build/tests
 
 test: build/tests
