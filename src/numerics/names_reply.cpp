@@ -14,7 +14,7 @@ namespace pingpong {
 		try {
 			parsed = numeric_message::parse_names_reply(line.parameters);
 		} catch (const std::invalid_argument &err) {
-			DBG("Couldn't parse NAMES reply " << "["_d << line.parameters << "]"_d << ": " << err.what());
+			WARN("Couldn't parse NAMES reply " << "["_d << line.parameters << "]"_d << ": " << err.what());
 			return true;
 		}
 

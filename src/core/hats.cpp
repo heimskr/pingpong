@@ -36,7 +36,7 @@ namespace pingpong {
 	}
 
 	hat_set::operator bool() const {
-		return *this == hat::none;
+		return *this != hat::none;
 	}
 
 	hat_set::operator std::string() const {

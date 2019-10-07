@@ -102,6 +102,7 @@ namespace pingpong {
 			friend std::ostream & operator<<(std::ostream &, const hat_set &);
 	};
 
+	std::ostream & operator<<(std::ostream &, const hat_set &);
 	bool operator<(hat, hat);
 	bool operator>(hat, hat);
 }
