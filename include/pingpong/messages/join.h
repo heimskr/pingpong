@@ -8,11 +8,10 @@ namespace pingpong {
 	class join_message: public message {
 		public:
 			server *serv;
-			std::string who;
-			std::string chan;
+			std::string who, chan;
+			std::string accountname, realname; // if extended-join is enabled
 
-			join_message(const pingpong::line &line_):
-				message(line_), serv(line_.serv), who(line_.source.nick), chan(line_.parameters.substr(1)) {}
+			join_message(const pingpong::line &line_);
 
 			static constexpr auto get_name = []() -> std::string { return "JOIN"; };
 

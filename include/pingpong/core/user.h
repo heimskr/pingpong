@@ -15,7 +15,7 @@
 namespace pingpong {
 	class user: public moded {
 		public:
-			std::string name;
+			std::string name, account_name = "";
 			mask info {};
 
 			pingpong::server *serv = nullptr;

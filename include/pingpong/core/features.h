@@ -13,7 +13,7 @@ namespace pingpong {
 			cap_notify,        // Unimplemented
 			chghost,           // Unimplemented
 			echo_message,      // Unimplemented
-			extended_join,     // Unimplemented
+			extended_join,
 			invite_notify,     // Unimplemented
 			labeled_response,  // Unimplemented
 			message_ids,       // Unimplemented
