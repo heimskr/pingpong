@@ -19,10 +19,14 @@
 #include "pingpong/net/sock.h"
 #include "pingpong/net/socket_buffer.h"
 
+namespace spjalla { class client; }
+
 namespace pingpong {
 	class message;
 
 	class server {
+		friend class spjalla::client;
+
 		private:
 			std::shared_ptr<net::sock> sock;
 			std::shared_ptr<net::socket_buffer> buffer;

@@ -27,7 +27,7 @@ namespace pingpong {
 			chan = formicine::util::nth_word(params, 0, false);
 			accountname = formicine::util::nth_word(params, 1, false);
 
-			const size_t second_space = formicine::util::nth_index(params, ' ', 1);
+			const size_t second_space = formicine::util::nth_index(params, ' ', 2);
 			if (params[second_space + 1] != ':') {
 				throw std::invalid_argument("Expected a colon at the start of the realname parameter in an extended "
 				                            "JOIN message");
