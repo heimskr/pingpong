@@ -31,6 +31,10 @@ namespace pingpong {
 	}
 
 	long util::timestamp() {
+		return std::chrono::duration_cast<timetype>(now()).count();
+	}
+
+	long util::seconds() {
 		return std::chrono::duration_cast<std::chrono::seconds>(now()).count();
 	}
 

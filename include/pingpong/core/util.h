@@ -12,6 +12,7 @@ namespace pingpong {
 	 * Contains miscellaneous utility functions for pingpong.
 	 */
 	struct util {
+
 		static constexpr const char *nick_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 			"-_[]{}\\`|";
 		static constexpr const char *flag_chars = "+-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -19,7 +20,12 @@ namespace pingpong {
 
 		static std::chrono::system_clock::duration now();
 
+		static constexpr long precision = 1e6;
+
+		using timetype = std::chrono::microseconds;
+
 		static long timestamp();
+		static long seconds();
 		static long millistamp();
 		static long microstamp();
 		static long nanostamp();
