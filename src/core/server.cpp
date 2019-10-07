@@ -84,7 +84,12 @@ namespace pingpong {
 	}
 
 	void server::negotiate_capabilities() {
-		cap_command(this, features::implemented, cap_command::action::req).send();
+		if (features::implemented.empty()) {
+			status = stage::setuser;
+			user_command(this, parent->username, parent->realname).send();
+		} else {
+			cap_command(this, features::implemented, cap_command::action::req).send();
+		}
 	}
 
 

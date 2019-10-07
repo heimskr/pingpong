@@ -25,8 +25,6 @@ namespace pingpong {
 				server_event(where_->serv), local(where_), mset(mset_), who(who_), line(line_) {}
 
 			std::string get_name() const {
-				DBG("who: " << who);
-				DBG("line: " << std::string(line.source));
 				return who? who->name : (line? line.source.nick : "");
 			}
 	};
