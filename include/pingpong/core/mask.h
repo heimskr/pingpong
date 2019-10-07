@@ -21,6 +21,7 @@ namespace pingpong {
 			/** If a message comes directly from the server instead of from a user, the user and host will be empty. */
 			bool is_server() const;
 
+			operator bool() const { return !is_empty(); }
 			operator std::string() const;
 	};
 }

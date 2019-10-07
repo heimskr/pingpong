@@ -65,6 +65,28 @@ namespace pingpong {
 		return false;
 	}
 
+	bool channel::set_hats(std::shared_ptr<user> user, const hat_set &set) {
+		auto iter = hats.find(user);
+
+		if (!set) {
+			if (iter != hats.end()) {
+				hats.erase(iter);
+				return true;
+			}
+
+			return false;
+		}
+
+		if (iter == hats.end()) {
+			hats.insert({user, set});
+			return false;
+		}
+
+		hats.erase(iter);
+		hats.insert({user, set});
+		return true;
+	}
+
 	hat_set & channel::get_hats(std::shared_ptr<user> user) {
 		auto iter = hats.find(user);
 		if (iter == hats.end()) {

@@ -35,6 +35,10 @@ namespace pingpong {
 		return out;
 	}
 
+	hat_set::operator bool() const {
+		return *this == hat::none;
+	}
+
 	hat_set::operator std::string() const {
 		if (*this == hat::none)
 			return "";

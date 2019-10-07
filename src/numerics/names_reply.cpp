@@ -39,18 +39,19 @@ namespace pingpong {
 		}
 
 		if (chan) {
-			bool any = false;
+			bool anyone_new = false;
 			for (auto & [uhats, name]: userlist) {
 				std::shared_ptr<user> uptr = serv->get_user(name, true);
 				*uptr += chan;
 				if (!chan->has_user(uptr)) {
-					any = true;
+					anyone_new = true;
 					chan->add_user(uptr);
-					chan->hats.insert({uptr, uhats});
 				}
+
+				chan->set_hats(uptr, uhats);
 			}
 
-			if (any)
+			if (anyone_new)
 				events::dispatch<names_updated_event>(chan);
 		}
 

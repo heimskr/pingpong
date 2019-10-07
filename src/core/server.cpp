@@ -274,19 +274,32 @@ namespace pingpong {
 		return nullptr;
 	}
 
-	std::shared_ptr<user> server::get_user(const std::string &name, bool create) {
+	std::shared_ptr<user> server::get_user(const std::string &rawname, bool create) {
+		std::string name;
+		mask info {};
+		if (rawname.find('!') != std::string::npos) {
+			info = rawname;
+			name = info.nick;
+		} else {
+			name = rawname;
+		}
+
 		if (!has_user(name)) {
 			if (!create)
 				return nullptr;
 			std::shared_ptr<user> new_user = std::make_shared<user>(name, this);
+			new_user->info = info;
 			users.push_back(new_user);
 			events::dispatch<user_appeared_event>(new_user);
 			return new_user;
 		}
 
 		for (std::shared_ptr<user> user: users) {
-			if (user->name == name)
+			if (user->name == name) {
+				if (info)
+					user->info = info;
 				return user;
+			}
 		}
 
 		return nullptr;

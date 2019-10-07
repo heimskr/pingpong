@@ -19,7 +19,7 @@ namespace pingpong {
 			message_ids,       // Unimplemented
 			multi_prefix,
 			server_time,       // Unimplemented
-			userhost_in_names, // Unimplemented
+			userhost_in_names,
 		};
 
 		static std::unordered_set<type> implemented;

@@ -50,6 +50,9 @@ namespace pingpong {
 			/** Determines whether there's any user in the channel with a given nick. */
 			bool has_user(const std::string &) const;
 
+			/** Updates the hat information for a user. Returns true if any existing data was overwritten. */
+			bool set_hats(std::shared_ptr<user>, const hat_set &);
+
 			/** Returns the hat corresponding to a user if it's known, or the default hat otherwise. */
 			hat_set & get_hats(std::shared_ptr<user> user);
 

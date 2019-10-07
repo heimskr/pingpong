@@ -33,5 +33,6 @@ namespace pingpong {
 
 	std::unordered_set<features::type> features::implemented = {
 		features::type::multi_prefix,
+		features::type::userhost_in_names,
 	};
 }

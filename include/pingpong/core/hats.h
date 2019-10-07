@@ -36,6 +36,9 @@ namespace pingpong {
 			/** Returns the number of hats in the set (not including the "none" pseudo-hat). */
 			size_t size() const;
 
+			/** Returns whether the hat set contains any hats (not including the "none" pseudo-hat). */
+			operator bool() const;
+
 			/** Returns a string indicating all hats in the set, ordered from highest rank to lowest rank. */
 			operator std::string() const;
 
