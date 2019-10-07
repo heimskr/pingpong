@@ -2,7 +2,6 @@
 #define PINGPONG_CORE_HATS_H_
 
 #include <ostream>
-#include <set>
 #include <unordered_set>
 #include <unordered_map>
 
@@ -14,14 +13,14 @@ namespace pingpong {
 	 */
 	class hat_set {
 		public:
-			static const std::string order;
+			static const std::string order, reverse_order;
 			static std::unordered_map<hat, int> ranks;
 			static std::unordered_map<char, hat> map;
 
 		private:
 			std::unordered_set<hat> set;
 
-			static std::set<hat> all_hats;
+			static std::unordered_set<hat> all_hats;
 
 		public:
 			hat_set(): set({hat::none}) {}

@@ -2,13 +2,15 @@
 
 #include "pingpong/core/hats.h"
 
+#include "lib/formicine/ansi.h"
+
 namespace pingpong {
-	std::set<hat> hat_set::all_hats = {hat::owner, hat::admin, hat::op, hat::halfop, hat::voiced, hat::none};
+	std::unordered_set<hat> hat_set::all_hats = {hat::owner, hat::admin, hat::op, hat::halfop, hat::voiced, hat::none};
 
 	hat hat_set::highest() const {
-		for (hat h: all_hats) {
-			if (*this % h)
-				return h;
+		for (char ch: order) {
+			if (*this % ch)
+				return static_cast<hat>(ch);
 		}
 
 		return hat::none;
@@ -18,9 +20,9 @@ namespace pingpong {
 		if (*this == hat::none)
 			return hat::none;
 
-		for (auto iter = all_hats.rbegin(), end = all_hats.rend(); iter != end; ++iter) {
-			if (*this % *iter)
-				return *iter;
+		for (char ch: reverse_order) {
+			if (*this % ch)
+				return static_cast<hat>(ch);
 		}
 
 		return hat::none;
@@ -137,7 +139,8 @@ namespace pingpong {
 	}
 	
 
-	const std::string hat_set::order = "~*@%+ ";
+	const std::string hat_set::order = "~&@%+ ";
+	const std::string hat_set::reverse_order = " +%@&~";
 
 	std::unordered_map<char, hat> hat_set::map {
 		{'q', hat::owner},
