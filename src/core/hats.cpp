@@ -2,8 +2,6 @@
 
 #include "pingpong/core/hats.h"
 
-#include "lib/formicine/ansi.h"
-
 namespace pingpong {
 	std::unordered_set<hat> hat_set::all_hats = {hat::owner, hat::admin, hat::op, hat::halfop, hat::voiced, hat::none};
 

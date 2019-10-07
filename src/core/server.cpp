@@ -36,7 +36,6 @@ namespace pingpong {
 	void server::work_read() {
 		signal(SIGPIPE, SIG_IGN);
 		negotiate_capabilities();
-		// user_command(this, parent->username, parent->realname).send();
 
 		std::string line;
 		while (std::getline(*stream, line)) {
@@ -85,7 +84,7 @@ namespace pingpong {
 	}
 
 	void server::negotiate_capabilities() {
-		cap_command(this, features::implemented).send();
+		cap_command(this, features::implemented, cap_command::action::req).send();
 	}
 
 

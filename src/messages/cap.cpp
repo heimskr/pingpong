@@ -1,4 +1,6 @@
 #include "pingpong/messages/cap.h"
+#include "pingpong/commands/cap.h"
+#include "pingpong/commands/user.h"
 #include "pingpong/core/features.h"
 
 #include "lib/formicine/futil.h"
@@ -14,9 +16,14 @@ namespace pingpong {
 
 		if (colon == std::string::npos && (sub == "ACK" || sub == "NAK"))
 			throw std::invalid_argument("No parameter list found in CAP command");
-		
+
 		if (sub == "ACK") {
 			ack(serv, formicine::util::split(line.parameters.substr(colon + 1), " ", true));
+
+			if (serv->get_status() == server::stage::capneg) {
+				cap_command(serv, cap_command::action::end).send();
+				user_command(serv, serv->get_parent()->username, serv->get_parent()->realname).send();
+			}
 		} else if (sub == "NAK") {
 			DBG("Denied features: " << line.parameters.substr(colon + 1));
 		}
