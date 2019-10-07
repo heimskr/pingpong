@@ -36,7 +36,6 @@ namespace pingpong {
 			if (features::types.count(cap) == 0) {
 				DBG("Unknown feature: \"" << cap << "\"");
 			} else {
-				DBG("Adding feature: \"" << cap << "\"");
 				serv->add_feature(features::types.at(cap));
 			}
 		}
