@@ -26,13 +26,22 @@ namespace pingpong {
 		return hat::none;
 	}
 
+	size_t hat_set::size() const {
+		size_t out = 0;
+		for (hat h: set) {
+			if (h != hat::none)
+				++out;
+		}
+		return out;
+	}
+
 	hat_set::operator std::string() const {
 		if (*this == hat::none)
 			return "";
 		std::string out;
 		out.reserve(set.size());
 		for (char ch: order) {
-			if (set.count(static_cast<hat>(ch)) != 0)
+			if (ch != ' ' && set.count(static_cast<hat>(ch)) != 0)
 				out += ch;
 		}
 		return out;
@@ -90,7 +99,10 @@ namespace pingpong {
 
 
 	hat_set & hat_set::operator=(hat hat) {
-		set = {hat};
+		if (hat == hat::none)
+			set.clear();
+		else
+			set = {hat};
 		return *this;
 	}
 
@@ -123,6 +135,10 @@ namespace pingpong {
 		return *this -= get_hat(ch);
 	}
 
+
+	bool hat_set::is_hat(char ch) {
+		return all_hats.count(static_cast<hat>(ch)) != 0;
+	}
 
 	hat hat_set::get_hat(char ch) {
 		if (hat_set::order.find(ch) != std::string::npos)

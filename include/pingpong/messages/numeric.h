@@ -7,6 +7,7 @@
 #include <unordered_set>
 
 #include "pingpong/core/channel.h"
+#include "pingpong/core/hats.h"
 #include "pingpong/core/numeric_type.h"
 #include "pingpong/messages/line.h"
 #include "pingpong/messages/message.h"
@@ -14,7 +15,7 @@
 
 namespace pingpong {
 	class numeric_message: public message {
-		using names = std::tuple<std::string, channel::visibility, std::vector<std::pair<hat, std::string>>>;
+		using names = std::tuple<std::string, channel::visibility, std::vector<std::pair<hat_set, std::string>>>;
 
 		private:
 			static std::unordered_set<numeric_type> types;

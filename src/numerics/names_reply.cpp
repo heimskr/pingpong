@@ -6,19 +6,21 @@
 #include "pingpong/events/names_updated.h"
 #include "pingpong/messages/numeric.h"
 
+#include "lib/formicine/futil.h"
+
 namespace pingpong {
 	bool numeric_message::handle_names_reply(server *serv) {
 		names parsed;
 		try {
 			parsed = numeric_message::parse_names_reply(line.parameters);
 		} catch (const std::invalid_argument &err) {
-			DBG("Couldn't parse NAMES reply " << "["_d << line.parameters << "]"_d);
+			DBG("Couldn't parse NAMES reply " << "["_d << line.parameters << "]"_d << ": " << err.what());
 			return true;
 		}
 
 		std::string chanstr;
 		channel::visibility vis;
-		std::vector<std::pair<hat, std::string>> userlist;
+		std::vector<std::pair<hat_set, std::string>> userlist;
 		std::tie(chanstr, vis, userlist) = parsed;
 
 		std::shared_ptr<channel> chan = serv->get_channel(chanstr);
@@ -38,13 +40,13 @@ namespace pingpong {
 
 		if (chan) {
 			bool any = false;
-			for (auto [uhat, name]: userlist) {
+			for (auto & [uhats, name]: userlist) {
 				std::shared_ptr<user> uptr = serv->get_user(name, true);
 				*uptr += chan;
 				if (!chan->has_user(uptr)) {
 					any = true;
 					chan->add_user(uptr);
-					chan->hats.insert({uptr, uhat});
+					chan->hats.insert({uptr, uhats});
 				}
 			}
 
@@ -73,33 +75,32 @@ namespace pingpong {
 		if (sep == std::string::npos || colon == std::string::npos || colon < sep)
 			throw std::invalid_argument("Invalid 353 message");
 
-		std::string chanstr, userstr;
+		std::string chanstr;
+		std::vector<std::string> usersplit;
 		try {
 			chanstr = params.substr(sep + 3, colon - sep - 4);
-			userstr = params.substr(colon + 1);
-			while (userstr.back() == ' ')
-				userstr.pop_back();
+			usersplit = formicine::util::split(params.substr(colon + 1), " ", true);
 		} catch (const std::out_of_range &err) {
 			throw std::invalid_argument("Invalid 353 message");
 		}
 
-		std::vector<std::pair<hat, std::string>> userlist;
-		while (userstr.length() > 0) {
-			size_t space = userstr.find(' ');
-			std::string to_add;
-			if (space == std::string::npos) {
-				to_add = userstr;
-				userstr.clear();
-			} else {
-				to_add = userstr.substr(0, space);
-				for (; userstr[space] == ' '; ++space);
-				userstr.erase(0, space);
+		std::vector<std::pair<hat_set, std::string>> userlist;
+		for (const std::string &userstr: usersplit) {
+			hat_set userhats {};
+
+			for (char ch: userstr) {
+				if (hat_set::is_hat(ch)) {
+					userhats += ch;
+				} else {
+					break;
+				}
 			}
 
-			hat userhat = hat_set::get_hat(to_add);
-			if (userhat != hat::none)
-				to_add.erase(0, 1);
-			userlist.push_back({userhat, to_add});
+			if (userhats == hat::none) {
+				userlist.push_back({userhats, userstr});
+			} else {
+				userlist.push_back({userhats, userstr.substr(userhats.size())});
+			}
 		}
 
 		return {chanstr, vis, userlist};

@@ -23,7 +23,7 @@ namespace pingpong {
 			static std::unordered_set<hat> all_hats;
 
 		public:
-			hat_set(): set({hat::none}) {}
+			hat_set(): set({}) {}
 			hat_set(hat hat): set({hat}) {}
 			hat_set(const std::unordered_set<hat> &set_): set(set_) {}
 
@@ -32,6 +32,9 @@ namespace pingpong {
 
 			/** Returns the lowest ranked hat in the set. */
 			hat lowest() const;
+
+			/** Returns the number of hats in the set (not including the "none" pseudo-hat). */
+			size_t size() const;
 
 			/** Returns a string indicating all hats in the set, ordered from highest rank to lowest rank. */
 			operator std::string() const;
@@ -83,6 +86,9 @@ namespace pingpong {
 
 			/** Removes a hat from the hat set. */
 			hat_set & operator-=(char);
+
+			/** Returns whether a character is a valid hat representation. */
+			static bool is_hat(char);
 
 			/** Converts a character into a hat. Throws an exception if the character doesn't represent a hat. */
 			static hat get_hat(char);
