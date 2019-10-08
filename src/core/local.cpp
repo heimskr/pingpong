@@ -9,13 +9,13 @@ namespace pingpong {
 	}
 
 	bool local::is_user() const {
-		return where.front() != '#';
+		return where.front() != '#' && where.front() != '&';
 	}
 
 	bool local::is_channel() const {
 		if (where.empty())
 			throw std::runtime_error("Destination cannot be empty");
-		return where.front() == '#';
+		return where.front() == '#' || where.front() == '&';
 	}
 
 	std::shared_ptr<user> local::get_user(server *serv) const {
