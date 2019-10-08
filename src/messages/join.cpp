@@ -11,7 +11,6 @@
 namespace pingpong {
 	join_message::join_message(const pingpong::line &line_): message(line_), serv(line_.serv), who(line_.source.nick) {
 		const std::string &params = line_.parameters;
-		DBG("join_message. [" << params << "]");
 		if (params.empty())
 			throw std::invalid_argument("Parameters for a JOIN message cannot be empty");
 
