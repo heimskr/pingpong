@@ -4,6 +4,7 @@
 #include <ostream>
 #include <unordered_set>
 #include <unordered_map>
+#include <utility>
 
 #include "pingpong/core/defs.h"
 
@@ -26,6 +27,7 @@ namespace pingpong {
 			hat_set(): set({}) {}
 			hat_set(hat hat): set({hat}) {}
 			hat_set(const std::unordered_set<hat> &set_): set(set_) {}
+			hat_set(const std::string &);
 
 			/** Returns the highest ranked hat in the set. */
 			hat highest() const;
@@ -98,6 +100,9 @@ namespace pingpong {
 
 			/** Converts a string into a hat. Throws an exception if the string doesn't represent a single hat. */
 			static hat get_hat(const std::string &);
+
+			/** Separates a string like "@+pingpong" into a hat_set and a string for the nick. */
+			static std::pair<hat_set, std::string> separate(const std::string &);
 
 			friend std::ostream & operator<<(std::ostream &, const hat_set &);
 	};

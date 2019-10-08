@@ -5,6 +5,14 @@
 namespace pingpong {
 	std::unordered_set<hat> hat_set::all_hats = {hat::owner, hat::admin, hat::op, hat::halfop, hat::voiced, hat::none};
 
+	hat_set::hat_set(const std::string &str): set({}) {
+		for (char ch: str) {
+			if (!is_hat(ch))
+				throw std::invalid_argument("Invalid character in hat string");
+			set.insert(get_hat(ch));
+		}
+	}
+
 	hat hat_set::highest() const {
 		for (char ch: order) {
 			if (*this % ch)
@@ -154,6 +162,13 @@ namespace pingpong {
 
 	hat hat_set::get_hat(const std::string &str) {
 		return str.empty() || str[0] == ' '? hat::none : get_hat(str[0]);
+	}
+
+	std::pair<hat_set, std::string> hat_set::separate(const std::string &str) {
+		const size_t nickpos = str.find_first_not_of("~&@%+");
+		if (nickpos == 0)
+			return {{}, str};
+		return {str.substr(0, nickpos), str.substr(nickpos)};
 	}
 	
 
