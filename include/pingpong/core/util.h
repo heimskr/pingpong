@@ -30,6 +30,12 @@ namespace pingpong {
 		static long microstamp();
 		static long nanostamp();
 
+		static std::string get_date(long);
+		static std::string get_date(timetype);
+
+		static std::string get_time(long);
+		static std::string get_time(timetype);
+
 		/** Returns true if all the characters in a string are valid for nicknames. */
 		static bool is_valid_nick(const std::string &);
 
