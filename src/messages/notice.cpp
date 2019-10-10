@@ -1,3 +1,4 @@
+#include "pingpong/events/notice.h"
 #include "pingpong/messages/notice.h"
 
 namespace pingpong {
@@ -7,5 +8,10 @@ namespace pingpong {
 
 		const std::string name = who? who->name : "?";
 		return "[" + (is_user()? name : where) + "] -" + name + "- " + content;
+	}
+
+	bool notice_message::operator()(server *serv) {
+		events::dispatch<notice_event>(serv, who, where, content);
+		return true;
 	}
 }

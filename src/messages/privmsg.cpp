@@ -1,5 +1,3 @@
-#include <string>
-
 #include "pingpong/events/privmsg.h"
 #include "pingpong/messages/privmsg.h"
 
