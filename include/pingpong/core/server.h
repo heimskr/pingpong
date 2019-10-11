@@ -1,6 +1,7 @@
 #ifndef PINGPONG_CORE_SERVER_H_
 #define PINGPONG_CORE_SERVER_H_
 
+#include <condition_variable>
 #include <list>
 #include <memory>
 #include <mutex>
