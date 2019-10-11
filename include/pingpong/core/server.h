@@ -46,6 +46,9 @@ namespace pingpong {
 			void handle_line(const pingpong::line &);
 			void negotiate_capabilities();
 
+			/** The number of capabilities we've requested that we're waiting for the server to respond to. */
+			size_t caps_requested = 0;
+
 		public:
 			enum class stage {
 				// Connecting to an IRC server occurs in multiple stages.
@@ -165,6 +168,12 @@ namespace pingpong {
 
 			/** Returns whether the server supports a given feature. */
 			bool supports_feature(features::type) const;
+
+			/** Called when a request for capabilities has been sent. */
+			void sent_cap_req(size_t count) { caps_requested += count; }
+
+			/** Called when the server responds with an ACK or NAK to a CAP REQ. */
+			void cap_answered(size_t count);
 
 			/** Places the names of all joined channels into a container, starting at a given iterator. */
 			template <typename Iter>

@@ -384,4 +384,10 @@ namespace pingpong {
 	bool server::supports_feature(features::type feature) const {
 		return supported_features.count(feature) != 0;
 	}
+
+	void server::cap_answered(size_t count) {
+		--caps_requested -= count;
+		if (status == stage::capneg && caps_requested == 0)
+			cap_command(this, cap_command::action::end).send();
+	}
 }

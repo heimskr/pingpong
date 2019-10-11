@@ -17,6 +17,7 @@ namespace pingpong {
 			std::transform(to_request.begin(), to_request.end(), std::back_inserter(request_chars),
 				[&](features::type feature) { return features::names[feature]; });
 
+			serv->sent_cap_req(to_request.size());
 			return "CAP REQ :" + formicine::util::join(request_chars, " ");
 		}
 
