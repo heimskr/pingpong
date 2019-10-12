@@ -5,10 +5,6 @@ CC				 = $(COMPILER) $(strip $(CFLAGS) $(CHECKFLAGS))
 CHECKFLAGS		:=
 MKBUILD			:= mkdir -p build
 
-ifeq ($(shell uname -s), Darwin)
-	SDKFLAGS	:= --sysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
-endif
-
 ifeq ($(CHECK), asan)
 	CHECKFLAGS += -fsanitize=address -fno-common
 else ifeq ($(CHECK), msan)
@@ -37,7 +33,7 @@ clean:
 
 build/%.o: src/%.cpp
 	@ mkdir -p "$(shell dirname "$@")"
-	$(CC) $(strip $(SDKFLAGS) $(CPPFLAGS) $(CXXFLAGS) -Iinclude -c) $< -o $@
+	$(CC) $(strip $(CPPFLAGS) $(CXXFLAGS) -Iinclude -c) $< -o $@
 
 DEPFILE  = .dep
 DEPTOKEN = "\# MAKEDEPENDS"
