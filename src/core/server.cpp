@@ -23,6 +23,8 @@
 #include "pingpong/events/server_status.h"
 #include "pingpong/events/user_appeared.h"
 
+#include "lib/formicine/futil.h"
+
 namespace pingpong {
 	server::server(irc *parent_, const std::string &id_, const std::string &hostname_, int port_):
 	parent(parent_), id(id_), hostname(hostname_), port(port_) {
@@ -88,7 +90,7 @@ namespace pingpong {
 			status = stage::setuser;
 			user_command(this, parent->username, parent->realname).send();
 		} else {
-			cap_command(this, features::implemented, cap_command::action::req).send();
+			cap_command(this, {}, cap_command::action::ls).send();
 		}
 	}
 
@@ -378,16 +380,36 @@ namespace pingpong {
 	}
 
 	void server::add_feature(features::type feature) {
+		enabled_features.insert(feature);
+	}
+
+	void server::support_feature(features::type feature) {
 		supported_features.insert(feature);
 	}
 
-	bool server::supports_feature(features::type feature) const {
-		return supported_features.count(feature) != 0;
+	void server::support_features(const std::string &str) {
+		std::vector<std::string> caps = formicine::util::split(str, " ");
+		for (const std::string &cap: caps) {
+			if (features::types.count(cap) == 0) {
+				DBG("Unknown feature: \"" << cap << "\"");
+			} else {
+				support_feature(features::types[cap]);
+			}
+		}
+	}
+
+	bool server::feature_enabled(features::type feature) const {
+		return enabled_features.count(feature) != 0;
 	}
 
 	void server::cap_answered(size_t count) {
-		--caps_requested -= count;
-		if (status == stage::capneg && caps_requested == 0)
+		DBG("Old caps_requested: " << caps_requested);
+		caps_requested -= count;
+		DBG("New caps_requested: " << caps_requested);
+		if (status == stage::capneg && caps_requested == 0) {
+			DBG("Sending END.");
 			cap_command(this, cap_command::action::end).send();
+			user_command(this, parent->username, parent->realname).send();
+		}
 	}
 }

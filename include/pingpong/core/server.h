@@ -35,6 +35,9 @@ namespace pingpong {
 			irc *parent;
 			std::string nick;
 
+			/** Contains features requested and acknowledged by the server, not features supported by Spjalla. */
+			std::unordered_set<features::type> enabled_features;
+
 			/** Contains features supported by the server, not features supported by Spjalla. */
 			std::unordered_set<features::type> supported_features;
 
@@ -163,17 +166,29 @@ namespace pingpong {
 			/** Locks the mutex that protects the server status. */
 			std::unique_lock<std::recursive_mutex> lock_status();
 
-			/** Marks a feature as supported. */
+			/** Marks a feature as active. */
 			void add_feature(features::type);
 
-			/** Returns whether the server supports a given feature. */
-			bool supports_feature(features::type) const;
+			/** Marks a feature as supported by the server. */
+			void support_feature(features::type);
+
+			/** Marks all features in a string as supported. */
+			void support_features(const std::string &);
+
+			/** Returns the set of features that the server supports. */
+			const std::unordered_set<features::type> & get_supported_features() const { return supported_features; }
+
+			/** Returns whether a given feature has is enabled. */
+			bool feature_enabled(features::type) const;
 
 			/** Called when a request for capabilities has been sent. */
 			void sent_cap_req(size_t count) { caps_requested += count; }
 
 			/** Called when the server responds with an ACK or NAK to a CAP REQ. */
 			void cap_answered(size_t count);
+
+			/** Returns the number of capability requests that the server hasn't yet responded to. */
+			size_t get_caps_requested() const { return caps_requested; }
 
 			/** Places the names of all joined channels into a container, starting at a given iterator. */
 			template <typename Iter>
