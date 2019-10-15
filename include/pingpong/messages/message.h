@@ -7,11 +7,12 @@
 #include <stdexcept>
 #include <string>
 
-#include "pingpong/core/server.h"
 #include "pingpong/messages/line.h"
 
 namespace pingpong {
 	class message;
+	class server;
+
 	using message_ctor = std::function<std::shared_ptr<message>(pingpong::line)>;
 
 	class message {

@@ -2,6 +2,7 @@
 #include "pingpong/commands/cap.h"
 #include "pingpong/commands/user.h"
 #include "pingpong/core/features.h"
+#include "pingpong/core/server.h"
 
 #include "lib/formicine/futil.h"
 
