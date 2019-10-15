@@ -62,7 +62,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%			public:
 	%				
 	%				operator std::string() const override;
-	%				virtual void send() override;
+	%				virtual bool send() override;
 	%		};
 	%	}
 	%	

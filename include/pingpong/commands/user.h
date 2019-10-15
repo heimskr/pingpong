@@ -12,7 +12,7 @@ namespace pingpong {
 				command(serv_), username(username_), realname(realname_) {}
 
 			operator std::string() const override;
-			bool send() override;
+			virtual bool send() override;
 	};
 }
 
