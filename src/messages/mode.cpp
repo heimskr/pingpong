@@ -5,6 +5,8 @@
 
 #include "pingpong/messages/mode.h"
 
+#include "lib/formicine/futil.h"
+
 namespace pingpong {
 	mode_message::mode_message(const pingpong::line &line_): message(line_), local("") {
 		size_t middle;
@@ -25,8 +27,14 @@ namespace pingpong {
 			// host. The parameters will look like "pingpong :+iwx".
 
 			middle = line.parameters.find(" :");
-			if (middle == std::string::npos)
-				throw bad_message(line);
+			size_t middle_size = 2;
+			if (middle == std::string::npos) {
+				// Rizon doesn't insert a colon for whatever reason.
+				middle = std::min(line.parameters.find(" +"), line.parameters.find(" -"));
+				if (middle == std::string::npos)
+					throw bad_message(line);
+				middle_size = 1;
+			}
 
 			if (line.source.nick != line.serv->get_nick()) {
 				// The mode command, if the source is a nick, tells you what your current nick is. If it's different
@@ -36,7 +44,7 @@ namespace pingpong {
 				line.serv->remove_user("?");
 			}
 			
-			mset_main = line.parameters.substr(middle + 2);
+			mset_main = line.parameters.substr(middle + middle_size);
 			where = line.parameters.substr(0, middle);
 		} else {
 			// This is presumably a channel mode change. The parameters should look like "#chan -S".

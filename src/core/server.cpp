@@ -47,9 +47,9 @@ namespace pingpong {
 
 			try {
 				handle_line(pingpong::line(this, line));
-			} catch (std::invalid_argument &) {
+			} catch (const std::invalid_argument &) {
 				// Already dealt with by dispatching a bad_line_event.
-			}
+			} catch (const bad_message &) {}
 		}
 
 		getline_mutex.unlock();
@@ -73,7 +73,11 @@ namespace pingpong {
 		std::shared_ptr<message> msg;
 		try {
 			msg = pingpong::message::parse(line);
-		} catch (std::invalid_argument &err) {
+		} catch (const std::invalid_argument &err) {
+			DBG("Bad line: " << err.what());
+			events::dispatch<bad_line_event>(this, line.original);
+			throw;
+		} catch (const bad_message &err) {
 			DBG("Bad line: " << err.what());
 			events::dispatch<bad_line_event>(this, line.original);
 			throw;
