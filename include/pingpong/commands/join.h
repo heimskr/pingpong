@@ -16,11 +16,10 @@ namespace pingpong {
 			join_command(server *serv_, const std::vector<join_pair> &pairs_):
 				command(serv_), pairs(pairs_) {}
 
-			join_command(const channel &chan):
-				join_command(chan.serv, {join_pair(chan, "")}) {}
-
 			join_command(server *serv_, const std::string &chan):
 				join_command(serv_, {join_pair(chan, "")}) {}
+
+			join_command(const channel &chan);
 
 			join_command(server *, const std::vector<std::string> &);
 			join_command(server *, const std::vector<channel> &);

@@ -3,8 +3,11 @@
 
 #include "pingpong/commands/join.h"
 #include "pingpong/commands/mode.h"
+#include "pingpong/core/channel.h"
 
 namespace pingpong {
+	join_command::join_command(const channel &chan): join_command(chan.serv, {join_pair(chan, "")}) {}
+
 	join_command::join_command(server *serv_, const std::vector<std::string> &chans): command(serv_) {
 		for (const std::string &chan: chans)
 			pairs.push_back({chan, ""});

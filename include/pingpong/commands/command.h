@@ -1,12 +1,14 @@
-#ifndef COMMANDS_COMMAND_H_
-#define COMMANDS_COMMAND_H_
+#ifndef PINGPONG_COMMANDS_COMMAND_H_
+#define PINGPONG_COMMANDS_COMMAND_H_
 
 #include <functional>
 
 #include "pingpong/core/util.h"
-#include "pingpong/core/server.h"
 
 namespace pingpong {
+	class server;
+	class channel;
+
 	class command {
 		public:
 			// Preprocesses a command and determines whether it's okay to send.

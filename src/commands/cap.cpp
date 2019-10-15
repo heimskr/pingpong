@@ -1,4 +1,6 @@
 #include "pingpong/commands/cap.h"
+#include "pingpong/core/server.h"
+
 #include "lib/formicine/futil.h"
 
 namespace pingpong {

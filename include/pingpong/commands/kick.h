@@ -12,8 +12,7 @@ namespace pingpong {
 				command(serv_), chan(chan_), whom(whom_), reason(reason_) {}
 
 			kick_command(server *serv_, std::shared_ptr<channel> chan_, const std::string &whom_,
-			const std::string &reason_ = ""):
-				kick_command(serv_, chan_->name, whom_, reason_) {}
+			const std::string &reason_ = "");
 
 			operator std::string() const override;
 	};
