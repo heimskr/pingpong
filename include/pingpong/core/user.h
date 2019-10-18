@@ -21,7 +21,7 @@ namespace pingpong {
 			std::set<std::weak_ptr<channel>, weakptr_compare<channel>> channels = {};
 
 			std::string account_name {}, server_name {};
-			long idle_since;
+			long idle_since = -1, signon_time = -1;
 
 			user(const std::string &name_, server *serv_): name(name_), serv(serv_) {}
 
