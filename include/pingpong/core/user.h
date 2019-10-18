@@ -15,11 +15,13 @@
 namespace pingpong {
 	class user: public moded {
 		public:
-			std::string name, account_name = "";
+			std::string name;
 			mask info {};
-
 			pingpong::server *serv = nullptr;
 			std::set<std::weak_ptr<channel>, weakptr_compare<channel>> channels = {};
+
+			std::string account_name {}, server_name {};
+			long idle_since;
 
 			user(const std::string &name_, server *serv_): name(name_), serv(serv_) {}
 

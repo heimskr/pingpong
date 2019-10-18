@@ -31,6 +31,7 @@ namespace pingpong {
 	bool numeric_message::operator()(server *serv) {
 		switch (type) {
 			case numeric_type::welcome:       return handle_welcome(serv);       // 001
+			case numeric_type::whois_server:  return handle_whois_server(serv);  // 312
 			case numeric_type::channel_modes: return handle_channel_modes(serv); // 324
 			case numeric_type::channel_topic: return handle_channel_topic(serv); // 332
 			case numeric_type::names_reply:   return handle_names_reply(serv);   // 353

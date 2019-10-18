@@ -3,6 +3,7 @@
 
 #include <condition_variable>
 #include <list>
+#include <map>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -73,6 +74,9 @@ namespace pingpong {
 			std::thread worker, reaper;
 			std::recursive_mutex status_mutex;
 			stage status = stage::unconnected;
+
+			/** A map of the names of all servers in the network to their descriptions. */
+			std::map<std::string, std::string> server_descriptions;
 
 			server(irc *parent_, const std::string &id_, const std::string &hostname_, int port_ = irc::default_port);
 
