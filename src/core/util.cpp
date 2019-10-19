@@ -50,6 +50,10 @@ namespace pingpong {
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(now()).count();
 	}
 
+	util::timetype util::from_seconds(long seconds) {
+		return std::chrono::duration_cast<timetype>(std::chrono::seconds(seconds));
+	}
+
 	std::string util::get_date(timetype when) {
 		return format_time<64>(when, "%Y/%m/%d");
 	}

@@ -30,6 +30,8 @@ namespace pingpong {
 		static long microstamp();
 		static long nanostamp();
 
+		static timetype from_seconds(long);
+
 		template <size_t Size = 64>
 		static std::string format_time(timetype when, const char *format) {
 			std::chrono::system_clock::time_point tpoint {when};
