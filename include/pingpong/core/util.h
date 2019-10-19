@@ -30,11 +30,25 @@ namespace pingpong {
 		static long microstamp();
 		static long nanostamp();
 
-		static std::string get_date(long);
-		static std::string get_date(timetype);
+		template <size_t Size = 64>
+		static std::string format_time(timetype when, const char *format) {
+			std::chrono::system_clock::time_point tpoint {when};
+			std::time_t time = std::chrono::system_clock::to_time_t(tpoint);
+			char str[Size];
+			std::strftime(str, sizeof(str), format, std::localtime(&time));
+			return str;
+		}
 
-		static std::string get_time(long);
+		template <size_t Size = 64>
+		static std::string format_time(long stamp, const char *format) {
+			return format_time(timetype(stamp), format);
+		}
+
+		static std::string get_date(timetype);
+		static std::string get_date(long);
+
 		static std::string get_time(timetype);
+		static std::string get_time(long);
 
 		/** Returns true if all the characters in a string are valid for nicknames. */
 		static bool is_valid_nick(const std::string &);

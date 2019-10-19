@@ -50,28 +50,20 @@ namespace pingpong {
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(now()).count();
 	}
 
+	std::string util::get_date(timetype when) {
+		return format_time<64>(when, "%Y/%m/%d");
+	}
+
 	std::string util::get_date(long stamp) {
 		return get_date(timetype(stamp));
 	}
 
-	std::string util::get_date(timetype when) {
-		std::chrono::system_clock::time_point tpoint {when};
-		std::time_t time = std::chrono::system_clock::to_time_t(tpoint);
-		char str[64];
-		std::strftime(str, sizeof(str), "%Y/%m/%d", std::localtime(&time));
-		return str;
+	std::string util::get_time(timetype when) {
+		return format_time<64>(when, "%H:%M:%S");
 	}
 
 	std::string util::get_time(long stamp) {
 		return get_time(timetype(stamp));
-	}
-
-	std::string util::get_time(timetype when) {
-		std::chrono::system_clock::time_point tpoint {when};
-		std::time_t time = std::chrono::system_clock::to_time_t(tpoint);
-		char str[64];
-		std::strftime(str, sizeof(str), "%H:%M:%S", std::localtime(&time));
-		return str;
 	}
 
 	bool util::is_valid_nick(const std::string &str) {
