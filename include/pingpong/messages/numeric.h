@@ -62,6 +62,7 @@ namespace pingpong {
 			bool operator!=(numeric_type type_) const;
 
 			bool handle_welcome(server *);       // 001
+			bool handle_whois_user(server *);    // 311
 			bool handle_whois_server(server *);  // 312
 			bool handle_whois_idle(server *);    // 317
 			bool handle_channel_modes(server *); // 324
