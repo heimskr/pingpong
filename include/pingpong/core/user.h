@@ -20,7 +20,9 @@ namespace pingpong {
 			pingpong::server *serv = nullptr;
 			std::set<std::weak_ptr<channel>, weakptr_compare<channel>> channels = {};
 
-			std::string account_name {}, server_name {};
+			std::string account_name = "";
+			std::string server_name = "";
+			std::string realname = "";
 			long idle_since = -1, signon_time = -1;
 
 			user(const std::string &name_, server *serv_): name(name_), serv(serv_) {}
