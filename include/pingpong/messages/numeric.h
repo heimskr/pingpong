@@ -68,6 +68,7 @@ namespace pingpong {
 			bool handle_channel_modes(server *); // 324
 			bool handle_channel_topic(server *); // 332
 			bool handle_names_reply(server *);   // 353
+			bool handle_nick_in_use(server *);   // 433
 	};
 }
 

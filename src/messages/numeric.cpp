@@ -37,6 +37,7 @@ namespace pingpong {
 			case numeric_type::channel_modes: return handle_channel_modes(serv); // 324
 			case numeric_type::channel_topic: return handle_channel_topic(serv); // 332
 			case numeric_type::names_reply:   return handle_names_reply(serv);   // 353
+			case numeric_type::nick_in_use:   return handle_nick_in_use(serv);   // 433
 			default: return true;
 		}
 	}

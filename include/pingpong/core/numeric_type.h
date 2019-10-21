@@ -19,6 +19,7 @@ namespace pingpong {
 		whois_modes      = 379, // "nick :is using modes +iwx"       -- A user's modes.
 		motd_end         = 376, // ":End of /MOTD command."          -- There's nothing more in the message of the day.
 		no_such_nick     = 401, // "someone :No such nick/channel"   -- You tried to message someone who doesn't exist.
+		nick_in_use      = 433, // "someone :reason"                 -- The requested nickname is already being used.
 	};
 }
 
