@@ -100,6 +100,8 @@ namespace pingpong {
 				if (!in_color) {
 					std::string next = str.substr(i + 1, 5);
 					std::string first = util::take_while(next, [](char c) { return std::isdigit(c); });
+					if (2 < first.length())
+						first.erase(2);
 					std::string second;
 					const size_t comma = next.find(',');
 					if (comma <= 2)
