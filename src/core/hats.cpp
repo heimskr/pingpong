@@ -64,17 +64,24 @@ namespace pingpong {
 		return set == other.set;
 	}
 
+	bool hat_set::operator!=(const hat_set &other) const {
+		return !(*this == other);
+	}
+
+	bool hat_set::operator>(const hat_set &other) const {
+		return highest() > other.highest();
+	}
+
+	bool hat_set::operator<(const hat_set &other) const {
+		return highest() < other.highest();
+	}
+
 	bool hat_set::operator==(hat h) const {
 		return (h == hat::none && set.empty()) || (set.size() == 1 && set.count(h) == 1);
 	}
 
 	bool hat_set::operator==(char ch) const {
 		return *this == get_hat(ch);
-	}
-
-
-	bool hat_set::operator!=(const hat_set &other) const {
-		return !(*this == other);
 	}
 
 	bool hat_set::operator!=(hat h) const {

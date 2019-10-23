@@ -47,14 +47,20 @@ namespace pingpong {
 			/** Returns whether the hat set's contents are the same as another's. */
 			bool operator==(const hat_set &) const;
 
+			/** Returns whether the hat set's contents differs from another's. */
+			bool operator!=(const hat_set &) const;
+
+			/** Returns whether this hat set outranks another. Compares only the highest hat in each set. */
+			bool operator>(const hat_set &) const;
+
+			/** Returns whether this hat set is outranked by another. Compares only the highest hat in each set. */
+			bool operator<(const hat_set &) const;
+
 			/** Returns whether the hat set contains a given hat (and no other hats). */
 			bool operator==(hat) const;
 
 			/** Returns whether the hat set contains a given hat (and no other hats). */
 			bool operator==(char) const;
-
-			/** Returns whether the hat set's contents differs from another's. */
-			bool operator!=(const hat_set &) const;
 
 			/** Returns whether the hat set contains no hats, multiple hats or a hat other than a given hat. */
 			bool operator!=(hat) const;
