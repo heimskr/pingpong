@@ -1,0 +1,6 @@
+#ifndef PINGPONG_CORE_OPTIONS_H_
+#define PINGPONG_CORE_OPTIONS_H_
+
+#define PINGPONG_VERSION_NUMBER "0.1.0"
+
+#endif

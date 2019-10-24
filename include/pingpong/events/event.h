@@ -67,7 +67,7 @@ namespace pingpong {
 			}
 	};
 
-	// For events local to one server.
+	/** For events local to one server. */
 	struct server_event: public event {
 		server *serv;
 

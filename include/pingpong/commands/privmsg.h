@@ -1,5 +1,5 @@
-#ifndef COMMANDS_PRIVMSG_H_
-#define COMMANDS_PRIVMSG_H_
+#ifndef PINGPONG_COMMANDS_PRIVMSG_H_
+#define PINGPONG_COMMANDS_PRIVMSG_H_
 
 #include <string>
 

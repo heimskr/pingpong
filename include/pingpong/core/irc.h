@@ -9,6 +9,7 @@
 #include <utility>
 
 #include "pingpong/core/defs.h"
+#include "pingpong/core/options.h"
 
 #include "lib/formicine/ansi.h"
 
@@ -30,6 +31,9 @@ namespace pingpong {
 			std::list<server *> server_order {};
 
 			server *active_server = nullptr;
+
+			/** Represents the client's version. */
+			std::string version = "pingpong " PINGPONG_VERSION_NUMBER;
 
 			irc(std::string user, std::string real): username(user), realname(real) {}
 			irc(): irc(default_user, default_realname) {}
