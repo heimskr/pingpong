@@ -25,7 +25,6 @@ namespace pingpong {
 
 		static constexpr long precision = 1e6;
 
-
 		static long timestamp();
 		static long seconds();
 		static long millistamp();

@@ -18,11 +18,13 @@ namespace pingpong {
 		if (command::send()) {
 			if (is_channel()) {
 				std::shared_ptr<channel> chan = get_channel(serv);
-				if (chan)
-					events::dispatch<notice_event>(serv->get_self(), chan, message, hidden);
-				else
+				if (chan) {
+					if (!hidden)
+						events::dispatch<notice_event>(serv->get_self(), chan, message, hidden);
+				} else {
 					events::dispatch<error_event>("Can't send notice: channel is null", false);
-			} else {
+				}
+			} else if (!hidden) {
 				events::dispatch<notice_event>(serv->get_self(), get_user(serv), message, hidden);
 			}
 
