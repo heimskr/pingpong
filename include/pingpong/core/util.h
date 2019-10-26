@@ -18,11 +18,13 @@ namespace pingpong {
 		static constexpr const char *flag_chars = "+-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		static std::array<std::string, 16> irc_colors;
 
-		static std::chrono::system_clock::duration now();
+		using timetype = std::chrono::microseconds;
+
+		static timetype now();
+		static std::chrono::system_clock::duration system_now();
 
 		static constexpr long precision = 1e6;
 
-		using timetype = std::chrono::microseconds;
 
 		static long timestamp();
 		static long seconds();

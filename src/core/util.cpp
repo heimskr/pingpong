@@ -26,12 +26,16 @@ namespace pingpong {
 		"lightgray"
 	};
 
-	std::chrono::system_clock::duration util::now() {
+	util::timetype util::now() {
+		return std::chrono::duration_cast<timetype>(system_now());
+	}
+
+	std::chrono::system_clock::duration util::system_now() {
 		return std::chrono::system_clock::now().time_since_epoch();
 	}
 
 	long util::timestamp() {
-		return std::chrono::duration_cast<timetype>(now()).count();
+		return now().count();
 	}
 
 	long util::seconds() {
