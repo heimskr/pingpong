@@ -4,6 +4,7 @@
 namespace pingpong {
 	enum class numeric_type: int {
 		welcome          =   1, // varies                            -- The post-registration welcome message.
+		i_support        =   5, // "KEY=value" ..., generally        -- Displays various server parameters.
 		whois_user       = 311, // "nick user host * :realname"      -- The name-related information of a user.
 		whois_server     = 312, // "nick server :server_info"        -- The server a user's conencted to.
 		whois_idle       = 317, // "nick \d+( \d+)* :seconds idle.*" -- A user's idle time.
