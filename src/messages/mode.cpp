@@ -34,11 +34,11 @@ namespace pingpong {
 				if (middle == std::string::npos)
 					throw bad_message(line);
 				middle_size = 1;
-			}
-
-			if (line.source.nick != line.serv->get_nick()) {
+			} else if (line.source.nick != line.serv->get_nick()) {
 				// The mode command, if the source is a nick, tells you what your current nick is. If it's different
 				// from what we were assuming, we need to take the source as your new nick.
+				// Rizon doesn't do this. Instead, it uses the server name as the source. We skip this check by testing
+				// for a colon above; Rizon doesn't include a colon before the modeset.
 				line.serv->set_nick(line.source.nick, true);
 				DBG("Removing fake user.");
 				line.serv->remove_user("?");

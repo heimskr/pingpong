@@ -150,6 +150,7 @@ namespace pingpong {
 	void server::set_nick(const std::string &new_nick, bool immediate) {
 		if (immediate) {
 			nick = new_nick;
+			get_self()->rename(new_nick);
 		} else {
 			nick_command(this, new_nick).send();
 		}
@@ -330,7 +331,7 @@ namespace pingpong {
 		}
 
 		if (std::shared_ptr<user> uptr = get_user(old_nick, false))
-			uptr->name = new_nick;
+			uptr->rename(new_nick);
 
 		for (std::shared_ptr<channel> chan: channels) {
 			chan->rename_user(old_nick, new_nick);
