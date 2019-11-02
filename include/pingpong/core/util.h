@@ -16,7 +16,7 @@ namespace pingpong {
 		static constexpr const char *nick_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 			"-_[]{}\\`|";
 		static constexpr const char *flag_chars = "+-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-		static std::array<std::string, 16> irc_colors;
+		static std::array<std::string, 100> irc_colors;
 
 		using timetype = std::chrono::microseconds;
 
