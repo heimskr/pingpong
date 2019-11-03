@@ -116,7 +116,6 @@ namespace pingpong {
 				if (irc_colors_length <= first_long || irc_colors_length <= second_long)
 					continue;
 
-				DBG("first_long[" << first_long << "]");
 				if (!irc_colors[first_long].empty())
 					out << "\x1b[" << irc_colors[first_long] << "m";
 
