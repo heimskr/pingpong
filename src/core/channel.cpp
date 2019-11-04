@@ -20,8 +20,10 @@ namespace pingpong {
 	}
 
 	bool channel::add_user(std::shared_ptr<user> user) {
+		auto lock = lock_users();
+
 		if (!has_user(user)) {
-			users.push_back(user);
+			users.push_front(user);
 			return true;
 		}
 
@@ -29,6 +31,8 @@ namespace pingpong {
 	}
 
 	bool channel::remove_user(std::shared_ptr<user> user) {
+		auto lock = lock_users();
+
 		auto iter = std::find(users.begin(), users.end(), user);
 		if (iter != users.end()) {
 			users.erase(iter);
@@ -39,6 +43,7 @@ namespace pingpong {
 	}
 
 	bool channel::rename_user(const std::string &old_nick, const std::string &new_nick) {
+		auto lock = lock_users();
 		// It's possible that the user has already been renamed in server::rename_user.
 		if (!has_user(new_nick)) {
 			for (std::shared_ptr<user> user: users) {

@@ -11,6 +11,9 @@ namespace pingpong {
 	}
 
 	bool notice_message::operator()(server *serv) {
+		if (is_channel()) {
+			get_channel()->send_to_front(who);
+
 		events::dispatch<notice_event>(serv, who, where, content);
 		return true;
 	}
