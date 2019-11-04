@@ -97,6 +97,32 @@ namespace pingpong {
 		return iter->second;
 	}
 
+	bool channel::send_to_front(std::shared_ptr<user> user) {
+		if (!user)
+			return false;
+
+		auto lock = lock_users();
+
+		// No need to do anything if the user is already at the front.
+		if (users.front() == user)
+			return false;
+
+		// Search for the user in the list. If found, erase the user at the found position and push them to the front.
+		for (auto iter = users.begin(), end = users.end(); iter != end; ++iter) {
+			if (*iter == user) {
+				users.erase(iter);
+				users.push_front(user);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool channel::send_to_front(const std::string &nick) {
+		return send_to_front(serv->get_user(nick, false));
+	}
+
 	channel::operator std::string() const {
 		return serv->id + "/" + name;
 	}

@@ -20,6 +20,9 @@ namespace pingpong {
 	class server;
 
 	class channel: public moded {
+		private:
+			std::mutex users_mutex;
+
 		public:
 			enum class visibility: char {pub='=', priv='*', secret='@'};
 
@@ -56,6 +59,14 @@ namespace pingpong {
 			/** Returns the hat corresponding to a user if it's known, or the default hat otherwise. */
 			hat_set & get_hats(std::shared_ptr<user> user);
 
+			/** Should be called whenever a user speaks. Reorders the list of users to put the user at the front.
+			 *  Returns whether the user was found and sent to the front. */
+			bool send_to_front(std::shared_ptr<user>);
+
+			/** Should be called whenever a user speaks. Reorders the list of users to put the user at the front.
+			 *  Returns whether the user was found and sent to the front. */
+			bool send_to_front(const std::string &);
+
 			operator std::string() const;
 			std::shared_ptr<user> operator[](const std::string &);
 			bool operator==(const std::string &) const;
@@ -63,6 +74,9 @@ namespace pingpong {
 			bool operator==(const channel &) const;
 			bool operator!=(const channel &) const;
 			bool operator<(const channel &) const;
+
+			/** Returns a lock on the users list. */
+			std::unique_lock<std::mutex> lock_users() { return std::unique_lock(users_mutex); }
 
 			friend std::ostream & operator<<(std::ostream &os, const channel &chan);
 	};
