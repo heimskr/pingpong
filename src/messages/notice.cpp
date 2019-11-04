@@ -14,7 +14,7 @@ namespace pingpong {
 		if (is_channel())
 			get_channel(serv)->send_to_front(who);
 
-		events::dispatch<notice_event>(who, where, content);
+		events::dispatch<notice_event>(serv, who, where, content);
 		return true;
 	}
 }
