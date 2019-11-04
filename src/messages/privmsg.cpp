@@ -9,12 +9,12 @@ namespace pingpong {
 		return "[" + where + "] <" + who->name + "> " + content;
 	}
 
-	bool privmsg_message::operator()(server *) {
+	bool privmsg_message::operator()(server *serv) {
 		if (formicine::util::upper(content) == "\x01VERSION\x01") {
 			events::dispatch<version_requested_event>(who, where, content);
 		} else {
-			if (is_channel()) {
-				get_channel()->send_to_front(who);
+			if (is_channel())
+				get_channel(serv)->send_to_front(who);
 
 			events::dispatch<privmsg_event>(who, where, content);
 		}
