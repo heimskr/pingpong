@@ -9,7 +9,7 @@ namespace pingpong {
 		return "[" + where + "] <" + who->name + "> " + content;
 	}
 
-	bool privmsg_message::operator()(server *serv) {
+	bool privmsg_message::operator()(server *) {
 		if (formicine::util::upper(content) == "\x01VERSION\x01") {
 			events::dispatch<version_requested_event>(who, where, content);
 		} else {
