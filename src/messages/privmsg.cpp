@@ -13,9 +13,6 @@ namespace pingpong {
 		if (formicine::util::upper(content) == "\x01VERSION\x01") {
 			events::dispatch<version_requested_event>(who, where, content);
 		} else {
-			if (is_channel())
-				get_channel(serv)->send_to_front(who);
-
 			events::dispatch<privmsg_event>(who, where, content);
 		}
 

@@ -128,6 +128,21 @@ namespace pingpong {
 		return send_to_front(serv->get_user(nick, false));
 	}
 
+	void channel::sort_users() {
+		auto lock = lock_users();
+		users.sort([&](const std::shared_ptr<user> &left, const std::shared_ptr<user> &right) {
+			const auto mismatch = std::mismatch(left->name.cbegin(), left->name.cend(), right->name.cbegin(),
+				right->name.cend(), [](const unsigned char lchar, const unsigned char rchar) {
+					return tolower(lchar) == tolower(rchar);
+				});
+
+			if (mismatch.second != right->name.cend())
+				return false;
+
+			return mismatch.first == left->name.cend() || tolower(*mismatch.first) < tolower(*mismatch.second);
+		});
+	}
+
 	channel::operator std::string() const {
 		return serv->id + "/" + name;
 	}

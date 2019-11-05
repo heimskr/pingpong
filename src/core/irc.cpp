@@ -6,6 +6,9 @@
 #include "pingpong/core/irc.h"
 #include "pingpong/core/server.h"
 
+#include "pingpong/events/join.h"
+#include "pingpong/events/notice.h"
+#include "pingpong/events/privmsg.h"
 #include "pingpong/events/server_status.h"
 
 #include "pingpong/messages/cap.h"
@@ -26,6 +29,7 @@
 #include "pingpong/net/resolution_error.h"
 
 #include "lib/formicine/ansi.h"
+#include "lib/formicine/futil.h"
 
 namespace pingpong {
 	std::string irc::default_nick = "pingpong";
@@ -170,5 +174,23 @@ namespace pingpong {
 		}
 
 		return *this;
+	}
+
+	void irc::add_listeners() {
+		events::listen<join_event>([&](join_event *ev) {
+			if (ev->who->is_self())
+				ev->chan->sort_users();
+		});
+
+		events::listen<notice_event>([&](notice_event *ev) {
+			if (ev->is_channel())
+				ev->get_channel(ev->serv)->send_to_front(ev->speaker);
+		});
+
+		events::listen<privmsg_event>([&](privmsg_event *ev) {
+			if (ev->is_channel())
+				ev->get_channel(ev->serv)->send_to_front(ev->speaker);
+		});
+
 	}
 }

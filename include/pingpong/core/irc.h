@@ -58,6 +58,9 @@ namespace pingpong {
 			void init();
 			void init_messages();
 
+			/** Registers a set of standard event listeners. */
+			void add_listeners();
+
 			std::unique_lock<std::mutex> lock_console() { return std::unique_lock(console_mutex); }
 			std::unique_lock<std::mutex> lock_servers() { return std::unique_lock(servers_mutex); }
 

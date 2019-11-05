@@ -67,6 +67,9 @@ namespace pingpong {
 			 *  Returns whether the user was found and sent to the front. */
 			bool send_to_front(const std::string &);
 
+			/** Sorts the user list case-insensitively by name. Ignores hats. */
+			void sort_users();
+
 			operator std::string() const;
 			std::shared_ptr<user> operator[](const std::string &);
 			bool operator==(const std::string &) const;
