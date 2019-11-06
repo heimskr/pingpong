@@ -125,7 +125,7 @@ namespace pingpong {
 	}
 
 	bool channel::send_to_front(const std::string &nick) {
-		return send_to_front(serv->get_user(nick, false));
+		return send_to_front(serv->get_user(nick, false, false));
 	}
 
 	void channel::sort_users() {

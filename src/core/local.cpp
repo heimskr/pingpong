@@ -18,12 +18,12 @@ namespace pingpong {
 		return where.front() == '#' || where.front() == '&';
 	}
 
-	std::shared_ptr<user> local::get_user(server *serv) const {
+	std::shared_ptr<user> local::get_user(server *serv, bool update_case) const {
 		if (is_channel())
 			return nullptr;
 		// Because I don't want to assume that this would never be anything other than your nickname (as reasonable as
 		// that assumption would be), I don't just return serv->get_self() here.
-		return serv->get_user(where, true);
+		return serv->get_user(where, true, update_case);
 	}
 
 	std::shared_ptr<channel> local::get_channel(server *serv) const {

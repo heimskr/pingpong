@@ -27,9 +27,9 @@ namespace pingpong {
 		if (*(second + 1) != ':')
 			throw std::runtime_error("Invalid targeted_message: second space not followed by colon");
 
-		who     = line_.serv->get_user(line_.source.nick, true);
+		who     = line_.serv->get_user(line_.source.nick, true, true);
 		chan    = line_.serv->get_channel(std::string(raw.begin(), first), true);
-		whom    = line_.serv->get_user(std::string(first + 1, second), true);
+		whom    = line_.serv->get_user(std::string(first + 1, second), true, true);
 		content = std::string(second + 2, end);
 	}
 }

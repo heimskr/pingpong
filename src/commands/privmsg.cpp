@@ -24,7 +24,7 @@ namespace pingpong {
 					events::dispatch<error_event>("Can't send message: channel is null", false);
 				}
 			} else {
-				events::dispatch<privmsg_event>(serv->get_self(), get_user(serv), message);
+				events::dispatch<privmsg_event>(serv->get_self(), get_user(serv, false), message);
 			}
 
 			return true;

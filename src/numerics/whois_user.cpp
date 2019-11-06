@@ -16,7 +16,7 @@ namespace pingpong {
 
 			const std::string  realname = line.parameters.substr(colon + 1);
 
-			std::shared_ptr<user> who = serv->get_user(nickname, true);
+			std::shared_ptr<user> who = serv->get_user(nickname, true, true);
 			who->info.user = username;
 			who->info.host = hostname;
 			DBG("setting realname to [" << realname << "]");

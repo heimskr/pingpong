@@ -129,10 +129,10 @@ namespace pingpong {
 			std::shared_ptr<channel> get_channel(const std::string &, bool create = false);
 
 			/** Retrieves a user pointer by name. */
-			std::shared_ptr<user> get_user(const std::string &, bool create = false);
+			std::shared_ptr<user> get_user(const std::string &, bool create = false, bool update_case = false);
 
 			/** Retrieves a user pointer by mask. */
-			std::shared_ptr<user> get_user(const mask &, bool create = false);
+			std::shared_ptr<user> get_user(const mask &, bool create = false, bool update_case = false);
 
 			/** Renames a user. */
 			void rename_user(const std::string &old_nick, const std::string &new_nick);

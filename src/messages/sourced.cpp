@@ -2,7 +2,7 @@
 
 namespace pingpong {
 	sourced_message::sourced_message(const pingpong::line &line_):
-	message(line_), local(""), who(line_.serv->get_user(line_.source, true)) {
+	message(line_), local(""), who(line_.serv->get_user(line_.source, true, true)) {
 		serv = line_.serv;
 		const std::string &raw = line_.parameters;
 

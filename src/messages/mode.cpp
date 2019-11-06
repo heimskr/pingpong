@@ -70,7 +70,7 @@ namespace pingpong {
 			mset_extra = extra;
 		}
 
-		who = line.serv->get_user(line.source, true);
+		who = line.serv->get_user(line.source, true, true);
 
 		try {
 			mset = {mset_type, mset_main, mset_extra};
@@ -85,7 +85,7 @@ namespace pingpong {
 			if (util::is_valid_nick(mset.extra)) {
 				// If the extra data in the modeset is a nickname, then presumably we need to add or remove a hat.
 				// I'm not sure what other conditions could cause this situation.
-				std::shared_ptr<user> who = serv->get_user(mset.extra, true);
+				std::shared_ptr<user> extra_who = serv->get_user(mset.extra, true, true);
 				const auto hat_end = hat_set::map.end();
 
 				bool add = true;
@@ -95,7 +95,7 @@ namespace pingpong {
 						if (iter == hat_end)
 							continue;
 
-						hat_set &set = chan->get_hats(who), old_set = set;
+						hat_set &set = chan->get_hats(extra_who), old_set = set;
 						if (add) {
 							set += iter->second;
 						} else {
@@ -103,7 +103,7 @@ namespace pingpong {
 						}
 
 						if (set != old_set)
-							events::dispatch<hats_updated_event>(who, chan, old_set, set);
+							events::dispatch<hats_updated_event>(extra_who, chan, old_set, set);
 					}
 
 					add = false;

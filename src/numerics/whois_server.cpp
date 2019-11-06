@@ -17,7 +17,7 @@ namespace pingpong {
 		const std::string &server_name = split[2];
 		const std::string &description = line.parameters.substr(colon + 1);
 
-		serv->get_user(nick, true)->server_name = server_name;
+		serv->get_user(nick, true, true)->server_name = server_name;
 		serv->server_descriptions.insert({server_name, description});
 		return true;
 	}

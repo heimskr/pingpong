@@ -19,6 +19,7 @@
 #include "pingpong/events/bad_line.h"
 #include "pingpong/events/message.h"
 #include "pingpong/events/names_updated.h"
+#include "pingpong/events/nick_updated.h"
 #include "pingpong/events/raw.h"
 #include "pingpong/events/server_status.h"
 #include "pingpong/events/user_appeared.h"
@@ -236,7 +237,7 @@ namespace pingpong {
 	}
 
 	bool server::remove_user(const std::string &whom) {
-		std::shared_ptr<user> uptr = get_user(whom, false);
+		std::shared_ptr<user> uptr = get_user(whom, false, false);
 		if (uptr)
 			return remove_user(uptr);
 		if (whom != "?")
@@ -258,8 +259,9 @@ namespace pingpong {
 	}
 
 	bool server::has_user(const std::string &name) const {
+		const std::string lower = formicine::util::lower(name);
 		for (std::shared_ptr<user> user: users) {
-			if (user->name == name)
+			if (formicine::util::lower(user->name) == lower)
 				return true;
 		}
 
@@ -281,7 +283,7 @@ namespace pingpong {
 		return nullptr;
 	}
 
-	std::shared_ptr<user> server::get_user(const std::string &rawname, bool create) {
+	std::shared_ptr<user> server::get_user(const std::string &rawname, bool create, bool update_case) {
 		std::string name;
 		mask info {};
 		if (rawname.find('!') != std::string::npos) {
@@ -301,10 +303,18 @@ namespace pingpong {
 			return new_user;
 		}
 
+		const std::string lower = formicine::util::lower(name);
 		for (std::shared_ptr<user> user: users) {
-			if (user->name == name) {
+			if (formicine::util::lower(user->name) == lower) {
 				if (info)
 					user->info = info;
+
+				if (update_case && user->name != name) {
+					const std::string old_name = user->name;
+					user->name = name;
+					events::dispatch<nick_updated_event>(user, old_name, name);
+				}
+
 				return user;
 			}
 		}
@@ -312,7 +322,7 @@ namespace pingpong {
 		return nullptr;
 	}
 
-	std::shared_ptr<user> server::get_user(const mask &mask_, bool create) {
+	std::shared_ptr<user> server::get_user(const mask &mask_, bool create, bool update_case) {
 		if (mask_.is_server()) {
 			// If the host and user are empty, then it's presumably a message from the server (it'll look like
 			// {nick="irc.example.com", user="", host=""}) and we return nullptr because there's no actual user here.
@@ -320,7 +330,7 @@ namespace pingpong {
 		}
 
 		// Otherwise, pass it off to another overload.
-		return get_user(mask_.nick, create);
+		return get_user(mask_.nick, create, update_case);
 	}
 
 
@@ -330,7 +340,7 @@ namespace pingpong {
 			remove_user("?");
 		}
 
-		if (std::shared_ptr<user> uptr = get_user(old_nick, false))
+		if (std::shared_ptr<user> uptr = get_user(old_nick, false, false))
 			uptr->rename(new_nick);
 
 		for (std::shared_ptr<channel> chan: channels) {
@@ -351,7 +361,7 @@ namespace pingpong {
 
 	std::shared_ptr<user> server::get_self() {
 		// If you don't have a nick yet, return a fake "?" user. Once you do have a nick, the fake user is removed.
-		return get_user(nick.empty()? "?" : nick, true);
+		return get_user(nick.empty()? "?" : nick, true, false);
 	}
 
 	void server::kill() {

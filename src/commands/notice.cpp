@@ -25,7 +25,7 @@ namespace pingpong {
 					events::dispatch<error_event>("Can't send notice: channel is null", false);
 				}
 			} else if (!hidden) {
-				events::dispatch<notice_event>(serv->get_self(), get_user(serv), message, hidden);
+				events::dispatch<notice_event>(serv->get_self(), get_user(serv, false), message, hidden);
 			}
 
 			return true;

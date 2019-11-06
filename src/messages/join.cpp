@@ -44,7 +44,7 @@ namespace pingpong {
 		if (chan.empty() || chan.front() != '#')
 			throw std::runtime_error("Invalid channel for join_message");
 
-		std::shared_ptr<user> userptr = serv->get_user(who, true);
+		std::shared_ptr<user> userptr = serv->get_user(who, true, true);
 		std::shared_ptr<channel> chanptr = serv->get_channel(chan, true);
 
 		if (accountname == "*") {

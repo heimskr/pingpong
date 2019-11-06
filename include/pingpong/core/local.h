@@ -29,7 +29,7 @@ namespace pingpong {
 			/** If the location is a user, this returns a pointer. Note that when the destination of a received message
 			 *  is a user, that user shouldn't ever be anyone but you, unless you found a way to receive messages
 			 *  intended for other users... */
-			std::shared_ptr<user> get_user(server *) const;
+			std::shared_ptr<user> get_user(server *, bool update_case = false) const;
 
 			/** If the source of this message is a channel, this returns a pointer to the channel. */
 			std::shared_ptr<channel> get_channel(server *) const;
