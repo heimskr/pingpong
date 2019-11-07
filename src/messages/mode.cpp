@@ -40,7 +40,6 @@ namespace pingpong {
 				// Rizon doesn't do this. Instead, it uses the server name as the source. We skip this check by testing
 				// for a colon above; Rizon doesn't include a colon before the modeset.
 				line.serv->set_nick(line.source.nick, true);
-				DBG("Removing fake user.");
 				line.serv->remove_user("?");
 			}
 			

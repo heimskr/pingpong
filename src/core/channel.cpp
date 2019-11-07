@@ -181,4 +181,3 @@ namespace pingpong {
 		return os;
 	}
 }
-

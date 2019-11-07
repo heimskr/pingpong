@@ -405,11 +405,8 @@ namespace pingpong {
 	void server::support_features(const std::string &str) {
 		std::vector<std::string> caps = formicine::util::split(str, " ");
 		for (const std::string &cap: caps) {
-			if (features::types.count(cap) == 0) {
-				DBG("Unknown feature: \"" << cap << "\"");
-			} else {
+			if (0 < features::types.count(cap))
 				support_feature(features::types[cap]);
-			}
 		}
 	}
 
@@ -418,11 +415,8 @@ namespace pingpong {
 	}
 
 	void server::cap_answered(size_t count) {
-		DBG("Old caps_requested: " << caps_requested);
 		caps_requested -= count;
-		DBG("New caps_requested: " << caps_requested);
 		if (status == stage::capneg && caps_requested == 0) {
-			DBG("Sending END.");
 			cap_command(this, cap_command::action::end).send();
 			user_command(this, parent->username, parent->realname).send();
 		}
