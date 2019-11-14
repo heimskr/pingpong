@@ -15,7 +15,7 @@ namespace pingpong {
 			// TODO: dispatch an event instead of just silently updating?
 			chan->modes = mset.added;
 		} catch (const std::invalid_argument &err) {
-			DBG("Failed to parse modeset: " << err.what());
+			DBG("Failed to parse modeset (" << util::rtrim(mode_str) << "): " << err.what());
 		}
 
 		return true;
