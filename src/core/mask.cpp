@@ -12,7 +12,7 @@ namespace pingpong {
 
 		if (bang == std::string::npos) {
 			if (combined.find('@') != std::string::npos)
-				throw parse_error("Couldn't find hostname separator in mask");
+				throw parse_error(combined, "Couldn't find hostname separator in mask");
 			nick = combined;
 			return;
 		}
@@ -20,10 +20,10 @@ namespace pingpong {
 		const size_t at = combined.find('@');
 
 		if (at == length)
-			throw parse_error("Couldn't find hostname separator in mask");
+			throw parse_error(combined, "Couldn't find hostname separator in mask");
 
 		if (at < bang)
-			throw parse_error("Hostname separator came before username separator in mask");
+			throw parse_error(combined, "Hostname separator came before username separator in mask");
 
 		nick = combined.substr(0, bang);
 		user = combined.substr(bang + 1, at - bang - 1);

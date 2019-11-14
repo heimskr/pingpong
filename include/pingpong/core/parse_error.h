@@ -4,15 +4,15 @@
 #include <stdexcept>
 #include <string>
 
+#include "lib/formicine/ansi.h"
+
 namespace pingpong {
 	struct parse_error: public std::exception {
-		const std::string message;
-
-		parse_error(const std::string &message_): message(message_) {}
-
-		const char * what() const noexcept {
-			return message.c_str();
-		}
+		std::string text;
+		const char *explanation;
+		parse_error(const std::string &text_, const char *explanation_ = "Parsing failed"):
+			text(text_), explanation(explanation_) { DBG("parse_error: \"" << text_ << "\""); }
+		const char * what() const throw() { return explanation; }
 	};
 }
 
