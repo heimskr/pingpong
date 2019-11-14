@@ -38,6 +38,7 @@ namespace pingpong {
 			case numeric_type::channel_modes: return handle_channel_modes(serv); // 324
 			case numeric_type::channel_topic: return handle_channel_topic(serv); // 332
 			case numeric_type::names_reply:   return handle_names_reply(serv);   // 353
+			case numeric_type::motd:          return handle_motd(serv);          // 372
 			case numeric_type::nick_in_use:   return handle_nick_in_use(serv);   // 433
 			default: return true;
 		}
@@ -95,7 +96,7 @@ namespace pingpong {
 		size_t space = str.find(' ');
 		size_t space_colon = str.find(" :");
 		if (space >= space_colon)
-			throw parse_error("Expected space before space-colon");
+			throw parse_error(str, "Expected space before space-colon");
 
 		try {
 			return {str.substr(0, space), str.substr(space + 1, space_colon - space - 1), str.substr(space_colon + 2)};
