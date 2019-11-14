@@ -1,3 +1,4 @@
+#include "pingpong/core/parse_error.h"
 #include "pingpong/messages/numeric.h"
 #include "pingpong/events/motd.h"
 

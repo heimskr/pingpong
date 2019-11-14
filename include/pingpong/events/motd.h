@@ -5,8 +5,7 @@
 
 namespace pingpong {
 	struct motd_event: public server_event {
-		std::string line;
-		motd_event(server *serv_, const std::string &line_): server_event(serv_), line(line_) {}
+		motd_event(server *serv_, const std::string &content_): server_event(serv_, content_) {}
 	};
 }
 
