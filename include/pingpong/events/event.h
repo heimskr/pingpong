@@ -36,24 +36,45 @@ namespace pingpong {
 
 	class events {
 		private:
-			static std::multimap<std::string, listener_fn> listeners;
+			static std::multimap<std::string, std::pair<std::string, listener_fn>> listeners;
+			static size_t listeners_added;
 
 		public:
 			template <typename T>
-			static void listen(std::function<void(T *)> fn) {
-				listeners.insert(std::pair<std::string, listener_fn>(
-					std::string(typeid(T).name()),
+			static void listen(const std::string &name, std::function<void(T *)> fn) {
+				listeners.insert({std::string(typeid(T).name()), {
+					name,
 					[=](event *ev) {
 						fn(dynamic_cast<T *>(ev));
 					}
-				));
+				}});
+			}
+
+			template <typename T>
+			static std::string listen(std::function<void(T *)> fn) {
+				std::string name = "_" + std::to_string(++listeners_added);
+				listen(name, fn);
+				return name;
+			}
+
+			template <typename T>
+			static bool unlisten(const std::string &name) {
+				auto range = listeners.equal_range(typeid(T).name());
+				for (auto iter = range.first; iter != range.second; ++iter) {
+					if (iter->second.first == name) {
+						listeners.erase(iter);
+						return true;
+					}
+				}
+
+				return false;
 			}
 
 			template <typename T>
 			static void dispatch(T *ptr) {
 				auto range = listeners.equal_range(typeid(T).name());
-				for (auto i = range.first; i != range.second; ++i)
-					i->second(ptr);
+				for (auto iter = range.first; iter != range.second; ++iter)
+					iter->second.second(ptr);
 			}
 
 			template <typename T>

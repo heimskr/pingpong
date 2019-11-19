@@ -6,7 +6,8 @@
 #include "pingpong/events/event.h"
 
 namespace pingpong {
-	std::multimap<std::string, listener_fn> events::listeners;
+	std::multimap<std::string, std::pair<std::string, listener_fn>> events::listeners;
+	size_t events::listeners_added = 0;
 
 	channel_event::channel_event(const std::shared_ptr<channel> &chan_, server *serv_, const std::string &content_):
 	server_event(serv_, content_), chan(chan_) {
