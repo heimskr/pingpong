@@ -15,8 +15,9 @@ namespace pingpong {
 
 		operator std::string() const;
 		operator bool() const;
-		friend std::ostream & operator<<(std::ostream &, const line &);
 	};
+
+	std::ostream & operator<<(std::ostream &, const line &);
 }
 
 #endif
