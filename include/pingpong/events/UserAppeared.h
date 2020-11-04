@@ -8,7 +8,7 @@ namespace PingPong {
 	 * Occurs whenever a user is noted to exist. If someone quits, you can listen for this event to do something the
 	 * next time we see them do something, such as being seen in a channel or messaging you.
 	 */
-	class user_appeared_event: public UserEvent {
+	class UserAppearedEvent: public UserEvent {
 		public:
 			using UserEvent::UserEvent;
 	};

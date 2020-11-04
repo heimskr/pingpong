@@ -20,8 +20,8 @@ namespace PingPong {
 		"38;5;235", "38;5;237", "38;5;239", "38;5;241", "38;5;244", "38;5;247", "38;5;250", "38;5;254", "38;5;231", ""
 	};
 
-	Util::timetype Util::now() {
-		return std::chrono::duration_cast<timetype>(system_now());
+	Util::TimeType Util::now() {
+		return std::chrono::duration_cast<TimeType>(system_now());
 	}
 
 	std::chrono::system_clock::duration Util::system_now() {
@@ -48,24 +48,24 @@ namespace PingPong {
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(now()).count();
 	}
 
-	Util::timetype Util::fromSeconds(long seconds) {
-		return std::chrono::duration_cast<timetype>(std::chrono::seconds(seconds));
+	Util::TimeType Util::fromSeconds(long seconds) {
+		return std::chrono::duration_cast<TimeType>(std::chrono::seconds(seconds));
 	}
 
-	std::string Util::getDate(timetype when) {
+	std::string Util::getDate(TimeType when) {
 		return formatTime<64>(when, "%Y/%m/%d");
 	}
 
 	std::string Util::getDate(long stamp) {
-		return getDate(timetype(stamp));
+		return getDate(TimeType(stamp));
 	}
 
-	std::string Util::getTime(timetype when) {
+	std::string Util::getTime(TimeType when) {
 		return formatTime<64>(when, "%H:%M:%S");
 	}
 
 	std::string Util::getTime(long stamp) {
-		return getTime(timetype(stamp));
+		return getTime(TimeType(stamp));
 	}
 
 	bool Util::isValidNick(const std::string &str) {

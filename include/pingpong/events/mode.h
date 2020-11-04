@@ -11,18 +11,18 @@
 namespace PingPong {
 	class ModeEvent: public ServerEvent, public Local {
 		public:
-			ModeSet modeset;
+			ModeSet modeSet;
 			std::shared_ptr<PingPong::User> who;
 			PingPong::Line line;
 
 			ModeEvent(Server *server_, const std::string &where_, const std::shared_ptr<PingPong::User> &who_,
-			const ModeSet &modeset_, const PingPong::Line &line_ = {}):
-				ServerEvent(server_), Local(where_), modeset(modeset_), who(who_), line(line_) {}
+			const ModeSet &modeset, const PingPong::Line &line_ = {}):
+				ServerEvent(server_), Local(where_), modeSet(modeset), who(who_), line(line_) {}
 
 			template <typename T>
-			ModeEvent(const T &where_, const std::shared_ptr<PingPong::User> &who_, const ModeSet &modeset_,
+			ModeEvent(const T &where_, const std::shared_ptr<PingPong::User> &who_, const ModeSet &modeset,
 			const PingPong::Line &line_):
-				ServerEvent(where_->server), Local(where_), modeset(modeset_), who(who_), line(line_) {}
+				ServerEvent(where_->server), Local(where_), modeSet(modeset), who(who_), line(line_) {}
 
 			std::string getName() const {
 				return who? who->name : (line? line.source.nick : "");

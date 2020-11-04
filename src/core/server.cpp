@@ -299,7 +299,7 @@ namespace PingPong {
 			std::shared_ptr<User> new_user = std::make_shared<User>(name, this);
 			new_user->info = info;
 			users.push_back(new_user);
-			Events::dispatch<user_appeared_event>(new_user);
+			Events::dispatch<UserAppearedEvent>(new_user);
 			return new_user;
 		}
 

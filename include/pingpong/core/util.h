@@ -18,9 +18,9 @@ namespace PingPong {
 		static constexpr const char *flagChars = "+-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		static std::array<std::string, 100> ircColors;
 
-		using timetype = std::chrono::microseconds;
+		using TimeType = std::chrono::microseconds;
 
-		static timetype now();
+		static TimeType now();
 		static std::chrono::system_clock::duration system_now();
 
 		static constexpr long precision = 1'000'000;
@@ -31,10 +31,10 @@ namespace PingPong {
 		static long microstamp();
 		static long nanostamp();
 
-		static timetype fromSeconds(long);
+		static TimeType fromSeconds(long);
 
 		template <size_t Size = 64>
-		static std::string formatTime(timetype when, const char *format) {
+		static std::string formatTime(TimeType when, const char *format) {
 			std::chrono::system_clock::time_point tpoint {when};
 			std::time_t time = std::chrono::system_clock::to_time_t(tpoint);
 			char str[Size];
@@ -44,13 +44,13 @@ namespace PingPong {
 
 		template <size_t Size = 64>
 		static std::string formatTime(long stamp, const char *format) {
-			return formatTime(timetype(stamp), format);
+			return formatTime(TimeType(stamp), format);
 		}
 
-		static std::string getDate(timetype);
+		static std::string getDate(TimeType);
 		static std::string getDate(long);
 
-		static std::string getTime(timetype);
+		static std::string getTime(TimeType);
 		static std::string getTime(long);
 
 		/** Returns true if all the characters in a string are valid for nicknames. */
