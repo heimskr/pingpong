@@ -1,17 +1,17 @@
 #include <string>
 
-#include "pingpong/commands/user.h"
-#include "pingpong/core/server.h"
+#include "pingpong/commands/User.h"
+#include "pingpong/core/Server.h"
 
-namespace pingpong {
-	user_command::operator std::string() const {
+namespace PingPong {
+	UserCommand::operator std::string() const {
 		return "USER " + username + " 0 * :" + realname;
 	}
 
-	bool user_command::send() {
-		if (command::send()) {
-			if (serv->status == server::stage::setuser)
-				serv->status = server::stage::setnick;
+	bool UserCommand::send() {
+		if (Command::send()) {
+			if (server->status == Server::Stage::SetUser)
+				server->status = Server::Stage::SetNick;
 			return true;
 		}
 

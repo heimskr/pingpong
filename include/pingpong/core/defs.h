@@ -6,20 +6,20 @@
 #include <string>
 #include <unordered_map>
 
-namespace pingpong {
-	class channel;
-	class server;
-	class irc;
-	class user;
-	class message;
+namespace PingPong {
+	class Channel;
+	class Server;
+	class IRC;
+	class User;
+	class Message;
 
-	enum class hat: char {none=' ', voiced='+', halfop='%', op='@', admin='&', owner='~'};
+	enum class Hat: char {None=' ', Voiced='+', Halfop='%', Op='@', Admin='&', Owner='~'};
 
-	struct user_exists_error: public std::exception {
-		server *serv;
-		std::string old_nick, new_nick;
-		user_exists_error(server *serv_, const std::string &old_, const std::string &new_):
-			serv(serv_), old_nick(old_), new_nick(new_) {}
+	struct UserExistsError: public std::exception {
+		Server *server;
+		std::string oldNick, newNick;
+		UserExistsError(Server *server_, const std::string &old_, const std::string &new_):
+			server(server_), oldNick(old_), newNick(new_) {}
 		const char * what() const throw() { return "A user with the same name already exists"; }
 	};
 }

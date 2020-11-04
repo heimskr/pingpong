@@ -1,9 +1,9 @@
-#include "pingpong/messages/sourced.h"
+#include "pingpong/messages/Sourced.h"
 
-namespace pingpong {
-	sourced_message::sourced_message(const pingpong::line &line_):
-	message(line_), local(""), who(line_.serv->get_user(line_.source, true, true)) {
-		serv = line_.serv;
+namespace PingPong {
+	SourcedMessage::SourcedMessage(const PingPong::Line &line_):
+	Message(line_), Local(""), who(line_.server->getUser(line_.source, true, true)) {
+		server = line_.server;
 		const std::string &raw = line_.parameters;
 
 		if (raw.empty())
@@ -20,7 +20,7 @@ namespace pingpong {
 			content = raw.substr(raw.find(':') + 1);
 			where   = raw.substr(0, raw.find(' '));
 			if (where.empty())
-				throw std::runtime_error("Source is empty in sourced_message");
+				throw std::runtime_error("Source is empty in SourcedMessage");
 		}
 	}
 }

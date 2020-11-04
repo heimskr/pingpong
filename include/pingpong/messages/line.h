@@ -1,23 +1,23 @@
 #ifndef PINGPONG_MESSAGES_LINE_H_
 #define PINGPONG_MESSAGES_LINE_H_
 
-#include "pingpong/core/defs.h"
-#include "pingpong/core/mask.h"
+#include "pingpong/core/Defs.h"
+#include "pingpong/core/Mask.h"
 
-namespace pingpong {
-	struct line {
+namespace PingPong {
+	struct Line {
 		const std::string original;
-		server *serv;
+		Server *server;
 		std::string tags, command, parameters;
-		mask source;
+		Mask source;
 
-		line(server *serv = nullptr, const std::string &original_ = "");
+		Line(Server *server_ = nullptr, const std::string &original_ = "");
 
 		operator std::string() const;
 		operator bool() const;
 	};
 
-	std::ostream & operator<<(std::ostream &, const line &);
+	std::ostream & operator<<(std::ostream &, const Line &);
 }
 
 #endif

@@ -9,79 +9,78 @@
 #include <string>
 #include <unordered_set>
 
-#include "pingpong/core/defs.h"
-#include "pingpong/core/hats.h"
-#include "pingpong/core/moded.h"
-#include "pingpong/core/topicset.h"
-#include "pingpong/core/user.h"
+#include "pingpong/core/Defs.h"
+#include "pingpong/core/Hats.h"
+#include "pingpong/core/Moded.h"
+#include "pingpong/core/TopicSet.h"
+#include "pingpong/core/User.h"
 
-namespace pingpong {
-	class user;
-	class server;
+namespace PingPong {
+	class User;
+	class Server;
 
-	class channel: public moded {
+	class Channel: public Moded {
 		private:
-			std::mutex users_mutex;
+			std::mutex usersMutex;
 
 		public:
-			enum class visibility: char {pub='=', priv='*', secret='@'};
+			enum class Visibility: char {Public='=', Private='*', Secret='@'};
 
 			std::string name;
-			server *serv;
-			std::list<std::shared_ptr<user>> users;
-			std::map<std::shared_ptr<user>, hat_set> hats;
-			topicset topic;
+			Server *server;
+			std::list<std::shared_ptr<User>> users;
+			std::map<std::shared_ptr<User>, HatSet> hats;
+			TopicSet topic;
 
-			channel(std::string, server *);
-			channel(std::string);
+			Channel(const std::string &, Server * = nullptr);
 
 			/** Returns whether the channel is associated with a server (it really should be...). */
-			bool has_server() const;
+			bool hasServer() const;
 
 			/** Adds a user to the channel. */
-			bool add_user(std::shared_ptr<user>);
+			bool addUser(std::shared_ptr<User>);
 
 			/** Removes a user from the channel if possible and returns whether the user was successfully removed. */
-			bool remove_user(std::shared_ptr<user>);
+			bool removeUser(std::shared_ptr<User>);
 
 			/** Renames a user in the channel. */
-			bool rename_user(const std::string &, const std::string &);
+			bool renameUser(const std::string &, const std::string &);
 
 			/** Returns whether a particular user is in the channel. */
-			bool has_user(std::shared_ptr<user>) const;
+			bool hasUser(std::shared_ptr<User>) const;
 
 			/** Determines whether there's any user in the channel with a given nick. */
-			bool has_user(const std::string &) const;
+			bool hasUser(const std::string &) const;
 
 			/** Updates the hat information for a user. Returns true if any existing data was overwritten. */
-			bool set_hats(std::shared_ptr<user>, const hat_set &);
+			bool setHats(std::shared_ptr<User>, const HatSet &);
 
 			/** Returns the hat corresponding to a user if it's known, or the default hat otherwise. */
-			hat_set & get_hats(std::shared_ptr<user> user);
+			HatSet & getHats(std::shared_ptr<User> user);
 
 			/** Should be called whenever a user speaks. Reorders the list of users to put the user at the front.
 			 *  Returns whether the user was found and sent to the front. */
-			bool send_to_front(std::shared_ptr<user>);
+			bool sendToFront(std::shared_ptr<User>);
 
 			/** Should be called whenever a user speaks. Reorders the list of users to put the user at the front.
 			 *  Returns whether the user was found and sent to the front. */
-			bool send_to_front(const std::string &);
+			bool sendToFront(const std::string &);
 
 			/** Sorts the user list case-insensitively by name. Ignores hats. */
-			void sort_users();
+			void sortUsers();
 
 			operator std::string() const;
-			std::shared_ptr<user> operator[](const std::string &);
+			std::shared_ptr<User> operator[](const std::string &);
 			bool operator==(const std::string &) const;
 			bool operator!=(const std::string &) const;
-			bool operator==(const channel &) const;
-			bool operator!=(const channel &) const;
-			bool operator<(const channel &) const;
+			bool operator==(const Channel &) const;
+			bool operator!=(const Channel &) const;
+			bool operator<(const Channel &) const;
 
 			/** Returns a lock on the users list. */
-			std::unique_lock<std::mutex> lock_users() { return std::unique_lock(users_mutex); }
+			std::unique_lock<std::mutex> lockUsers() { return std::unique_lock(usersMutex); }
 
-			friend std::ostream & operator<<(std::ostream &os, const channel &chan);
+			friend std::ostream & operator<<(std::ostream &, const Channel &);
 	};
 }
 

@@ -7,39 +7,39 @@
 #include <stdexcept>
 #include <string>
 
-#include "pingpong/messages/line.h"
+#include "pingpong/messages/Line.h"
 
-namespace pingpong {
-	class message;
-	class server;
+namespace PingPong {
+	class Message;
+	class Server;
 
-	using message_ctor = std::function<std::shared_ptr<message>(pingpong::line)>;
+	using Message_ctor = std::function<std::shared_ptr<Message>(PingPong::Line)>;
 
-	class message {
+	class Message {
 		public:
-			pingpong::line line;
+			PingPong::Line line;
 
-			message(const pingpong::line &line_): line(line_) {}
+			Message(const PingPong::Line &line_): line(line_) {}
 
-			static constexpr auto get_name = []() -> std::string { return "???"; };
+			static constexpr auto getName = []() -> std::string { return "???"; };
 
-			static std::map<std::string, message_ctor> ctors;
-			virtual ~message() = 0;
+			static std::map<std::string, Message_ctor> ctors;
+			virtual ~Message() = 0;
 
 			virtual operator std::string() const;
 
 			/** Performs any actions to be taken when the message is received. For a PING, this would be replying with
 			 *  a PONG; for most messages, it might just be dispatching the corresponding event. The function should
-			 *  return false if a default message_event should be dispatched, or true if it should be suppressed. */
-			virtual bool operator()(server *) { return false; }
+			 *  return false if a default MessageEvent should be dispatched, or true if it should be suppressed. */
+			virtual bool operator()(Server *) { return false; }
 
-			server * get_server() { return line.serv; }
+			Server * getServer() { return line.server; }
 
-			static std::shared_ptr<message> parse(const pingpong::line &);
+			static std::shared_ptr<Message> parse(const PingPong::Line &);
 
 			template <typename T>
-			static void add_ctor() {
-				message::ctors.insert({T::get_name(), [](pingpong::line line_) -> std::shared_ptr<T> {
+			static void addConstructor() {
+				Message::ctors.insert({T::getName(), [](PingPong::Line line_) -> std::shared_ptr<T> {
 					return std::make_shared<T>(line_);
 				}});
 			}
@@ -50,11 +50,11 @@ namespace pingpong {
 			}
 	};
 
-	class bad_message: public std::exception {
+	class BadMessage: public std::exception {
 		public:
-			const line original;
+			const Line original;
 
-			bad_message(const line &original_): original(original_) {}
+			BadMessage(const Line &original_): original(original_) {}
 
 			const char * what() const noexcept {
 				return "Malformed message";

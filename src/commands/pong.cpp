@@ -1,9 +1,9 @@
 #include <string>
 
-#include "pingpong/commands/pong.h"
+#include "pingpong/commands/Pong.h"
 
-namespace pingpong {
-	pong_command::operator std::string() const {
+namespace PingPong {
+	PongCommand::operator std::string() const {
 		return "PONG :" + token;
 	}
 }

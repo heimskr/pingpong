@@ -1,33 +1,33 @@
-#include "pingpong/core/topicset.h"
-#include "pingpong/core/user.h"
+#include "pingpong/core/TopicSet.h"
+#include "pingpong/core/User.h"
 
-namespace pingpong {
-	topicset & topicset::operator=(const std::string &str) {
+namespace PingPong {
+	TopicSet & TopicSet::operator=(const std::string &str) {
 		if (text != str)
 			text = str;
 		return *this;
 	}
 
-	topicset & topicset::operator=(const std::shared_ptr<user> &user_) {
-		if (modified_by != user_->name)
-			modified_by = user_->name;
+	TopicSet & TopicSet::operator=(const std::shared_ptr<User> &user_) {
+		if (modifiedBy != user_->name)
+			modifiedBy = user_->name;
 		return *this;
 	}
 
-	topicset & topicset::operator=(long num) {
+	TopicSet & TopicSet::operator=(long num) {
 		modified = num;
 		return *this;
 	}
 
-	bool topicset::operator==(const std::string &str) const {
+	bool TopicSet::operator==(const std::string &str) const {
 		return text == str;
 	}
 
-	bool topicset::operator!=(const std::string &str) const {
+	bool TopicSet::operator!=(const std::string &str) const {
 		return text != str;
 	}	
 
-	bool topicset::operator<(const std::string &str) const {
+	bool TopicSet::operator<(const std::string &str) const {
 		return text < str;
 	}	
 }

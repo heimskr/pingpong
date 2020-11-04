@@ -1,16 +1,16 @@
-#include "pingpong/events/kick.h"
-#include "pingpong/events/names_updated.h"
-#include "pingpong/messages/kick.h"
+#include "pingpong/events/Kick.h"
+#include "pingpong/events/NamesUpdated.h"
+#include "pingpong/messages/Kick.h"
 
-namespace pingpong {
-	kick_message::operator std::string() const {
-		return who->name + " kicked " + whom->name + " from " + chan->name + " [" + content + "]";
+namespace PingPong {
+	KickMessage::operator std::string() const {
+		return who->name + " kicked " + whom->name + " from " + channel->name + " [" + content + "]";
 	}
 
-	bool kick_message::operator()(server *) {
-		chan->remove_user(whom);
-		events::dispatch<names_updated_event>(chan);
-		events::dispatch<kick_event>(who, whom, chan, content);
+	bool KickMessage::operator()(Server *) {
+		channel->removeUser(whom);
+		Events::dispatch<NamesUpdatedEvent>(channel);
+		Events::dispatch<KickEvent>(who, whom, channel, content);
 		return true;
 	}
 }

@@ -1,16 +1,16 @@
 #ifndef PINGPONG_EVENTS_PART_H_
 #define PINGPONG_EVENTS_PART_H_
 
-#include "pingpong/core/channel.h"
-#include "pingpong/events/event.h"
+#include "pingpong/core/Channel.h"
+#include "pingpong/events/Event.h"
 
-namespace pingpong {
+namespace PingPong {
 	/**
 	 * Dispatched when a user leaves a channel.
 	 */
-	class part_event: public user_event {
+	class PartEvent: public UserEvent {
 		public:
-			using user_event::user_event;
+			using UserEvent::UserEvent;
 	};
 }
 

@@ -1,21 +1,21 @@
 #ifndef PINGPONG_EVENTS_PRIVMSG_H_
 #define PINGPONG_EVENTS_PRIVMSG_H_
 
-#include "pingpong/core/channel.h"
-#include "pingpong/core/local.h"
-#include "pingpong/core/user.h"
-#include "pingpong/events/event.h"
+#include "pingpong/core/Channel.h"
+#include "pingpong/core/Local.h"
+#include "pingpong/core/User.h"
+#include "pingpong/events/Event.h"
 
-namespace pingpong {
+namespace PingPong {
 	/**
 	 * Represents a message to a user or a channel.
 	 */
-	struct privmsg_event: public local_event {
-		std::shared_ptr<user> speaker;
+	struct PrivmsgEvent: public LocalEvent {
+		std::shared_ptr<User> speaker;
 
 		template <typename T>
-		privmsg_event(const std::shared_ptr<user> &speaker_, const T &where_, const std::string &message_):
-			local_event(speaker_->serv, where_, message_), speaker(speaker_) {}
+		PrivmsgEvent(const std::shared_ptr<User> &speaker_, const T &where_, const std::string &message_):
+			LocalEvent(speaker_->server, where_, message_), speaker(speaker_) {}
 	};
 }
 

@@ -3,28 +3,28 @@
 #include <memory>
 #include <string>
 
-#include "pingpong/events/event.h"
+#include "pingpong/events/Event.h"
 
-namespace pingpong {
-	std::multimap<std::string, std::pair<std::string, listener_fn>> events::listeners;
-	size_t events::listeners_added = 0;
+namespace PingPong {
+	std::multimap<std::string, std::pair<std::string, Listener_f>> Events::listeners;
+	size_t Events::listenersAdded = 0;
 
-	channel_event::channel_event(const std::shared_ptr<channel> &chan_, server *serv_, const std::string &content_):
-	server_event(serv_, content_), chan(chan_) {
-		if (chan && !chan->has_server())
-			throw std::invalid_argument("Channel is not associated with a server in channel_event");
+	ChannelEvent::ChannelEvent(const std::shared_ptr<Channel> &channel_, Server *server_, const std::string &content_):
+	ServerEvent(server_, content_), channel(channel_) {
+		if (channel && !channel->hasServer())
+			throw std::invalid_argument("Channel is not associated with a server in ChannelEvent");
 	}
 
-	user_event::user_event(const std::shared_ptr<user> &who_, const std::shared_ptr<channel> &chan_,
-	const std::string &content_): channel_event(chan_, who_->serv, content_), who(who_) {
-		if (chan_ && who_->serv != chan_->serv)
-			throw std::invalid_argument("User and channel are associated with different servers in user_event");
+	UserEvent::UserEvent(const std::shared_ptr<User> &who_, const std::shared_ptr<Channel> &channel_,
+	const std::string &content_): ChannelEvent(channel_, who_->server, content_), who(who_) {
+		if (channel_ && who_->server != channel_->server)
+			throw std::invalid_argument("User and channel are associated with different servers in UserEvent");
 	}
 
-	targeted_event::targeted_event(const std::shared_ptr<user> &who_, const std::shared_ptr<user> &whom_,
-	const std::shared_ptr<channel> &chan_, const std::string &content_):
-	user_event(who_, chan_, content_), whom(whom_) {
-		if (who->serv != whom->serv)
-			throw std::invalid_argument("Users are associated with different servers in targeted_event");
+	TargetedEvent::TargetedEvent(const std::shared_ptr<User> &who_, const std::shared_ptr<User> &whom_,
+	const std::shared_ptr<Channel> &channel_, const std::string &content_):
+	UserEvent(who_, channel_, content_), whom(whom_) {
+		if (who->server != whom->server)
+			throw std::invalid_argument("Users are associated with different servers in TargetedEvent");
 	}
 }

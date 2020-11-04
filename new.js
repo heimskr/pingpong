@@ -55,9 +55,9 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#ifndef PINGPONG_COMMANDS_${name.toUpperCase()}_H_
 	%	#define PINGPONG_COMMANDS_${name.toUpperCase()}_H_
 	%	
-	%	#include "pingpong/commands/command.h"
+	%	#include "pingpong/commands/Command.h"
 	%	
-	%	namespace pingpong {
+	%	namespace PingPong {
 	%		class ${cls}: public command {
 	%			public:
 	%				
@@ -71,7 +71,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	sourcetext = prepare(`
 	%	#include "pingpong/commands/${name}.h"
 	%	
-	%	namespace pingpong {
+	%	namespace PingPong {
 	%		${cls}::operator std::string() const {
 	%			
 	%		}
@@ -90,13 +90,13 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#ifndef PINGPONG_MESSAGES_${name.toUpperCase()}_H_
 	%	#define PINGPONG_MESSAGES_${name.toUpperCase()}_H_
 	%	
-	%	#include "pingpong/messages/message.h"
+	%	#include "pingpong/messages/Message.h"
 	%	${base? `#include "pingpong/messages/${base}.h"\n` : ""}
-	%	namespace pingpong {
+	%	namespace PingPong {
 	%		class ${cls}: public ${parent} {
 	%			public:
 	%				using ${parent}::${parent};
-	%				static constexpr auto get_name = []() -> std::string { return "${args[2] || name.toUpperCase()}"; };
+	%				static constexpr auto getName = []() -> std::string { return "${args[2] || name.toUpperCase()}"; };
 	%	
 	%				operator std::string() const override;
 	%		};
@@ -107,7 +107,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	sourcetext = prepare(`
 	%	#include "pingpong/messages/${name}.h"
 	%	
-	%	namespace pingpong {
+	%	namespace PingPong {
 	%		${cls}::operator std::string() const {
 	%			
 	%		}
@@ -139,7 +139,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	
 	%	#include "pingpong/events/${["sourced", "targeted"].includes(base)? base : "event"}.h"
 	%	
-	%	namespace pingpong {
+	%	namespace PingPong {
 	%		struct ${cls}: public ${parent} {
 	%			using ${parent}::${parent};
 	%		};
@@ -156,7 +156,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#ifndef PINGPONG_LIB_${name.toUpperCase()}_H_
 	%	#define PINGPONG_LIB_${name.toUpperCase()}_H_
 	%	
-	%	namespace pingpong {
+	%	namespace PingPong {
 	%		
 	%	}
 	%	
@@ -165,7 +165,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	sourcetext = prepare(`
 	%	#include "pingpong/lib/${name}.h"
 	%	
-	%	namespace pingpong {
+	%	namespace PingPong {
 	%		
 	%	}`);
 
@@ -174,9 +174,9 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	sourcename = `numerics/${name}.cpp`;
 
 	sourcetext = prepare(`
-	%	#include "pingpong/messages/numeric.h"
+	%	#include "pingpong/messages/Numeric.h"
 	%
-	%	namespace pingpong {
+	%	namespace PingPong {
 	%		bool numeric_message::handle_${name}(server *serv) {
 	%			
 	%			return true;
@@ -184,13 +184,13 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	}`);
 
 	afterWrite = () => {
-		let numeric_h   = fs.readFileSync("include/pingpong/messages/numeric.h", "utf8");
+		let numeric_h   = fs.readFileSync("include/pingpong/messages/Numeric.h", "utf8");
 		let numeric_cpp = fs.readFileSync("src/messages/numeric.cpp",   "utf8");
 
 		numeric_h = numeric_h.replace(/(\n\t};\n}\n\n#endif)/, `\n\t\t\tbool handle_${name}(server *);$1`);
 		numeric_cpp = numeric_cpp.replace(/(default: return true;)/, `case numeric_type::${name}: return handle_${name}(serv);\n\t\t\t$1`);
 
-		fs.writeFileSync("include/pingpong/messages/numeric.h", numeric_h);
+		fs.writeFileSync("include/pingpong/messages/Numeric.h", numeric_h);
 		fs.writeFileSync("src/messages/numeric.cpp", numeric_cpp);
 	};
 
@@ -203,7 +203,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	%	#ifndef PINGPONG_CORE_${name.toUpperCase()}_H_
 	%	#define PINGPONG_CORE_${name.toUpperCase()}_H_
 	%	
-	%	namespace pingpong {
+	%	namespace PingPong {
 	%		
 	%	}
 	%	
@@ -212,7 +212,7 @@ if (type.match(/^(com(mands?)?|cmd)$/i)) {
 	sourcetext = prepare(`
 	%	#include "pingpong/core/${name}.h"
 	%
-	%	namespace pingpong {
+	%	namespace PingPong {
 	%		
 	%	}`);
 

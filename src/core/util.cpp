@@ -2,12 +2,12 @@
 #include <cstdlib>
 #include <sstream>
 
-#include "pingpong/core/util.h"
+#include "pingpong/core/Util.h"
 
 #include "lib/formicine/ansi.h"
 
-namespace pingpong {
-	std::array<std::string, 100> util::irc_colors = { // Nabbed straight from irssi.
+namespace PingPong {
+	std::array<std::string, 100> Util::ircColors = { // Nabbed straight from irssi.
 		"97", "30", "34", "32", "91", "31", "35", "33", "93", "92", "36", "96", "94", "95", "90", "37", "38;5;52",
 		"38;5;94",  "38;5;100", "38;5;58",  "38;5;22", "38;5;29", "38;5;23", "38;5;24", "38;5;17", "38;5;54", "38;5;53",
 		"38;5;89",  "38;5;88",  "38;5;130", "38;5;142", "38;5;64",  "38;5;28",  "38;5;35",  "38;5;30",  "38;5;25",
@@ -20,71 +20,71 @@ namespace pingpong {
 		"38;5;235", "38;5;237", "38;5;239", "38;5;241", "38;5;244", "38;5;247", "38;5;250", "38;5;254", "38;5;231", ""
 	};
 
-	util::timetype util::now() {
+	Util::timetype Util::now() {
 		return std::chrono::duration_cast<timetype>(system_now());
 	}
 
-	std::chrono::system_clock::duration util::system_now() {
+	std::chrono::system_clock::duration Util::system_now() {
 		return std::chrono::system_clock::now().time_since_epoch();
 	}
 
-	long util::timestamp() {
+	long Util::timestamp() {
 		return now().count();
 	}
 
-	long util::seconds() {
+	long Util::seconds() {
 		return std::chrono::duration_cast<std::chrono::seconds>(now()).count();
 	}
 
-	long util::millistamp() {
+	long Util::millistamp() {
 		return std::chrono::duration_cast<std::chrono::milliseconds>(now()).count();
 	}
 
-	long util::microstamp() {
+	long Util::microstamp() {
 		return std::chrono::duration_cast<std::chrono::microseconds>(now()).count();
 	}
 
-	long util::nanostamp() {
+	long Util::nanostamp() {
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(now()).count();
 	}
 
-	util::timetype util::from_seconds(long seconds) {
+	Util::timetype Util::fromSeconds(long seconds) {
 		return std::chrono::duration_cast<timetype>(std::chrono::seconds(seconds));
 	}
 
-	std::string util::get_date(timetype when) {
-		return format_time<64>(when, "%Y/%m/%d");
+	std::string Util::getDate(timetype when) {
+		return formatTime<64>(when, "%Y/%m/%d");
 	}
 
-	std::string util::get_date(long stamp) {
-		return get_date(timetype(stamp));
+	std::string Util::getDate(long stamp) {
+		return getDate(timetype(stamp));
 	}
 
-	std::string util::get_time(timetype when) {
-		return format_time<64>(when, "%H:%M:%S");
+	std::string Util::getTime(timetype when) {
+		return formatTime<64>(when, "%H:%M:%S");
 	}
 
-	std::string util::get_time(long stamp) {
-		return get_time(timetype(stamp));
+	std::string Util::getTime(long stamp) {
+		return getTime(timetype(stamp));
 	}
 
-	bool util::is_valid_nick(const std::string &str) {
-		return !str.empty() && str.find_first_not_of(nick_chars) == std::string::npos;
+	bool Util::isValidNick(const std::string &str) {
+		return !str.empty() && str.find_first_not_of(nickChars) == std::string::npos;
 	}
 
-	std::string & util::rtrim(std::string &str) {
+	std::string & Util::rtrim(std::string &str) {
 		str.erase(std::find_if(str.rbegin(), str.rend(), [](char c) {
 			return !std::isspace(c) && c != '\n' && c != '\r' && c != '\t';
 		}).base(), str.end());
 		return str;
 	}
 
-	std::string util::rtrim(const std::string &str) {
+	std::string Util::rtrim(const std::string &str) {
 		std::string copy = str;
 		return rtrim(copy);
 	}
 
-	std::string util::irc2ansi(std::string str) {
+	std::string Util::irc2ansi(std::string str) {
 		// TODO: Unicode support
 		std::ostringstream out;
 		const size_t length = str.length();
@@ -97,13 +97,13 @@ namespace pingpong {
 			if (ch == '\x03') {
 				out << ansi::reset_fg << ansi::reset_bg;
 				const std::string next = str.substr(i + 1, 5);
-				std::string first = util::take_while(next, [](char c) { return std::isdigit(c); });
+				std::string first = Util::takeWhile(next, [](char c) { return std::isdigit(c); });
 				if (2 < first.length())
 					first.erase(2);
 				std::string second;
 				const size_t comma = next.find(',');
 				if (comma <= 2)
-					second = util::take_while(next.substr(comma + 1), [](char c) { return std::isdigit(c); });
+					second = Util::takeWhile(next.substr(comma + 1), [](char c) { return std::isdigit(c); });
 
 				if (first.empty())
 					continue;
@@ -112,15 +112,15 @@ namespace pingpong {
 				if (!second.empty())
 					second_long = strtol(second.c_str(), nullptr, 10);
 
-				constexpr long irc_colors_length = irc_colors.size();
+				constexpr long irc_colors_length = ircColors.size();
 				if (irc_colors_length <= first_long || irc_colors_length <= second_long)
 					continue;
 
-				if (!irc_colors[first_long].empty())
-					out << "\x1b[" << irc_colors[first_long] << "m";
+				if (!ircColors[first_long].empty())
+					out << "\x1b[" << ircColors[first_long] << "m";
 
-				if (-1 < second_long && !irc_colors[second_long].empty())
-					out << "\x1b[" << irc_colors[second_long] << "m";
+				if (-1 < second_long && !ircColors[second_long].empty())
+					out << "\x1b[" << ircColors[second_long] << "m";
 
 				i += first.length() + (comma <= 2? 1 + second.length() : 0);
 			} else if (ch == '\x02') {

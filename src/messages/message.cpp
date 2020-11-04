@@ -2,30 +2,30 @@
 #include <stdexcept>
 #include <string>
 
-#include "pingpong/core/server.h"
+#include "pingpong/core/Server.h"
 
-#include "pingpong/events/event.h"
-#include "pingpong/events/message.h"
+#include "pingpong/events/Event.h"
+#include "pingpong/events/Message.h"
 
-#include "pingpong/messages/numeric.h"
+#include "pingpong/messages/Numeric.h"
 
-namespace pingpong {
-	std::map<std::string, message_ctor> message::ctors;
+namespace PingPong {
+	std::map<std::string, Message_ctor> Message::ctors;
 
-	std::shared_ptr<message> message::parse(const pingpong::line &line) {
-		if (numeric_message::is_numeric(line.command.c_str()))
-			return std::make_shared<numeric_message>(line);
+	std::shared_ptr<Message> Message::parse(const PingPong::Line &line) {
+		if (NumericMessage::isNumeric(line.command.c_str()))
+			return std::make_shared<NumericMessage>(line);
 
-		auto ctor = message::ctors.find(line.command);
-		if (ctor == message::ctors.end())
+		auto ctor = Message::ctors.find(line.command);
+		if (ctor == Message::ctors.end())
 			throw std::invalid_argument("Unknown message");
 
 		return ctor->second(line);
 	}
 
-	message::~message() = default;
+	Message::~Message() = default;
 
-	message::operator std::string() const {
+	Message::operator std::string() const {
 		return std::string(line);
 	}
 }

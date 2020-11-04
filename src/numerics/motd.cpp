@@ -1,13 +1,13 @@
-#include "pingpong/core/parse_error.h"
-#include "pingpong/messages/numeric.h"
-#include "pingpong/events/motd.h"
+#include "pingpong/core/ParseError.h"
+#include "pingpong/messages/Numeric.h"
+#include "pingpong/events/Motd.h"
 
-namespace pingpong {
-	bool numeric_message::handle_motd(server *serv) {
+namespace PingPong {
+	bool NumericMessage::handleMotd(Server *server) {
 		const size_t colon = line.parameters.find(':');
 		if (colon == std::string::npos)
-			throw parse_error(line.parameters, "No colon in MOTD line");
-		events::dispatch<motd_event>(serv, line.parameters.substr(colon + 1));
+			throw ParseError(line.parameters, "No colon in MOTD line");
+		Events::dispatch<MotdEvent>(server, line.parameters.substr(colon + 1));
 		return true;
 	}
 }

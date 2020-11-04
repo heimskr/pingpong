@@ -1,110 +1,110 @@
 #include <string>
 
-#include "pingpong/core/hats.h"
+#include "pingpong/core/Hats.h"
 
-namespace pingpong {
-	std::unordered_set<hat> hat_set::all_hats = {hat::owner, hat::admin, hat::op, hat::halfop, hat::voiced, hat::none};
+namespace PingPong {
+	std::unordered_set<Hat> HatSet::allHats = {Hat::Owner, Hat::Admin, Hat::Op, Hat::Halfop, Hat::Voiced, Hat::None};
 
-	hat_set::hat_set(const std::string &str): set({}) {
+	HatSet::HatSet(const std::string &str): set({}) {
 		for (char ch: str) {
-			if (!is_hat(ch))
+			if (!isHat(ch))
 				throw std::invalid_argument("Invalid character in hat string");
-			set.insert(get_hat(ch));
+			set.insert(getHat(ch));
 		}
 	}
 
-	hat hat_set::highest() const {
+	Hat HatSet::highest() const {
 		for (char ch: order) {
 			if (*this % ch)
-				return static_cast<hat>(ch);
+				return static_cast<Hat>(ch);
 		}
 
-		return hat::none;
+		return Hat::None;
 	}
 
-	hat hat_set::lowest() const {
-		if (*this == hat::none)
-			return hat::none;
+	Hat HatSet::lowest() const {
+		if (*this == Hat::None)
+			return Hat::None;
 
-		for (char ch: reverse_order) {
+		for (char ch: reverseOrder) {
 			if (*this % ch)
-				return static_cast<hat>(ch);
+				return static_cast<Hat>(ch);
 		}
 
-		return hat::none;
+		return Hat::None;
 	}
 
-	size_t hat_set::size() const {
+	size_t HatSet::size() const {
 		size_t out = 0;
-		for (hat h: set) {
-			if (h != hat::none)
+		for (Hat h: set) {
+			if (h != Hat::None)
 				++out;
 		}
 		return out;
 	}
 
-	hat_set::operator bool() const {
-		return *this != hat::none;
+	HatSet::operator bool() const {
+		return *this != Hat::None;
 	}
 
-	hat_set::operator std::string() const {
-		if (*this == hat::none)
+	HatSet::operator std::string() const {
+		if (*this == Hat::None)
 			return "";
 		std::string out;
 		out.reserve(set.size());
 		for (char ch: order) {
-			if (ch != ' ' && set.count(static_cast<hat>(ch)) != 0)
+			if (ch != ' ' && set.count(static_cast<Hat>(ch)) != 0)
 				out += ch;
 		}
 		return out;
 	}
 
 
-	bool hat_set::operator==(const hat_set &other) const {
+	bool HatSet::operator==(const HatSet &other) const {
 		return set == other.set;
 	}
 
-	bool hat_set::operator!=(const hat_set &other) const {
+	bool HatSet::operator!=(const HatSet &other) const {
 		return !(*this == other);
 	}
 
-	bool hat_set::operator>(const hat_set &other) const {
+	bool HatSet::operator>(const HatSet &other) const {
 		return highest() > other.highest();
 	}
 
-	bool hat_set::operator<(const hat_set &other) const {
+	bool HatSet::operator<(const HatSet &other) const {
 		return highest() < other.highest();
 	}
 
-	bool hat_set::operator==(hat h) const {
-		return (h == hat::none && set.empty()) || (set.size() == 1 && set.count(h) == 1);
+	bool HatSet::operator==(Hat h) const {
+		return (h == Hat::None && set.empty()) || (set.size() == 1 && set.count(h) == 1);
 	}
 
-	bool hat_set::operator==(char ch) const {
-		return *this == get_hat(ch);
+	bool HatSet::operator==(char ch) const {
+		return *this == getHat(ch);
 	}
 
-	bool hat_set::operator!=(hat h) const {
+	bool HatSet::operator!=(Hat h) const {
 		return !(*this == h);
 	}
 
-	bool hat_set::operator!=(char ch) const {
+	bool HatSet::operator!=(char ch) const {
 		return !(*this == ch);
 	}
 
 
-	bool hat_set::operator%(hat h) const {
+	bool HatSet::operator%(Hat h) const {
 		return set.count(h) == 1;
 	}
 
-	bool hat_set::operator%(char ch) const {
-		return *this % get_hat(ch);
+	bool HatSet::operator%(char ch) const {
+		return *this % getHat(ch);
 	}
 
 
-	hat_set hat_set::operator&(const hat_set &other) const {
-		hat_set out {};
-		for (hat h: all_hats) {
+	HatSet HatSet::operator&(const HatSet &other) const {
+		HatSet out {};
+		for (Hat h: allHats) {
 			if (*this % h && other % h)
 				out += h;
 		}
@@ -112,102 +112,101 @@ namespace pingpong {
 		return out;
 	}
 
-	hat_set hat_set::operator&(hat h) const {
-		return *this % h? hat_set(h) : hat_set();
+	HatSet HatSet::operator&(Hat h) const {
+		return *this % h? HatSet(h) : HatSet();
 	}
 
 
-	hat_set & hat_set::operator=(hat hat) {
-		if (hat == hat::none)
+	HatSet & HatSet::operator=(Hat hat) {
+		if (hat == Hat::None)
 			set.clear();
 		else
 			set = {hat};
 		return *this;
 	}
 
-	hat_set & hat_set::operator=(char ch) {
-		set = {get_hat(ch)};
+	HatSet & HatSet::operator=(char ch) {
+		set = {getHat(ch)};
 		return *this;
 	}
 
 
-	hat_set & hat_set::operator+=(hat hat) {
-		if (hat == hat::none)
+	HatSet & HatSet::operator+=(Hat hat) {
+		if (hat == Hat::None)
 			set.clear();
 		else
 			set.insert(hat);
 		return *this;
 	}
 
-	hat_set & hat_set::operator+=(char ch) {
-		return *this += get_hat(ch);
+	HatSet & HatSet::operator+=(char ch) {
+		return *this += getHat(ch);
 	}
 
 
-	hat_set & hat_set::operator-=(hat hat) {
-		if (hat != hat::none)
+	HatSet & HatSet::operator-=(Hat hat) {
+		if (hat != Hat::None)
 			set.erase(hat);
 		return *this;
 	}
 
-	hat_set & hat_set::operator-=(char ch) {
-		return *this -= get_hat(ch);
+	HatSet & HatSet::operator-=(char ch) {
+		return *this -= getHat(ch);
 	}
 
 
-	bool hat_set::is_hat(char ch) {
-		return all_hats.count(static_cast<hat>(ch)) != 0;
+	bool HatSet::isHat(char ch) {
+		return allHats.count(static_cast<Hat>(ch)) != 0;
 	}
 
-	hat hat_set::get_hat(char ch) {
-		if (hat_set::order.find(ch) != std::string::npos)
-			return static_cast<hat>(ch);
-		if (hat_set::map.count(ch) != 0)
-			return hat_set::map.at(ch);
+	Hat HatSet::getHat(char ch) {
+		if (HatSet::order.find(ch) != std::string::npos)
+			return static_cast<Hat>(ch);
+		if (HatSet::map.count(ch) != 0)
+			return HatSet::map.at(ch);
 		throw std::invalid_argument("Invalid hat: '" + std::string(1, ch) + "'");
 	}
 
-	hat hat_set::get_hat(const std::string &str) {
-		return str.empty() || str[0] == ' '? hat::none : get_hat(str[0]);
+	Hat HatSet::getHat(const std::string &str) {
+		return str.empty() || str[0] == ' '? Hat::None : getHat(str[0]);
 	}
 
-	std::pair<hat_set, std::string> hat_set::separate(const std::string &str) {
+	std::pair<HatSet, std::string> HatSet::separate(const std::string &str) {
 		const size_t nickpos = str.find_first_not_of("~&@%+");
 		if (nickpos == 0)
 			return {{}, str};
 		return {str.substr(0, nickpos), str.substr(nickpos)};
 	}
 	
+	const std::string HatSet::order = "~&@%+ ";
+	const std::string HatSet::reverseOrder = " +%@&~";
 
-	const std::string hat_set::order = "~&@%+ ";
-	const std::string hat_set::reverse_order = " +%@&~";
-
-	std::unordered_map<char, hat> hat_set::map {
-		{'q', hat::owner},
-		{'a', hat::admin},
-		{'o', hat::op},
-		{'h', hat::halfop},
-		{'v', hat::voiced},
+	std::unordered_map<char, Hat> HatSet::map {
+		{'q', Hat::Owner},
+		{'a', Hat::Admin},
+		{'o', Hat::Op},
+		{'h', Hat::Halfop},
+		{'v', Hat::Voiced},
 	};
 
-	std::unordered_map<hat, int> hat_set::ranks {
-		{hat::owner,  5},
-		{hat::admin,  4},
-		{hat::op,     3},
-		{hat::halfop, 2},
-		{hat::voiced, 1},
-		{hat::none,   0}
+	std::unordered_map<Hat, int> HatSet::ranks {
+		{Hat::Owner,  5},
+		{Hat::Admin,  4},
+		{Hat::Op,     3},
+		{Hat::Halfop, 2},
+		{Hat::Voiced, 1},
+		{Hat::None,   0}
 	};
 
-	std::ostream & operator<<(std::ostream &os, const hat_set &set) {
+	std::ostream & operator<<(std::ostream &os, const HatSet &set) {
 		return os << std::string(set);
 	}
 
-	bool operator<(hat left, hat right) {
-		return hat_set::ranks.at(left) < hat_set::ranks.at(right);
+	bool operator<(Hat left, Hat right) {
+		return HatSet::ranks.at(left) < HatSet::ranks.at(right);
 	}
 
-	bool operator>(hat left, hat right) {
-		return hat_set::ranks.at(left) > hat_set::ranks.at(right);
+	bool operator>(Hat left, Hat right) {
+		return HatSet::ranks.at(left) > HatSet::ranks.at(right);
 	}
 }

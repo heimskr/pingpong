@@ -1,7 +1,7 @@
-#include "pingpong/commands/mode.h"
+#include "pingpong/commands/Mode.h"
 
-namespace pingpong {
-	mode_command::operator std::string() const {
+namespace PingPong {
+	ModeCommand::operator std::string() const {
 		return "MODE " + where + (!flags.empty()? " " + flags : "") + (!extra.empty()? " " + extra : "");
 	}
 }

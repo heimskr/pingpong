@@ -1,18 +1,18 @@
 #ifndef MESSAGES_NOTICE_H_
 #define MESSAGES_NOTICE_H_
 
-#include "message.h"
-#include "sourced.h"
+#include "Message.h"
+#include "Sourced.h"
 
-namespace pingpong {
-	class notice_message: public sourced_message {
+namespace PingPong {
+	class NoticeMessage: public SourcedMessage {
 		public:
-			using sourced_message::sourced_message;
+			using SourcedMessage::SourcedMessage;
 
-			static constexpr auto get_name = []() -> std::string { return "NOTICE"; };
+			static constexpr auto getName = []() -> std::string { return "NOTICE"; };
 
 			operator std::string() const override;
-			bool operator()(server *) override;
+			bool operator()(Server *) override;
 	};
 }
 

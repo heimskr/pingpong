@@ -2,71 +2,71 @@
 #include <iostream>
 #include <string>
 
-#include "pingpong/core/channel.h"
-#include "pingpong/core/server.h"
+#include "pingpong/core/Channel.h"
+#include "pingpong/core/Server.h"
 
-#include "pingpong/commands/join.h"
-#include "pingpong/commands/nick.h"
-#include "pingpong/commands/privmsg.h"
-#include "pingpong/commands/user.h"
+#include "pingpong/commands/Join.h"
+#include "pingpong/commands/Nick.h"
+#include "pingpong/commands/Privmsg.h"
+#include "pingpong/commands/User.h"
 
-#include "pingpong/events/event.h"
-#include "pingpong/events/join.h"
+#include "pingpong/events/Event.h"
+#include "pingpong/events/Join.h"
 
 using namespace std;
-using namespace pingpong;
+using namespace PingPong;
 
 namespace tests {
 	void test_channel() {
-		channel chan("#programming");
-		channel user("NickServ");
+		Channel chan("#programming");
+		Channel user("NickServ");
 	}
 
-	void test_commands(server *serv) {
-		user_command(serv, "some_user", "Some Name").send();
-		nick_command(serv, "somenick").send();
-		privmsg_command(serv, "#channel", "Hello, world!").send();
-		join_command(serv, vector<join_pair>({{"#foo", ""}, {"#bar", "B4R"}})).send();
-		join_command(serv, vector<join_pair>({{"#baz", ""}, {"#quux", ""}})).send();
+	void test_commands(Server *server) {
+		UserCommand(server, "some_user", "Some Name").send();
+		NickCommand(server, "somenick").send();
+		PrivmsgCommand(server, "#channel", "Hello, world!").send();
+		JoinCommand(server, vector<JoinPair>({{"#foo", ""}, {"#bar", "B4R"}})).send();
+		JoinCommand(server, vector<JoinPair>({{"#baz", ""}, {"#quux", ""}})).send();
 	}
 
-	void test_network(server &serv) {
-		serv.start();
-		serv.set_nick("pingpong");
-		serv.worker.join();
+	void test_network(Server &server) {
+		server.start();
+		server.setNick("pingpong");
+		server.worker.join();
 	}
 
 	void test_mask() {
 		string mstr = "nick!user@host";
-		mask m(mstr);
+		Mask m(mstr);
 		cout << "Nick[" << m.nick << "], User[" << m.user << "], Host[" << m.host << "]\n";
 	}
 
-	void test_events(server &serv) {
-		server *ptr = &serv;
+	void test_events(Server &server) {
+		Server *ptr = &server;
 
-		events::listen<join_event>([&](auto *ev) {
-			cout << "join1(" << *ev->who << " -> " << *ev->chan << ")\n";
+		Events::listen<JoinEvent>([&](auto *ev) {
+			cout << "join1(" << *ev->who << " -> " << *ev->channel << ")\n";
 		});
 
-		events::listen<join_event>([&](auto *ev) {
-			cout << "join2(" << *ev->who << " -> " << *ev->chan << ")\n";
+		Events::listen<JoinEvent>([&](auto *ev) {
+			cout << "join2(" << *ev->who << " -> " << *ev->channel << ")\n";
 		});
 
 		for (int i = 1; i < 10; ++i) {
-			std::shared_ptr<user> u = std::make_shared<user>("someone" + std::to_string(i), ptr);
-			std::shared_ptr<channel> c = std::make_shared<channel>("#somewhere" + std::to_string(i), ptr);
-			events::dispatch<join_event>(u, c);
+			std::shared_ptr<User> u = std::make_shared<User>("someone" + std::to_string(i), ptr);
+			std::shared_ptr<Channel> c = std::make_shared<Channel>("#somewhere" + std::to_string(i), ptr);
+			Events::dispatch<JoinEvent>(u, c);
 		}
 	}
 }
 
 int main(int, char **) {
-	irc *instance = new irc();
-	server serv(instance, "localhost");
+	IRC *instance = new IRC();
+	Server server(instance, "localhost");
 
 	// tests::test_network(serv);
-	tests::test_events(serv);
+	tests::test_events(server);
 	delete instance;
 	return 0;
 }

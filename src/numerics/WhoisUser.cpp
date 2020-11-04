@@ -1,9 +1,9 @@
-#include "pingpong/messages/numeric.h"
+#include "pingpong/messages/Numeric.h"
 
 #include "lib/formicine/futil.h"
 
-namespace pingpong {
-	bool numeric_message::handle_whois_user(server *serv) {
+namespace PingPong {
+	bool NumericMessage::handleWhoisUser(Server *server) {
 		const size_t colon = line.parameters.find(':');
 		if (colon == std::string::npos)
 			throw std::runtime_error("Couldn't parse 311 numeric: no colon found");
@@ -16,7 +16,7 @@ namespace pingpong {
 
 			const std::string  realname = line.parameters.substr(colon + 1);
 
-			std::shared_ptr<user> who = serv->get_user(nickname, true, true);
+			std::shared_ptr<User> who = server->getUser(nickname, true, true);
 			who->info.user = username;
 			who->info.host = hostname;
 			DBG("setting realname to [" << realname << "]");

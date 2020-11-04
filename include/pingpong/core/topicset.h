@@ -4,20 +4,20 @@
 #include <memory>
 #include <string>
 
-namespace pingpong {
-	class user;
+namespace PingPong {
+	class User;
 
-	struct topicset {
+	struct TopicSet {
 		std::string text;
-		std::string modified_by;
+		std::string modifiedBy;
 		long modified;
 
-		topicset(const std::string &text_ = "", const std::string &modified_by_ = "", long modified_ = -1):
-			text(text_), modified_by(modified_by_), modified(modified_) {}
+		TopicSet(const std::string &text_ = "", const std::string &modified_by = "", long modified_ = -1):
+			text(text_), modifiedBy(modified_by), modified(modified_) {}
 
-		topicset & operator=(const std::string &);
-		topicset & operator=(const std::shared_ptr<user> &);
-		topicset & operator=(long);
+		TopicSet & operator=(const std::string &);
+		TopicSet & operator=(const std::shared_ptr<User> &);
+		TopicSet & operator=(long);
 
 		operator std::string() const { return text; }
 		bool operator==(const std::string &) const;

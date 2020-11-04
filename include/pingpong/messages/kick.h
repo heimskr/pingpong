@@ -3,19 +3,19 @@
 
 #include <string>
 
-#include "message.h"
-#include "targeted.h"
-#include "line.h"
+#include "Message.h"
+#include "Targeted.h"
+#include "Line.h"
 
-namespace pingpong {
-	class kick_message: public targeted_message {
+namespace PingPong {
+	class KickMessage: public TargetedMessage {
 		public:
-			using targeted_message::targeted_message;
+			using TargetedMessage::TargetedMessage;
 
-			static constexpr auto get_name = []() -> std::string { return "KICK"; };
+			static constexpr auto getName = []() -> std::string { return "KICK"; };
 
 			operator std::string() const override;
-			bool operator()(server *) override;
+			bool operator()(Server *) override;
 	};
 }
 

@@ -2,73 +2,73 @@
 #include <utility>
 #include <vector>
 
-#include "pingpong/core/hats.h"
-#include "pingpong/events/names_updated.h"
-#include "pingpong/messages/numeric.h"
+#include "pingpong/core/Hats.h"
+#include "pingpong/events/NamesUpdated.h"
+#include "pingpong/messages/Numeric.h"
 
 #include "lib/formicine/futil.h"
 
-namespace pingpong {
-	bool numeric_message::handle_names_reply(server *serv) {
-		names parsed;
+namespace PingPong {
+	bool NumericMessage::handleNamesReply(Server *server) {
+		Names parsed;
 		try {
-			parsed = numeric_message::parse_names_reply(line.parameters);
+			parsed = NumericMessage::parseNamesReply(line.parameters);
 		} catch (const std::invalid_argument &err) {
 			WARN("Couldn't parse NAMES reply " << "["_d << line.parameters << "]"_d << ": " << err.what());
 			return true;
 		}
 
 		std::string chanstr;
-		channel::visibility vis;
-		std::vector<std::pair<hat_set, std::string>> userlist;
+		Channel::Visibility vis;
+		std::vector<std::pair<HatSet, std::string>> userlist;
 		std::tie(chanstr, vis, userlist) = parsed;
 
-		std::shared_ptr<channel> chan = serv->get_channel(chanstr);
+		std::shared_ptr<Channel> channel = server->getChannel(chanstr);
 
 		bool should_clear = false;
-		if (chan && serv->last_message && serv->last_message->get_name() != "_NUMERIC") {
-			auto last_message = std::dynamic_pointer_cast<numeric_message>(serv->last_message);
-			should_clear = last_message && last_message->type != numeric_type::names_reply;
+		if (channel && server->lastMessage && server->lastMessage->getName() != "_NUMERIC") {
+			auto lastMessage = std::dynamic_pointer_cast<NumericMessage>(server->lastMessage);
+			should_clear = lastMessage && lastMessage->type != NumericType::NamesReply;
 		}
 
 		if (should_clear) {
 			// If the previous message was something other than a NAMES reply, reset the current user list.
-			chan->users.clear();
-		} else if (!chan) {
+			channel->users.clear();
+		} else if (!channel) {
 			WARN("Channel not in list: " << chanstr);
 		}
 
-		if (chan) {
+		if (channel) {
 			bool anyone_new = false;
-			for (auto & [uhats, name]: userlist) {
-				std::shared_ptr<user> uptr = serv->get_user(name, true);
-				*uptr += chan;
-				if (!chan->has_user(uptr)) {
+			for (auto &[uhats, name]: userlist) {
+				std::shared_ptr<User> uptr = server->getUser(name, true);
+				*uptr += channel;
+				if (!channel->hasUser(uptr)) {
 					anyone_new = true;
-					chan->add_user(uptr);
+					channel->addUser(uptr);
 				}
 
-				chan->set_hats(uptr, uhats);
+				channel->setHats(uptr, uhats);
 			}
 
 			if (anyone_new)
-				events::dispatch<names_updated_event>(chan);
+				Events::dispatch<NamesUpdatedEvent>(channel);
 		}
 
 		return true;
 	}
 
-	numeric_message::names numeric_message::parse_names_reply(const std::string &params) {
+	NumericMessage::Names NumericMessage::parseNamesReply(const std::string &params) {
 		size_t sep = params.find(" = ");
-		channel::visibility vis = channel::visibility::pub;
+		Channel::Visibility vis = Channel::Visibility::Public;
 
 		if (sep == std::string::npos) {
 			sep = params.find(" * ");
 			if (sep == std::string::npos) {
 				sep = params.find(" @ ");
-				vis = channel::visibility::secret;
+				vis = Channel::Visibility::Secret;
 			} else {
-				vis = channel::visibility::priv;
+				vis = Channel::Visibility::Private;
 			}
 		}
 
@@ -85,23 +85,21 @@ namespace pingpong {
 			throw std::invalid_argument("Invalid 353 message");
 		}
 
-		std::vector<std::pair<hat_set, std::string>> userlist;
+		std::vector<std::pair<HatSet, std::string>> userlist;
 		for (const std::string &userstr: usersplit) {
-			hat_set userhats {};
+			HatSet userhats {};
 
 			for (char ch: userstr) {
-				if (hat_set::is_hat(ch)) {
+				if (HatSet::isHat(ch))
 					userhats += ch;
-				} else {
+				else
 					break;
-				}
 			}
 
-			if (userhats == hat::none) {
+			if (userhats == Hat::None)
 				userlist.push_back({userhats, userstr});
-			} else {
+			else
 				userlist.push_back({userhats, userstr.substr(userhats.size())});
-			}
 		}
 
 		return {chanstr, vis, userlist};

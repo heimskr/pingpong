@@ -1,17 +1,17 @@
-#include "pingpong/events/nick.h"
-#include "pingpong/messages/nick.h"
+#include "pingpong/events/Nick.h"
+#include "pingpong/messages/Nick.h"
 
-namespace pingpong {
-	nick_message::operator std::string() const {
+namespace PingPong {
+	NickMessage::operator std::string() const {
 		return line.source.nick + " is now known as " + content;
 	}
 
-	bool nick_message::operator()(server *serv) {
-		if (serv != who->serv)
+	bool NickMessage::operator()(Server *server) {
+		if (server != who->server)
 			throw std::runtime_error("Invalid server for user");
 
-		serv->rename_user(line.source.nick, content);
-		events::dispatch<nick_event>(who, line.source.nick);
+		server->renameUser(line.source.nick, content);
+		Events::dispatch<NickEvent>(who, line.source.nick);
 		return true;
 	}
 }

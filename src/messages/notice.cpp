@@ -1,17 +1,17 @@
-#include "pingpong/events/notice.h"
-#include "pingpong/messages/notice.h"
+#include "pingpong/events/Notice.h"
+#include "pingpong/messages/Notice.h"
 
-namespace pingpong {
-	notice_message::operator std::string() const {
-		if (line.source.is_server())
+namespace PingPong {
+	NoticeMessage::operator std::string() const {
+		if (line.source.isServer())
 			return "[" + line.source.nick + "] " + content;
 
 		const std::string name = who? who->name : "?";
-		return "[" + (is_user()? name : where) + "] -" + name + "- " + content;
+		return "[" + (isUser()? name : where) + "] -" + name + "- " + content;
 	}
 
-	bool notice_message::operator()(server *serv) {
-		events::dispatch<notice_event>(serv, who, where, content);
+	bool NoticeMessage::operator()(Server *serv) {
+		Events::dispatch<NoticeEvent>(serv, who, where, content);
 		return true;
 	}
 }

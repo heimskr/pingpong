@@ -1,15 +1,15 @@
 #ifndef COMMANDS_USER_H_
 #define COMMANDS_USER_H_
 
-#include "command.h"
+#include "Command.h"
 
-namespace pingpong {
-	class user_command: public command {
+namespace PingPong {
+	class UserCommand: public Command {
 		public:
 			std::string username, realname;
 
-			user_command(server *serv_, const std::string &username_, const std::string &realname_):
-				command(serv_), username(username_), realname(realname_) {}
+			UserCommand(Server *server_, const std::string &username_, const std::string &realname_):
+				Command(server_), username(username_), realname(realname_) {}
 
 			operator std::string() const override;
 			virtual bool send() override;

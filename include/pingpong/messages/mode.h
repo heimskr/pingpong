@@ -1,29 +1,29 @@
 #ifndef PINGPONG_MESSAGES_MODE_H_
 #define PINGPONG_MESSAGES_MODE_H_
 
-#include "pingpong/core/local.h"
-#include "pingpong/core/modeset.h"
+#include "pingpong/core/Local.h"
+#include "pingpong/core/ModeSet.h"
 
-#include "pingpong/messages/message.h"
+#include "pingpong/messages/Message.h"
 
-namespace pingpong {
+namespace PingPong {
 	/**
 	 * Received whenever someone changes the mode in a channel or when your usermode is changed.
 	 */
-	class mode_message: public message, public local {
+	class ModeMessage: public Message, public Local {
 		public:
-			modeset mset;
+			ModeSet modeset;
 
-			std::shared_ptr<user> who;
+			std::shared_ptr<User> who;
 
 			/** If the mode change is for a channel, this stores a pointer to the channel. */
-			std::shared_ptr<pingpong::channel> chan;
+			std::shared_ptr<PingPong::Channel> chan;
 
-			mode_message(const pingpong::line &);
+			ModeMessage(const PingPong::Line &);
 
-			static constexpr auto get_name = []() -> std::string { return "MODE"; };
+			static constexpr auto getName = []() -> std::string { return "MODE"; };
 			operator std::string() const override;
-			bool operator()(server *) override;
+			bool operator()(Server *) override;
 	};
 }
 

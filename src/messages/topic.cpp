@@ -1,21 +1,21 @@
-#include "pingpong/events/topic.h"
-#include "pingpong/events/topic_updated.h"
-#include "pingpong/messages/topic.h"
+#include "pingpong/events/Topic.h"
+#include "pingpong/events/TopicUpdated.h"
+#include "pingpong/messages/Topic.h"
 
-namespace pingpong {
-	topic_message::operator std::string() const {
+namespace PingPong {
+	TopicMessage::operator std::string() const {
 		return who->name + " changed the topic of " + where + " to \"" + content + "\"";
 	}
 
-	bool topic_message::operator()(server *serv) {
+	bool TopicMessage::operator()(Server *server) {
 		if (where.empty() || where.front() != '#')
-			throw std::runtime_error("Invalid channel for topic_message");
+			throw std::runtime_error("Invalid channel for TopicMessage");
 
-		std::shared_ptr<channel> chan = serv->get_channel(where, true);
-		topicset old_topic = chan->topic;
+		std::shared_ptr<Channel> chan = server->getChannel(where, true);
+		TopicSet old_topic = chan->topic;
 		chan->topic = content;
-		events::dispatch<topic_updated_event>(chan, old_topic, chan->topic);
-		events::dispatch<topic_event>(who, chan, content);
+		Events::dispatch<TopicUpdatedEvent>(chan, old_topic, chan->topic);
+		Events::dispatch<TopicEvent>(who, chan, content);
 
 		return true;
 	}

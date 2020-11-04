@@ -1,22 +1,22 @@
 #ifndef MESSAGES_JOIN_H_
 #define MESSAGES_JOIN_H_
 
-#include "pingpong/core/server.h"
-#include "pingpong/messages/message.h"
+#include "pingpong/core/Server.h"
+#include "pingpong/messages/Message.h"
 
-namespace pingpong {
-	class join_message: public message {
+namespace PingPong {
+	class JoinMessage: public Message {
 		public:
-			server *serv;
+			Server *server;
 			std::string who, chan;
-			std::string accountname, realname; // if extended-join is enabled
+			std::string accountName, realname; // if extended-join is enabled
 
-			join_message(const pingpong::line &line_);
+			JoinMessage(const PingPong::Line &line_);
 
-			static constexpr auto get_name = []() -> std::string { return "JOIN"; };
+			static constexpr auto getName = []() -> std::string { return "JOIN"; };
 
 			operator std::string() const override;
-			bool operator()(server *) override;
+			bool operator()(Server *) override;
 	};
 }
 

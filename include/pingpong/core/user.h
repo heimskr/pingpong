@@ -6,41 +6,41 @@
 #include <string>
 #include <unordered_set>
 
-#include "pingpong/core/defs.h"
-#include "pingpong/core/mask.h"
-#include "pingpong/core/moded.h"
-#include "pingpong/core/server.h"
-#include "pingpong/core/util.h"
+#include "pingpong/core/Defs.h"
+#include "pingpong/core/Mask.h"
+#include "pingpong/core/Moded.h"
+#include "pingpong/core/Server.h"
+#include "pingpong/core/Util.h"
 
-namespace pingpong {
-	class user: public moded {
+namespace PingPong {
+	class User: public Moded {
 		public:
 			std::string name;
-			mask info {};
-			pingpong::server *serv = nullptr;
-			std::set<std::weak_ptr<channel>, weakptr_compare<channel>> channels = {};
+			Mask info {};
+			PingPong::Server *server = nullptr;
+			std::set<std::weak_ptr<Channel>, weakptr_compare<Channel>> channels = {};
 
-			std::string account_name = "";
-			std::string server_name = "";
+			std::string accountName = "";
+			std::string serverName = "";
 			std::string realname = "";
-			long idle_since = -1, signon_time = -1;
+			long idleSince = -1, signonTime = -1;
 
-			user(const std::string &name_, server *serv_): name(name_), serv(serv_) {}
+			User(const std::string &name_, Server *server_): name(name_), server(server_) {}
 
 			void rename(const std::string &);
 			operator std::string() const { return name; }
 			
 			template <typename T>
-			user & operator+=(T chan) {
-				channels.insert(std::weak_ptr<channel>(chan));
+			User & operator+=(T chan) {
+				channels.insert(std::weak_ptr<Channel>(chan));
 				return *this;
 			}
 
-			friend std::ostream & operator<<(std::ostream &os, const user &who);
+			friend std::ostream & operator<<(std::ostream &os, const User &who);
 
-			bool is_self() const;
+			bool isSelf() const;
 
-			bool operator==(const user &) const;
+			bool operator==(const User &) const;
 	};
 }
 

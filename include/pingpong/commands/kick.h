@@ -1,17 +1,18 @@
 #ifndef PINGPONG_COMMANDS_KICK_H_
 #define PINGPONG_COMMANDS_KICK_H_
 
-#include "command.h"
+#include "Command.h"
 
-namespace pingpong {
-	class kick_command: public command {
+namespace PingPong {
+	class KickCommand: public Command {
 		public:
-			std::string chan, whom, reason;
+			std::string channel, whom, reason;
 
-			kick_command(server *serv_, std::string chan_, const std::string &whom_, const std::string &reason_ = ""):
-				command(serv_), chan(chan_), whom(whom_), reason(reason_) {}
+			KickCommand(Server *server_, const std::string &channel_, const std::string &whom_,
+			const std::string &reason_ = ""):
+				Command(server_), channel(channel_), whom(whom_), reason(reason_) {}
 
-			kick_command(server *serv_, std::shared_ptr<channel> chan_, const std::string &whom_,
+			KickCommand(Server *server_, std::shared_ptr<Channel> channel_, const std::string &whom_,
 			const std::string &reason_ = "");
 
 			operator std::string() const override;

@@ -3,15 +3,15 @@
 
 #include <string>
 
-#include "message.h"
-#include "line.h"
+#include "Message.h"
+#include "Line.h"
 
-namespace pingpong {
-	class basic_message: public message {
+namespace PingPong {
+	class BasicMessage: public Message {
 		public:
 			std::string content;
 
-			basic_message(const pingpong::line &line_): message(line_), content(line_.parameters.substr(1)) {}
+			BasicMessage(const PingPong::Line &line_): Message(line_), content(line_.parameters.substr(1)) {}
 	};
 }
 

@@ -1,16 +1,16 @@
 #ifndef COMMANDS_PONG_H_
 #define COMMANDS_PONG_H_
 
-#include "command.h"
+#include "Command.h"
 
-namespace pingpong {
-	class pong_command: public command {
+namespace PingPong {
+	class PongCommand: public Command {
 		public:
 			std::string token;
 
-			pong_command(server *serv_, const std::string &token_): command(serv_), token(token_) {}
+			PongCommand(Server *server_, const std::string &token_): Command(server_), token(token_) {}
 			operator std::string() const override;
-			bool is_silent() const override { return true; }
+			bool isSilent() const override { return true; }
 	};
 }
 

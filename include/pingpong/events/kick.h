@@ -1,16 +1,16 @@
 #ifndef PINGPONG_EVENTS_KICK_H_
 #define PINGPONG_EVENTS_KICK_H_
 
-#include "pingpong/core/channel.h"
-#include "pingpong/events/event.h"
+#include "pingpong/core/Channel.h"
+#include "pingpong/events/Event.h"
 
-namespace pingpong {
+namespace PingPong {
 	/**
 	 * Dispatched when a user kicks another user from a channel.
 	 */
-	class kick_event: public targeted_event {
+	class KickEvent: public TargetedEvent {
 		public:
-			using targeted_event::targeted_event;
+			using TargetedEvent::TargetedEvent;
 	};
 }
 

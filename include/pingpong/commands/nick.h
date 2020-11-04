@@ -1,15 +1,14 @@
 #ifndef COMMANDS_NICK_H_
 #define COMMANDS_NICK_H_
 
-#include "command.h"
+#include "Command.h"
 
-namespace pingpong {
-	class nick_command: public command {
-		public:
-			std::string nickname;
+namespace PingPong {
+	struct NickCommand: public Command {
+		std::string nickname;
 
-			nick_command(server *serv_, const std::string &nickname_): command(serv_), nickname(nickname_) {}
-			operator std::string() const override;
+		NickCommand(Server *server_, const std::string &nickname_): Command(server_), nickname(nickname_) {}
+		operator std::string() const override;
 	};
 }
 

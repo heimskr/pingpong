@@ -3,18 +3,16 @@
 
 #include <string>
 
-#include "command.h"
+#include "Command.h"
 
-namespace pingpong {
-	class 
-	quit_command: public command {
-		public:
-			std::string reason;
+namespace PingPong {
+	struct QuitCommand: public Command {
+		std::string reason;
 
-			quit_command(server *serv_, const std::string &reason_ = ""): command(serv_), reason(reason_) {}
+		QuitCommand(Server *server_, const std::string &reason_ = ""): Command(server_), reason(reason_) {}
 
-			operator std::string() const override;
-			virtual bool send() override;
+		operator std::string() const override;
+		virtual bool send() override;
 	};
 }
 

@@ -1,12 +1,12 @@
 #include <string>
 
-#include "pingpong/messages/line.h"
-#include "pingpong/core/mask.h"
+#include "pingpong/messages/Line.h"
+#include "pingpong/core/Mask.h"
 
 #include "lib/formicine/ansi.h"
 
-namespace pingpong {
-	line::line(server *serv_, const std::string &in): original(in), serv(serv_), source(mask("", "", "")) {
+namespace PingPong {
+	Line::Line(Server *server_, const std::string &in): original(in), server(server_), source(Mask("", "", "")) {
 		size_t index = 0;
 
 		std::string in_ = in;
@@ -19,24 +19,24 @@ namespace pingpong {
 
 		if (in_[index] == ':') {
 			index = in_.find(' ');
-			source = mask(in_.substr(1, index - 1));
+			source = Mask(in_.substr(1, index - 1));
 			in_.erase(0, index + 1);
 		}
 
-		index = in_.find(' ');
+		index      = in_.find(' ');
 		command    = in_.substr(0, index);
 		parameters = in_.substr(index + 1);
 	}
 	
-	line::operator std::string() const {
+	Line::operator std::string() const {
 		return "T[" + tags + "], S[" + std::string(source) + "], C[" + command + "], P[" + parameters + "]";
 	}
 
-	line::operator bool() const {
-		return serv && !original.empty();
+	Line::operator bool() const {
+		return server && !original.empty();
 	}
 
-	std::ostream & operator<<(std::ostream &os, const line &line_) {
+	std::ostream & operator<<(std::ostream &os, const Line &line_) {
 		return os << std::string(line_);
 	}
 }

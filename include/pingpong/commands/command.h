@@ -3,28 +3,30 @@
 
 #include <functional>
 
-#include "pingpong/core/util.h"
+#include "pingpong/core/Util.h"
 
-namespace pingpong {
-	class server;
-	class channel;
+namespace PingPong {
+	class Server;
+	class Channel;
 
-	class command {
+	class Command {
 		public:
 			// Preprocesses a command and determines whether it's okay to send.
-			static std::function<bool(command &)> before_send;
+			static std::function<bool(Command &)> beforeSend;
 
-			server *serv;
-			long sent_time = util::timestamp();
+			Server *server;
+			long sentTime = Util::timestamp();
 
-			command(server *serv_): serv(serv_) {}
+			Command() = delete;
+			Command(Server *server_): server(server_) {}
+
 			virtual operator std::string() const = 0;
 
 			/** Tries to send the command. Returns true if the command was sent. Implementations should run before_send
 			 *  to check whether it's okay to send the command with the base class's implementation. */
 			virtual bool send();
 
-			virtual bool is_silent() const { return false; }
+			virtual bool isSilent() const { return false; }
 	};
 }
 

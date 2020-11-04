@@ -1,20 +1,20 @@
 #ifndef PINGPONG_MESSAGES_CAP_H_
 #define PINGPONG_MESSAGES_CAP_H_
 
-#include "pingpong/messages/message.h"
+#include "pingpong/messages/Message.h"
 
-namespace pingpong {
-	class cap_message: public message {
+namespace PingPong {
+	class CapMessage: public Message {
 		private:
 			/** Handles an ACK subcommand. */
-			void ack(server *, const std::vector<std::string> &caps);
+			void ack(Server *, const std::vector<std::string> &caps);
 
 		public:
-			using message::message;
-			static constexpr auto get_name = []() -> std::string { return "CAP"; };
+			using Message::Message;
+			static constexpr auto getName = []() -> std::string { return "CAP"; };
 
 			operator std::string() const override;
-			bool operator()(server *) override;
+			bool operator()(Server *) override;
 	};
 }
 

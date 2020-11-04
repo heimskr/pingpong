@@ -1,15 +1,15 @@
 #include <string>
 
-#include "pingpong/commands/command.h"
-#include "pingpong/events/command.h"
+#include "pingpong/commands/Command.h"
+#include "pingpong/events/Command.h"
 	
-namespace pingpong {
-	std::function<bool(command &)> command::before_send = [](command &) { return true; };
+namespace PingPong {
+	std::function<bool(Command &)> Command::beforeSend = [](Command &) { return true; };
 
-	bool command::send() {
-		if (before_send(*this)) {
-			events::dispatch<command_event>(serv, this);
-			serv->quote(std::string(*this));
+	bool Command::send() {
+		if (beforeSend(*this)) {
+			Events::dispatch<CommandEvent>(server, this);
+			server->quote(std::string(*this));
 			return true;
 		}
 

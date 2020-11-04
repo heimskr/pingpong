@@ -3,25 +3,25 @@
 
 #include <string>
 
-namespace pingpong {
-	class mask {
+namespace PingPong {
+	class Mask {
 		public:
 			std::string nick {}, user {}, host {};
 
-			mask() = default;
+			Mask() = default;
 
-			mask(const std::string &nick_, const std::string &user_, const std::string &host_):
+			Mask(const std::string &nick_, const std::string &user_, const std::string &host_):
 				nick(nick_), user(user_), host(host_) {}
 
-			mask(const std::string &combined);
+			Mask(const std::string &combined);
 
-			bool is_full() const;
-			bool is_empty() const;
+			bool isFull() const;
+			bool isEmpty() const;
 
 			/** If a message comes directly from the server instead of from a user, the user and host will be empty. */
-			bool is_server() const;
+			bool isServer() const;
 
-			operator bool() const { return !is_empty(); }
+			operator bool() const { return !isEmpty(); }
 			operator std::string() const;
 	};
 }

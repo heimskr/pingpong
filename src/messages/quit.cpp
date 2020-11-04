@@ -1,21 +1,21 @@
-#include "pingpong/events/quit.h"
-#include "pingpong/messages/quit.h"
+#include "pingpong/events/Quit.h"
+#include "pingpong/messages/Quit.h"
 
-namespace pingpong {
-	quit_message::operator std::string() const {
+namespace PingPong {
+	QuitMessage::operator std::string() const {
 		return line.source.nick + " quit [" + content + "]";
 	}
 
-	bool quit_message::operator()(server *serv) {
-		if (serv != who->serv)
+	bool QuitMessage::operator()(Server *server) {
+		if (server != who->server)
 			throw std::runtime_error("Invalid server for user");
 
-		if (who == serv->get_self())
-			serv->reap();
+		if (who == server->getSelf())
+			server->reap();
 		else
-			serv->remove_user(who);
+			server->removeUser(who);
 
-		events::dispatch<quit_event>(who, content);
+		Events::dispatch<QuitEvent>(who, content);
 		return true;
 	}
 }

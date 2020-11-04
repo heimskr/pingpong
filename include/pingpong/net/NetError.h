@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-namespace pingpong::net {
+namespace PingPong::Net {
 	class net_error: public std::runtime_error {
 		public:
 			int status_code;

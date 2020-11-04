@@ -3,30 +3,30 @@
 
 #include <unordered_set>
 
-#include "pingpong/commands/command.h"
-#include "pingpong/core/features.h"
+#include "pingpong/commands/Command.h"
+#include "pingpong/core/Features.h"
 
-namespace pingpong {
-	class cap_command: public command {
+namespace PingPong {
+	class CapCommand: public Command {
 		public:
-			enum class action {none, ls, end, req};
+			enum class Action {None, Ls, End, Req};
 
-			std::unordered_set<features::type> to_request {};
-			action type = action::none;
+			std::unordered_set<Features::Type> to_request {};
+			Action type = Action::None;
 
 			template <typename Iter>
-			cap_command(server *serv_, Iter begin, Iter end, action type_ = action::none):
-				command(serv_), to_request(begin, end), type(type_) {}
+			CapCommand(Server *server_, Iter begin, Iter end, Action type_ = Action::None):
+				Command(server_), to_request(begin, end), type(type_) {}
 
 			template <typename Container>
-			cap_command(server *serv_, const Container &cont, action type_ = action::none):
-				cap_command(serv_, cont.begin(), cont.end(), type_) {}
+			CapCommand(Server *server_, const Container &cont, Action type_ = Action::None):
+				CapCommand(server_, cont.begin(), cont.end(), type_) {}
 
-			cap_command(server *serv_, std::initializer_list<features::type> ilist = {}, action type_ = action::none):
-				cap_command(serv_, ilist.begin(), ilist.end(), type_) {}
+			CapCommand(Server *server_, std::initializer_list<Features::Type> ilist = {}, Action type_ = Action::None):
+				CapCommand(server_, ilist.begin(), ilist.end(), type_) {}
 
-			cap_command(server *serv_, action type_):
-				command(serv_), type(type_) {}
+			CapCommand(Server *server_, Action type_):
+				Command(server_), type(type_) {}
 
 			operator std::string() const override;
 	};

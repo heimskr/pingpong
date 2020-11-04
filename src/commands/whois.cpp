@@ -1,11 +1,11 @@
-#include "pingpong/commands/whois.h"
-#include "pingpong/core/user.h"
+#include "pingpong/commands/Whois.h"
+#include "pingpong/core/User.h"
 
-namespace pingpong {
-	whois_command::whois_command(server *serv_, std::shared_ptr<user> whom_):
-		whois_command(serv_, whom_->name) {}
+namespace PingPong {
+	WhoisCommand::WhoisCommand(Server *server_, std::shared_ptr<User> whom_):
+		WhoisCommand(server_, whom_->name) {}
 
-	whois_command::operator std::string() const {
+	WhoisCommand::operator std::string() const {
 		return "WHOIS " + whom;
 	}
 }

@@ -1,22 +1,22 @@
-#include "pingpong/core/hats.h"
+#include "pingpong/core/Hats.h"
 
-#include "pingpong/events/mode.h"
-#include "pingpong/events/hats_updated.h"
+#include "pingpong/events/Mode.h"
+#include "pingpong/events/HatsUpdated.h"
 
-#include "pingpong/messages/mode.h"
+#include "pingpong/messages/Mode.h"
 
 #include "lib/formicine/futil.h"
 
-namespace pingpong {
-	mode_message::mode_message(const pingpong::line &line_): message(line_), local("") {
+namespace PingPong {
+	ModeMessage::ModeMessage(const PingPong::Line &line_): Message(line_), Local("") {
 		size_t middle;
 
-		modeset::mode_type mset_type = modeset::mode_type::self;
-		std::string mset_main {}, mset_extra {};
+		ModeSet::ModeType modeset_type = ModeSet::ModeType::Self;
+		std::string modeset_main {}, modeset_extra {};
 
 		// is_server() is true sometimes because the line source looks like a server name, even though it's a nick.
 		// It doesn't actually indicate that the message source is the server.
-		const bool is_server = line.source.is_server();
+		const bool is_server = line.source.isServer();
 
 		// On some servers, the user/host are also filled in with yours. For these situtations, it's necessary to check
 		// whether your nick is setting modes on itself.
@@ -32,25 +32,25 @@ namespace pingpong {
 				// Rizon doesn't insert a colon for whatever reason.
 				middle = std::min(line.parameters.find(" +"), line.parameters.find(" -"));
 				if (middle == std::string::npos)
-					throw bad_message(line);
+					throw BadMessage(line);
 				middle_size = 1;
-			} else if (line.source.nick != line.serv->get_nick()) {
+			} else if (line.source.nick != line.server->getNick()) {
 				// The mode command, if the source is a nick, tells you what your current nick is. If it's different
 				// from what we were assuming, we need to take the source as your new nick.
 				// Rizon doesn't do this. Instead, it uses the server name as the source. We skip this check by testing
-				// for a colon above; Rizon doesn't include a colon before the modeset.
-				line.serv->set_nick(line.source.nick, true);
-				line.serv->remove_user("?");
+				// for a colon above; Rizon doesn't include a colon before the ModeSet.
+				line.server->setNick(line.source.nick, true);
+				line.server->removeUser("?");
 			}
 			
-			mset_main = line.parameters.substr(middle + middle_size);
+			modeset_main = line.parameters.substr(middle + middle_size);
 			where = line.parameters.substr(0, middle);
 		} else {
 			// This is presumably a channel mode change. The parameters should look like "#chan -S".
 
 			middle = line.parameters.find(' ');
 			if (middle == std::string::npos)
-				throw bad_message(line);
+				throw BadMessage(line);
 
 			// Bans are in the form "+b nick!user@host", with an extra mask after the mode.
 			std::string modestr {line.parameters.substr(middle + 1)};
@@ -62,39 +62,39 @@ namespace pingpong {
 			}
 
 			where = line.parameters.substr(0, middle);
-			chan = line.serv->get_channel(where, true);
+			chan = line.server->getChannel(where, true);
 
-			mset_type = modeset::mode_type::channel;
-			mset_main = modestr;
-			mset_extra = extra;
+			modeset_type = ModeSet::ModeType::Channel;
+			modeset_main = modestr;
+			modeset_extra = extra;
 		}
 
-		who = line.serv->get_user(line.source, true, true);
+		who = line.server->getUser(line.source, true, true);
 
 		try {
-			mset = {mset_type, mset_main, mset_extra};
+			modeset = {modeset_type, modeset_main, modeset_extra};
 		} catch (const std::invalid_argument &err) {
-			DBG("Couldn't parse \"" << mset.modes << "\" as a modestring: " << err.what());
-			throw bad_message(line);
+			DBG("Couldn't parse \"" << modeset.modes << "\" as a modestring: " << err.what());
+			throw BadMessage(line);
 		}
 	}
 
-	bool mode_message::operator()(server *serv) {
-		if (mset.type == modeset::mode_type::channel) {
-			if (util::is_valid_nick(mset.extra)) {
-				// If the extra data in the modeset is a nickname, then presumably we need to add or remove a hat.
+	bool ModeMessage::operator()(Server *server) {
+		if (modeset.type == ModeSet::ModeType::Channel) {
+			if (Util::isValidNick(modeset.extra)) {
+				// If the extra data in the ModeSet is a nickname, then presumably we need to add or remove a hat.
 				// I'm not sure what other conditions could cause this situation.
-				std::shared_ptr<user> extra_who = serv->get_user(mset.extra, true, true);
-				const auto hat_end = hat_set::map.end();
+				std::shared_ptr<User> extra_who = server->getUser(modeset.extra, true, true);
+				const auto hat_end = HatSet::map.end();
 
 				bool add = true;
-				for (const std::unordered_set<char> &mset_set: {mset.added, mset.removed}) {
-					for (char c: mset_set) {
-						auto iter = hat_set::map.find(c);
+				for (const std::unordered_set<char> &modeset_set: {modeset.added, modeset.removed}) {
+					for (char c: modeset_set) {
+						auto iter = HatSet::map.find(c);
 						if (iter == hat_end)
 							continue;
 
-						hat_set &set = chan->get_hats(extra_who), old_set = set;
+						HatSet &set = chan->getHats(extra_who), old_set = set;
 						if (add) {
 							set += iter->second;
 						} else {
@@ -102,23 +102,23 @@ namespace pingpong {
 						}
 
 						if (set != old_set)
-							events::dispatch<hats_updated_event>(extra_who, chan, old_set, set);
+							Events::dispatch<HatsUpdatedEvent>(extra_who, chan, old_set, set);
 					}
 
 					add = false;
 				}
-			} else if (mset.extra.empty()) {
-				(chan? chan : serv->get_channel(where, true))->apply_modes(mset.removed, mset.added);
+			} else if (modeset.extra.empty()) {
+				(chan? chan : server->getChannel(where, true))->applyModes(modeset.removed, modeset.added);
 			}
 		} else {
-			line.serv->get_self()->apply_modes(mset.removed, mset.added);
+			line.server->getSelf()->applyModes(modeset.removed, modeset.added);
 		}
 
-		events::dispatch<mode_event>(serv, where, who, mset, line);
+		Events::dispatch<ModeEvent>(server, where, who, modeset, line);
 		return true;
 	}
 
-	mode_message::operator std::string() const {
+	ModeMessage::operator std::string() const {
 		return "";
 	}
 }

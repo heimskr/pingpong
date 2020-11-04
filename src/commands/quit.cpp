@@ -1,16 +1,16 @@
 #include <string>
 
-#include "pingpong/commands/quit.h"
-#include "pingpong/events/quit.h"
+#include "pingpong/commands/Quit.h"
+#include "pingpong/events/Quit.h"
 
-namespace pingpong {
-	quit_command::operator std::string() const {
+namespace PingPong {
+	QuitCommand::operator std::string() const {
 		return "QUIT :" + reason;
 	}
 
-	bool quit_command::send() {
-		if (command::send()) {
-			events::dispatch<quit_event>(serv->get_self());
+	bool QuitCommand::send() {
+		if (Command::send()) {
+			Events::dispatch<QuitEvent>(server->getSelf());
 			return true;
 		}
 

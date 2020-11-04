@@ -3,18 +3,18 @@
 
 #include <string>
 
-#include "message.h"
-#include "sourced.h"
+#include "Message.h"
+#include "Sourced.h"
 
-namespace pingpong {
-	class quit_message: public sourced_message {
+namespace PingPong {
+	class QuitMessage: public SourcedMessage {
 		public:
-			using sourced_message::sourced_message;
+			using SourcedMessage::SourcedMessage;
 
-			static constexpr auto get_name = []() -> std::string { return "QUIT"; };
+			static constexpr auto getName = []() -> std::string { return "QUIT"; };
 
 			operator std::string() const override;
-			bool operator()(server *) override;
+			bool operator()(Server *) override;
 	};
 }
 

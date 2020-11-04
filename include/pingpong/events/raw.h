@@ -4,24 +4,23 @@
 #include <memory>
 #include <string>
 
-#include "pingpong/core/server.h"
-#include "pingpong/events/event.h"
-#include "pingpong/messages/message.h"
+#include "pingpong/core/Server.h"
+#include "pingpong/events/Event.h"
+#include "pingpong/messages/Message.h"
 
-namespace pingpong {
-	class raw_in_event: public server_event {
-		public:
-			std::string raw_in;
+namespace PingPong {
+	struct RawInEvent: public ServerEvent {
+		std::string rawIn;
 
-			raw_in_event(server *serv_, const std::string &raw_in_): server_event(serv_), raw_in(raw_in_) {}
+		RawInEvent(Server *server_, const std::string &raw_in):
+			ServerEvent(server_), rawIn(raw_in) {}
 	};
 
-	class raw_out_event: public server_event {
-		public:
-			std::string raw_out;
+	struct RawOutEvent: public ServerEvent {
+		std::string rawOut;
 
-			raw_out_event(server *serv_, const std::string &raw_out_):
-				server_event(serv_), raw_out(raw_out_) {}
+		RawOutEvent(Server *server_, const std::string &raw_out):
+			ServerEvent(server_), rawOut(raw_out) {}
 	};
 }
 

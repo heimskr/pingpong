@@ -1,13 +1,13 @@
 #ifndef PINGPONG_EVENTS_JOIN_H_
 #define PINGPONG_EVENTS_JOIN_H_
 
-#include "pingpong/core/channel.h"
-#include "pingpong/events/event.h"
+#include "pingpong/core/Channel.h"
+#include "pingpong/events/Event.h"
 
-namespace pingpong {
-	class join_event: public user_event {
+namespace PingPong {
+	class JoinEvent: public UserEvent {
 		public:
-			using user_event::user_event;
+			using UserEvent::UserEvent;
 	};
 }
 

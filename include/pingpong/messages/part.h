@@ -3,19 +3,19 @@
 
 #include <string>
 
-#include "message.h"
-#include "sourced.h"
-#include "line.h"
+#include "Message.h"
+#include "Sourced.h"
+#include "Line.h"
 
-namespace pingpong {
-	class part_message: public sourced_message {
+namespace PingPong {
+	class PartMessage: public SourcedMessage {
 		public:
-			using sourced_message::sourced_message;
+			using SourcedMessage::SourcedMessage;
 
-			static constexpr auto get_name = []() -> std::string { return "PART"; };
+			static constexpr auto getName = []() -> std::string { return "PART"; };
 
 			operator std::string() const override;
-			bool operator()(server *) override;
+			bool operator()(Server *) override;
 	};
 }
 

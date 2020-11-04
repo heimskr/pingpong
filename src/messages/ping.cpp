@@ -1,16 +1,16 @@
 #include <string>
 
-#include "pingpong/commands/pong.h"
-#include "pingpong/events/server_status.h"
-#include "pingpong/messages/ping.h"
+#include "pingpong/commands/Pong.h"
+#include "pingpong/events/ServerStatus.h"
+#include "pingpong/messages/Ping.h"
 
-namespace pingpong {
-	ping_message::operator std::string() const {
+namespace PingPong {
+	PingMessage::operator std::string() const {
 		return "PING " + content;
 	}
 
-	bool ping_message::operator()(server *serv) {
-		pong_command(serv, content).send();
+	bool PingMessage::operator()(Server *server) {
+		PongCommand(server, content).send();
 		return true;
 	}
 }

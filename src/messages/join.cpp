@@ -1,15 +1,16 @@
 #include <iostream>
 #include <string>
 
-#include "pingpong/core/server.h"
-#include "pingpong/events/join.h"
-#include "pingpong/events/names_updated.h"
-#include "pingpong/messages/join.h"
+#include "pingpong/core/Server.h"
+#include "pingpong/events/Join.h"
+#include "pingpong/events/NamesUpdated.h"
+#include "pingpong/messages/Join.h"
 
 #include "lib/formicine/futil.h"
 
-namespace pingpong {
-	join_message::join_message(const pingpong::line &line_): message(line_), serv(line_.serv), who(line_.source.nick) {
+namespace PingPong {
+	JoinMessage::JoinMessage(const PingPong::Line &line_):
+	Message(line_), server(line_.server), who(line_.source.nick) {
 		const std::string &params = line_.parameters;
 		if (params.empty())
 			throw std::invalid_argument("Parameters for a JOIN message cannot be empty");
@@ -24,7 +25,7 @@ namespace pingpong {
 				throw std::invalid_argument("Parameters for a extended JOIN message must contain at least three words");
 
 			chan = formicine::util::nth_word(params, 0, false);
-			accountname = formicine::util::nth_word(params, 1, false);
+			accountName = formicine::util::nth_word(params, 1, false);
 
 			const size_t second_space = formicine::util::nth_index(params, ' ', 2);
 			if (params[second_space + 1] != ':') {
@@ -36,30 +37,30 @@ namespace pingpong {
 		}
 	}
 
-	join_message::operator std::string() const {
+	JoinMessage::operator std::string() const {
 		return who + " joined " + chan;
 	}
 
-	bool join_message::operator()(server *serv) {
+	bool JoinMessage::operator()(Server *server) {
 		if (chan.empty() || chan.front() != '#')
-			throw std::runtime_error("Invalid channel for join_message");
+			throw std::runtime_error("Invalid channel for JoinMessage");
 
-		std::shared_ptr<user> userptr = serv->get_user(who, true, true);
-		std::shared_ptr<channel> chanptr = serv->get_channel(chan, true);
+		std::shared_ptr<User> userptr = server->getUser(who, true, true);
+		std::shared_ptr<Channel> chanptr = server->getChannel(chan, true);
 
-		if (accountname == "*") {
+		if (accountName == "*") {
 			// If the accountname in an extended JOIN message is '*', the user isn't identified.
-			userptr->account_name.clear();
-		} else if (!accountname.empty()) {
-			userptr->account_name = accountname;
+			userptr->accountName.clear();
+		} else if (!accountName.empty()) {
+			userptr->accountName = accountName;
 		}
 
-		if (!chanptr->has_user(userptr)) {
-			chanptr->add_user(userptr);
-			events::dispatch<names_updated_event>(chanptr);
+		if (!chanptr->hasUser(userptr)) {
+			chanptr->addUser(userptr);
+			Events::dispatch<NamesUpdatedEvent>(chanptr);
 		}
 
-		events::dispatch<join_event>(userptr, chanptr);
+		Events::dispatch<JoinEvent>(userptr, chanptr);
 		return true;
 	}
 }

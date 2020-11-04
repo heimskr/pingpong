@@ -4,35 +4,35 @@
 #include <memory>
 #include <string>
 
-#include "pingpong/core/channel.h"
-#include "pingpong/core/server.h"
-#include "pingpong/core/user.h"
+#include "pingpong/core/Channel.h"
+#include "pingpong/core/Server.h"
+#include "pingpong/core/User.h"
 
-namespace pingpong {
+namespace PingPong {
 	/**
 	 * For anything specific to one location (a channel or a user).
 	 */
-	class local {
+	class Local {
 		protected:
-			local(const std::string &where_): where(where_) {}
-			local(std::shared_ptr<user> user_): local(user_->name) {}
-			local(std::shared_ptr<channel> chan_): local(chan_->name) {}
+			Local(const std::string &where_): where(where_) {}
+			Local(std::shared_ptr<User> user_): Local(user_->name) {}
+			Local(std::shared_ptr<Channel> chan_): Local(chan_->name) {}
 
-			inline void check_destination() const;
+			inline void checkDestination() const;
 
 		public:
 			std::string where;
 
-			bool is_user() const;
-			bool is_channel() const;
+			bool isUser() const;
+			bool isChannel() const;
 
 			/** If the location is a user, this returns a pointer. Note that when the destination of a received message
 			 *  is a user, that user shouldn't ever be anyone but you, unless you found a way to receive messages
 			 *  intended for other users... */
-			std::shared_ptr<user> get_user(server *, bool update_case = false) const;
+			std::shared_ptr<User> getUser(Server *, bool update_case = false) const;
 
 			/** If the source of this message is a channel, this returns a pointer to the channel. */
-			std::shared_ptr<channel> get_channel(server *) const;
+			std::shared_ptr<Channel> getChannel(Server *) const;
 	};
 }
 

@@ -1,19 +1,19 @@
 #ifndef PINGPONG_COMMANDS_PART_H_
 #define PINGPONG_COMMANDS_PART_H_
 
-#include "pingpong/core/channel.h"
-#include "command.h"
+#include "pingpong/core/Channel.h"
+#include "Command.h"
 
-namespace pingpong {
-	class part_command: public command {
+namespace PingPong {
+	class PartCommand: public Command {
 		public:
-			std::string chans, reason;
+			std::string channels, reason;
 
-			part_command(server *serv, std::string chans_, const std::string &reason_ = ""):
-				command(serv), chans(chans_), reason(reason_) {}
+			PartCommand(Server *server_, const std::string &channels_, const std::string &reason_ = ""):
+				Command(server_), channels(channels_), reason(reason_) {}
 
-			part_command(server *serv, std::shared_ptr<channel> chan, const std::string &reason_ = ""):
-				part_command(serv, chan->name, reason_) {}
+			PartCommand(Server *server_, std::shared_ptr<Channel> channel, const std::string &reason_ = ""):
+				PartCommand(server_, channel->name, reason_) {}
 
 			operator std::string() const override;
 	};

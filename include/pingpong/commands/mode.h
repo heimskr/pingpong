@@ -1,23 +1,24 @@
 #ifndef PINGPONG_COMMANDS_MODE_H_
 #define PINGPONG_COMMANDS_MODE_H_
 
-#include "pingpong/core/local.h"
-#include "command.h"
+#include "pingpong/core/Local.h"
+#include "Command.h"
 
-namespace pingpong {
-	class mode_command: public command, public local {
+namespace PingPong {
+	class ModeCommand: public Command, public Local {
 		public:
 			std::string flags, extra;
 
-			mode_command(const std::string &where_, server *serv_, const std::string &flags_ = "",
+			ModeCommand(const std::string &where_, Server *server_, const std::string &flags_ = "",
 			const std::string &extra_ = ""):
-				command(serv_), local(where_), flags(flags_), extra(extra_) {}
+				Command(server_), Local(where_), flags(flags_), extra(extra_) {}
 
-			mode_command(std::shared_ptr<user> who, const std::string &flags_ = "", const std::string &extra_ = ""):
-				mode_command(who->name, who->serv, flags_, extra_) {}
+			ModeCommand(std::shared_ptr<User> who, const std::string &flags_ = "", const std::string &extra_ = ""):
+				ModeCommand(who->name, who->server, flags_, extra_) {}
 
-			mode_command(std::shared_ptr<channel> chan, const std::string &flags_ = "", const std::string &extra_ = ""):
-				mode_command(chan->name, chan->serv, flags_, extra_) {}
+			ModeCommand(std::shared_ptr<Channel> channel, const std::string &flags_ = "",
+			const std::string &extra_ = ""):
+				ModeCommand(channel->name, channel->server, flags_, extra_) {}
 
 			operator std::string() const override;
 	};

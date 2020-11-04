@@ -6,34 +6,34 @@
 #include <unordered_map>
 #include <utility>
 
-#include "pingpong/core/defs.h"
+#include "pingpong/core/Defs.h"
 
-namespace pingpong {
+namespace PingPong {
 	/**
 	 * Represents a collection of IRC hats.
 	 */
-	class hat_set {
+	class HatSet {
 		public:
-			static const std::string order, reverse_order;
-			static std::unordered_map<hat, int> ranks;
-			static std::unordered_map<char, hat> map;
+			static const std::string order, reverseOrder;
+			static std::unordered_map<Hat, int> ranks;
+			static std::unordered_map<char, Hat> map;
 
 		private:
-			std::unordered_set<hat> set;
+			std::unordered_set<Hat> set;
 
-			static std::unordered_set<hat> all_hats;
+			static std::unordered_set<Hat> allHats;
 
 		public:
-			hat_set(): set({}) {}
-			hat_set(hat hat): set({hat}) {}
-			hat_set(const std::unordered_set<hat> &set_): set(set_) {}
-			hat_set(const std::string &);
+			HatSet(): set({}) {}
+			HatSet(Hat hat): set({hat}) {}
+			HatSet(const std::unordered_set<Hat> &set_): set(set_) {}
+			HatSet(const std::string &);
 
 			/** Returns the highest ranked hat in the set. */
-			hat highest() const;
+			Hat highest() const;
 
 			/** Returns the lowest ranked hat in the set. */
-			hat lowest() const;
+			Hat lowest() const;
 
 			/** Returns the number of hats in the set (not including the "none" pseudo-hat). */
 			size_t size() const;
@@ -45,77 +45,77 @@ namespace pingpong {
 			operator std::string() const;
 
 			/** Returns whether the hat set's contents are the same as another's. */
-			bool operator==(const hat_set &) const;
+			bool operator==(const HatSet &) const;
 
 			/** Returns whether the hat set's contents differs from another's. */
-			bool operator!=(const hat_set &) const;
+			bool operator!=(const HatSet &) const;
 
 			/** Returns whether this hat set outranks another. Compares only the highest hat in each set. */
-			bool operator>(const hat_set &) const;
+			bool operator>(const HatSet &) const;
 
 			/** Returns whether this hat set is outranked by another. Compares only the highest hat in each set. */
-			bool operator<(const hat_set &) const;
+			bool operator<(const HatSet &) const;
 
 			/** Returns whether the hat set contains a given hat (and no other hats). */
-			bool operator==(hat) const;
+			bool operator==(Hat) const;
 
 			/** Returns whether the hat set contains a given hat (and no other hats). */
 			bool operator==(char) const;
 
 			/** Returns whether the hat set contains no hats, multiple hats or a hat other than a given hat. */
-			bool operator!=(hat) const;
+			bool operator!=(Hat) const;
 
 			/** Returns whether the hat set contains no hats, multiple hats or a hat other than a given hat. */
 			bool operator!=(char) const;
 
 			/** Returns whether the hat set contains a given hat (possibly in addition to other hats.) */
-			bool operator%(hat) const;
+			bool operator%(Hat) const;
 
 			/** Returns whether the hat set contains a given hat (possibly in addition to other hats.) */
 			bool operator%(char) const;
 
 			/** Returns a new hat set consisting of the shared hats of this hat set and another. */
-			hat_set operator&(const hat_set &) const;
+			HatSet operator&(const HatSet &) const;
 
 			/** Returns a new hat set containing a given hat if this hat set contains it, or an empty set otherwise. */
-			hat_set operator&(hat) const;
+			HatSet operator&(Hat) const;
 
 			/** Replaces the hat set's contents with a single hat. */
-			hat_set & operator=(hat);
+			HatSet & operator=(Hat);
 
 			/** Replaces the hat set's contents with a single hat. */
-			hat_set & operator=(char);
+			HatSet & operator=(char);
 
 			/** Adds a hat to the hat set. */
-			hat_set & operator+=(hat);
+			HatSet & operator+=(Hat);
 
 			/** Adds a hat to the hat set. */
-			hat_set & operator+=(char);
+			HatSet & operator+=(char);
 
 			/** Removes a hat from the hat set. */
-			hat_set & operator-=(hat);
+			HatSet & operator-=(Hat);
 
 			/** Removes a hat from the hat set. */
-			hat_set & operator-=(char);
+			HatSet & operator-=(char);
 
 			/** Returns whether a character is a valid hat representation. */
-			static bool is_hat(char);
+			static bool isHat(char);
 
 			/** Converts a character into a hat. Throws an exception if the character doesn't represent a hat. */
-			static hat get_hat(char);
+			static Hat getHat(char);
 
 			/** Converts a string into a hat. Throws an exception if the string doesn't represent a single hat. */
-			static hat get_hat(const std::string &);
+			static Hat getHat(const std::string &);
 
-			/** Separates a string like "@+pingpong" into a hat_set and a string for the nick. */
-			static std::pair<hat_set, std::string> separate(const std::string &);
+			/** Separates a string like "@+pingpong" into a HatSet and a string for the nick. */
+			static std::pair<HatSet, std::string> separate(const std::string &);
 
-			friend std::ostream & operator<<(std::ostream &, const hat_set &);
+			friend std::ostream & operator<<(std::ostream &, const HatSet &);
 	};
 
-	std::ostream & operator<<(std::ostream &, const hat_set &);
-	bool operator<(hat, hat);
-	bool operator>(hat, hat);
+	std::ostream & operator<<(std::ostream &, const HatSet &);
+	bool operator<(Hat, Hat);
+	bool operator>(Hat, Hat);
 }
 
 #endif

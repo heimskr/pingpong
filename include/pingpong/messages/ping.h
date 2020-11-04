@@ -1,17 +1,17 @@
 #ifndef PINGPONG_MESSAGES_PING_H_
 #define PINGPONG_MESSAGES_PING_H_
 
-#include "basic.h"
+#include "Basic.h"
 
-namespace pingpong {
-	class ping_message: public basic_message {
+namespace PingPong {
+	class PingMessage: public BasicMessage {
 		public:
-			ping_message(pingpong::line line_): basic_message(line_) {}
+			PingMessage(const PingPong::Line &line_): BasicMessage(line_) {}
 
-			static constexpr auto get_name = []() -> std::string { return "PING"; };
+			static constexpr auto getName = []() -> std::string { return "PING"; };
 
 			operator std::string() const override;
-			bool operator()(server *) override;
+			bool operator()(Server *) override;
 	};
 }
 

@@ -5,13 +5,13 @@
 #include <string>
 #include <unordered_set>
 
-namespace pingpong {
-	class modeset {
+namespace PingPong {
+	class ModeSet {
 		public:
-			enum class mode_type {self, channel};
+			enum class ModeType {Self, Channel};
 			
 			/** There are two types of mode changes: user modes and channel modes. This indicates which type applies. */
-			mode_type type {mode_type::self};
+			ModeType type = ModeType::Self;
 
 			/** The raw string of mode changes, such as "-v+o". */
 			std::string modes;
@@ -25,17 +25,17 @@ namespace pingpong {
 			/** A set of all modes indicated as removed by the message. */
 			std::unordered_set<char> removed {};
 
-			modeset() = default;
+			ModeSet() = default;
 
 			/** Throws std::invalid_argument if the line is malformed. */
-			modeset(mode_type type_, const std::string &modes_, const std::string &extra_ = "") noexcept(false);
+			ModeSet(ModeType type_, const std::string &modes_, const std::string &extra_ = "") noexcept(false);
 
 			/** Returns whether the type is one of the defined types. This should never return false. */
-			bool is_type_valid() const noexcept;
+			bool isTypeValid() const noexcept;
 
 			/** Returns a string indicating the added and removed modes in the standard notation (e.g., "-S+n"), without
 			 *  extra data like masks (for bans). */
-			std::string mode_str() const;
+			std::string modeString() const;
 
 			/** Returns the modestring with any extra data appended. */
 			operator std::string() const;

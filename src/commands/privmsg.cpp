@@ -1,30 +1,29 @@
-#include "pingpong/commands/privmsg.h"
+#include "pingpong/commands/Privmsg.h"
 
-#include "pingpong/events/error.h"
-#include "pingpong/events/privmsg.h"
+#include "pingpong/events/Error.h"
+#include "pingpong/events/Privmsg.h"
 
-namespace pingpong {
-	privmsg_command::privmsg_command(server *serv_, std::string where_, std::string message_):
-	command(serv_), local(where_), message(message_) {
+namespace PingPong {
+	PrivmsgCommand::PrivmsgCommand(Server *server_, std::string where_, std::string message_):
+	Command(server_), Local(where_), message(message_) {
 		if (where.empty())
-			throw std::runtime_error("Destination is empty in privmsg_command");
+			throw std::runtime_error("Destination is empty in PrivmsgCommand");
 	}
 
-	privmsg_command::operator std::string() const {
+	PrivmsgCommand::operator std::string() const {
 		return "PRIVMSG " + where + " :" + message;
 	}
 
-	bool privmsg_command::send() {
-		if (command::send()) {
-			if (is_channel()) {
-				std::shared_ptr<channel> chan = get_channel(serv);
-				if (chan) {
-					events::dispatch<privmsg_event>(serv->get_self(), chan, message);
-				} else {
-					events::dispatch<error_event>("Can't send message: channel is null", false);
-				}
+	bool PrivmsgCommand::send() {
+		if (Command::send()) {
+			if (isChannel()) {
+				std::shared_ptr<Channel> channel = getChannel(server);
+				if (channel)
+					Events::dispatch<PrivmsgEvent>(server->getSelf(), channel, message);
+				else
+					Events::dispatch<ErrorEvent>("Can't send message: channel is null", false);
 			} else {
-				events::dispatch<privmsg_event>(serv->get_self(), get_user(serv, false), message);
+				Events::dispatch<PrivmsgEvent>(server->getSelf(), getUser(server, false), message);
 			}
 
 			return true;

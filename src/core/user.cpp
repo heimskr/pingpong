@@ -1,20 +1,19 @@
-#include "pingpong/core/user.h"
+#include "pingpong/core/User.h"
 
-namespace pingpong {
-	void user::rename(const std::string &new_name) {
+namespace PingPong {
+	void User::rename(const std::string &new_name) {
 		name = new_name;
 	}
 
-	std::ostream & operator<<(std::ostream &os, const pingpong::user &who) {
-		os << std::string(who);
-		return os;
+	bool User::isSelf() const {
+		return server && name == server->getNick();
 	}
 
-	bool user::is_self() const {
-		return serv && name == serv->get_nick();
+	bool User::operator==(const User &other) const {
+		return server == other.server && name == other.name;
 	}
 
-	bool user::operator==(const user &other) const {
-		return serv == other.serv && name == other.name;
+	std::ostream & operator<<(std::ostream &os, const PingPong::User &user) {
+		return os << std::string(user);
 	}
 }

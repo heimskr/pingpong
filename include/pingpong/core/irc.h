@@ -8,67 +8,68 @@
 #include <mutex>
 #include <utility>
 
-#include "pingpong/core/defs.h"
-#include "pingpong/core/options.h"
+#include "pingpong/core/Defs.h"
+#include "pingpong/core/Options.h"
 
 #include "lib/formicine/ansi.h"
 
-namespace pingpong {
-	class irc {
-		using connect_wrapper = std::function<void(const std::function<void()> &)>;
+namespace PingPong {
+	class IRC {
+		using ConnectWrapper = std::function<void(const std::function<void()> &)>;
+
 		private:
-			std::mutex console_mutex, servers_mutex;
+			std::mutex consoleMutex, serversMutex;
 
 		public:
-			static constexpr int default_port = 6667;
-			static std::string default_nick, default_user, default_realname;
+			static constexpr int defaultPort = 6667;
+			static std::string defaultNick, defaultUser, defaultRealname;
 
 			std::string username, realname;
 
 			/** A map of server IDs to server instances. */
-			std::map<std::string, server *> servers {};
+			std::map<std::string, Server *> servers {};
 
-			std::list<server *> server_order {};
+			std::list<Server *> serverOrder {};
 
-			server *active_server = nullptr;
+			Server *activeServer = nullptr;
 
 			/** Represents the client's version. */
 			std::string version = "pingpong " PINGPONG_VERSION_NUMBER;
 
-			irc(std::string user, std::string real): username(user), realname(real) {}
-			irc(): irc(default_user, default_realname) {}
-			~irc();
+			IRC(std::string user, std::string real): username(user), realname(real) {}
+			IRC(): IRC(defaultUser, defaultRealname) {}
+			~IRC();
 
 			/** Finds and returns the server with a given ID or nullptr if none is found. */
-			server * get_server(const std::string &id) const;
+			Server * getServer(const std::string &id) const;
 
 			/** Returns whether a server with a given ID exists. */
-			bool has_server(const std::string &id) const;
+			bool hasServer(const std::string &id) const;
 
 			/** Returns whether this instance contains a given server pointer. */
-			bool has_server(server *) const;
+			bool hasServer(Server *) const;
 
 			/** If this server contains a given server pointer, this function returns its key. Otherwise, it returns an
 			 *  empty string. */
-			std::string get_key(server *) const;
+			std::string getKey(Server *) const;
 
 			std::pair<std::string, long> connect(const std::string &where, const std::string &nick, long port = 6667,
-				connect_wrapper wrapper = {});
+			                                     ConnectWrapper wrapper = {});
 
 			void init();
-			void init_messages();
+			void initMessages();
 
 			/** Registers a set of standard event listeners. */
-			void add_listeners();
+			void addListeners();
 
-			std::unique_lock<std::mutex> lock_console() { return std::unique_lock(console_mutex); }
-			std::unique_lock<std::mutex> lock_servers() { return std::unique_lock(servers_mutex); }
+			std::unique_lock<std::mutex> lockConsole() { return std::unique_lock(consoleMutex); }
+			std::unique_lock<std::mutex> lockServers() { return std::unique_lock(serversMutex); }
 
 			/** Creates a unique ID for a server, a hostname. */
-			std::string create_id(const std::string &hostname);
+			std::string createID(const std::string &hostname);
 
-			irc & operator+=(server *);
-			irc & operator-=(server *);
+			IRC & operator+=(Server *);
+			IRC & operator-=(Server *);
 	};
 }
 

@@ -1,54 +1,54 @@
 #include <cctype>
 #include <vector>
 
-#include "pingpong/core/debug.h"
-#include "pingpong/core/parse_error.h"
+#include "pingpong/core/Debug.h"
+#include "pingpong/core/ParseError.h"
 
-#include "pingpong/events/event.h"
-#include "pingpong/events/names_updated.h"
+#include "pingpong/events/Event.h"
+#include "pingpong/events/NamesUpdated.h"
 
-#include "pingpong/messages/numeric.h"
+#include "pingpong/messages/Numeric.h"
 
 #include "lib/formicine/ansi.h"
 
-namespace pingpong {
-	numeric_message::numeric_message(pingpong::line line_): message(line_) {
+namespace PingPong {
+	NumericMessage::NumericMessage(const PingPong::Line &line_): Message(line_) {
 		int uncasted = 0;
-		if (!is_numeric(line_.command.c_str(), uncasted))
+		if (!isNumeric(line_.command.c_str(), uncasted))
 			throw std::invalid_argument("Expected a numeric command");
 
-		type = static_cast<numeric_type>(uncasted);
+		type = static_cast<NumericType>(uncasted);
 	}
 
 
 // Public instance methods
 
 
-	numeric_message::operator std::string() const {
-		return "[" + to_string() + "] " + line.original;
+	NumericMessage::operator std::string() const {
+		return "[" + toString() + "] " + line.original;
 	}
 
-	bool numeric_message::operator()(server *serv) {
+	bool NumericMessage::operator()(Server *server) {
 		switch (type) {
-			case numeric_type::welcome:       return handle_welcome(serv);       // 001
-			case numeric_type::i_support:     return handle_i_support(serv);     // 005
-			case numeric_type::whois_user:    return handle_whois_user(serv);    // 311
-			case numeric_type::whois_server:  return handle_whois_server(serv);  // 312
-			case numeric_type::whois_idle:    return handle_whois_idle(serv);    // 317
-			case numeric_type::channel_modes: return handle_channel_modes(serv); // 324
-			case numeric_type::channel_topic: return handle_channel_topic(serv); // 332
-			case numeric_type::names_reply:   return handle_names_reply(serv);   // 353
-			case numeric_type::motd:          return handle_motd(serv);          // 372
-			case numeric_type::nick_in_use:   return handle_nick_in_use(serv);   // 433
+			case NumericType::Welcome:      return handleWelcome(server);      // 001
+			case NumericType::ISupport:     return handleISupport(server);     // 005
+			case NumericType::WhoisUser:    return handleWhoisUser(server);    // 311
+			case NumericType::WhoisServer:  return handleWhoisServer(server);  // 312
+			case NumericType::WhoisIdle:    return handleWhoisIdle(server);    // 317
+			case NumericType::ChannelModes: return handleChannelModes(server); // 324
+			case NumericType::ChannelTopic: return handleChannelTopic(server); // 332
+			case NumericType::NamesReply:   return handleNamesReply(server);   // 353
+			case NumericType::Motd:         return handleMotd(server);         // 372
+			case NumericType::NickInUse:    return handleNickInUse(server);    // 433
 			default: return true;
 		}
 	}
 
-	bool numeric_message::is_known() const {
+	bool NumericMessage::isKnown() const {
 		return 0 < types.count(type);
 	}
 	
-	bool numeric_message::is_numeric(const char *str) {
+	bool NumericMessage::isNumeric(const char *str) {
 		if (!std::isdigit(str[0]))
 			return false;
 
@@ -60,7 +60,7 @@ namespace pingpong {
 		return !*ptr;
 	}
 
-	bool numeric_message::is_numeric(const char *str, int &l) {
+	bool NumericMessage::isNumeric(const char *str, int &l) {
 		if (!std::isdigit(str[0]))
 			return false;
 
@@ -72,16 +72,16 @@ namespace pingpong {
 		return true;
 	}
 
-	bool numeric_message::operator==(int number) const { return to_int() == number; }
-	bool numeric_message::operator!=(int number) const { return to_int() != number; }
-	bool numeric_message::operator==(numeric_type type_) const { return type == type_; }
-	bool numeric_message::operator!=(numeric_type type_) const { return type != type_; }
+	bool NumericMessage::operator==(int number) const { return toInt() == number; }
+	bool NumericMessage::operator!=(int number) const { return toInt() != number; }
+	bool NumericMessage::operator==(NumericType type_) const { return type == type_; }
+	bool NumericMessage::operator!=(NumericType type_) const { return type != type_; }
 
 
 // Private static methods
 
 
-	std::tuple<std::string, std::string, std::string> numeric_message::parse_ss(const std::string &str) {
+	std::tuple<std::string, std::string, std::string> NumericMessage::parseSS(const std::string &str) {
 		size_t first = str.find(' ');
 		size_t second = str.find(' ', first + 1);
 
@@ -92,11 +92,11 @@ namespace pingpong {
 		}
 	}
 
-	std::tuple<std::string, std::string, std::string> numeric_message::parse_ssc(const std::string &str) {
+	std::tuple<std::string, std::string, std::string> NumericMessage::parseSSC(const std::string &str) {
 		size_t space = str.find(' ');
 		size_t space_colon = str.find(" :");
 		if (space >= space_colon)
-			throw parse_error(str, "Expected space before space-colon");
+			throw ParseError(str, "Expected space before space-colon");
 
 		try {
 			return {str.substr(0, space), str.substr(space + 1, space_colon - space - 1), str.substr(space_colon + 2)};
@@ -109,15 +109,15 @@ namespace pingpong {
 // Public static fields
 
 
-	std::unordered_set<numeric_type> numeric_message::types = {
-		numeric_type::channel_modes,
-		numeric_type::channel_topic,
-		numeric_type::topic_modified,
-		numeric_type::names_reply,
-		numeric_type::motd,
-		numeric_type::motd_start,
-		numeric_type::motd_end,
-		numeric_type::no_such_nick
+	std::unordered_set<NumericType> NumericMessage::types = {
+		NumericType::ChannelModes,
+		NumericType::ChannelTopic,
+		NumericType::TopicModified,
+		NumericType::NamesReply,
+		NumericType::Motd,
+		NumericType::MotdStart,
+		NumericType::MotdEnd,
+		NumericType::NoSuchNick
 	};
 }
 

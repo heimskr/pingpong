@@ -3,26 +3,24 @@
 #include <stdexcept>
 #include <string>
 
-#include "pingpong/core/defs.h"
-#include "pingpong/core/channel.h"
-#include "pingpong/core/server.h"
+#include "pingpong/core/Defs.h"
+#include "pingpong/core/Channel.h"
+#include "pingpong/core/Server.h"
 
-namespace pingpong {
-	channel::channel(std::string name_, server *serv_): name(name_), serv(serv_) {
+namespace PingPong {
+	Channel::Channel(const std::string &name_, Server *server_): name(name_), server(server_) {
 		if (name_.empty() || (name_[0] != '#' && name_[0] != '&'))
 			throw std::invalid_argument("Invalid channel name");
 	}
 
-	channel::channel(std::string name_): channel(name_, nullptr) {}
-
-	bool channel::has_server() const {
-		return serv != nullptr;
+	bool Channel::hasServer() const {
+		return server != nullptr;
 	}
 
-	bool channel::add_user(std::shared_ptr<user> user) {
-		auto lock = lock_users();
+	bool Channel::addUser(std::shared_ptr<User> user) {
+		auto lock = lockUsers();
 
-		if (!has_user(user)) {
+		if (!hasUser(user)) {
 			users.push_front(user);
 			return true;
 		}
@@ -30,8 +28,8 @@ namespace pingpong {
 		return false;
 	}
 
-	bool channel::remove_user(std::shared_ptr<user> user) {
-		auto lock = lock_users();
+	bool Channel::removeUser(std::shared_ptr<User> user) {
+		auto lock = lockUsers();
 
 		auto iter = std::find(users.begin(), users.end(), user);
 		if (iter != users.end()) {
@@ -42,11 +40,11 @@ namespace pingpong {
 		return false;
 	}
 
-	bool channel::rename_user(const std::string &old_nick, const std::string &new_nick) {
-		auto lock = lock_users();
-		// It's possible that the user has already been renamed in server::rename_user.
-		if (!has_user(new_nick)) {
-			for (std::shared_ptr<user> user: users) {
+	bool Channel::renameUser(const std::string &old_nick, const std::string &new_nick) {
+		auto lock = lockUsers();
+		// It's possible that the user has already been renamed in Server::renameUser.
+		if (!hasUser(new_nick)) {
+			for (const std::shared_ptr<User> &user: users) {
 				if (user->name == old_nick) {
 					user->rename(new_nick);
 					return true;
@@ -57,12 +55,12 @@ namespace pingpong {
 		return false;
 	}
 
-	bool channel::has_user(std::shared_ptr<user> user) const {
-		return user && user->serv == serv && std::find(users.begin(), users.end(), user) != users.end();
+	bool Channel::hasUser(std::shared_ptr<User> user) const {
+		return user && user->server == server && std::find(users.begin(), users.end(), user) != users.end();
 	}
 
-	bool channel::has_user(const std::string &name) const {
-		for (std::shared_ptr<user> user: users) {
+	bool Channel::hasUser(const std::string &name) const {
+		for (std::shared_ptr<User> user: users) {
 			if (user->name == name)
 				return true;
 		}
@@ -70,7 +68,7 @@ namespace pingpong {
 		return false;
 	}
 
-	bool channel::set_hats(std::shared_ptr<user> user, const hat_set &set) {
+	bool Channel::setHats(std::shared_ptr<User> user, const HatSet &set) {
 		auto iter = hats.find(user);
 
 		if (!set) {
@@ -92,21 +90,21 @@ namespace pingpong {
 		return true;
 	}
 
-	hat_set & channel::get_hats(std::shared_ptr<user> user) {
+	HatSet & Channel::getHats(std::shared_ptr<User> user) {
 		auto iter = hats.find(user);
 		if (iter == hats.end()) {
-			hats.insert({user, hat_set()});
+			hats.insert({user, HatSet()});
 			return hats.at(user);
 		}
 
 		return iter->second;
 	}
 
-	bool channel::send_to_front(std::shared_ptr<user> user) {
+	bool Channel::sendToFront(std::shared_ptr<User> user) {
 		if (!user)
 			return false;
 
-		auto lock = lock_users();
+		auto lock = lockUsers();
 
 		// No need to do anything if the user is already at the front.
 		if (users.front() == user)
@@ -124,13 +122,13 @@ namespace pingpong {
 		return false;
 	}
 
-	bool channel::send_to_front(const std::string &nick) {
-		return send_to_front(serv->get_user(nick, false, false));
+	bool Channel::sendToFront(const std::string &nick) {
+		return sendToFront(server->getUser(nick, false, false));
 	}
 
-	void channel::sort_users() {
-		auto lock = lock_users();
-		users.sort([&](const std::shared_ptr<user> &left, const std::shared_ptr<user> &right) {
+	void Channel::sortUsers() {
+		auto lock = lockUsers();
+		users.sort([&](const std::shared_ptr<User> &left, const std::shared_ptr<User> &right) {
 			const auto mismatch = std::mismatch(left->name.cbegin(), left->name.cend(), right->name.cbegin(),
 				right->name.cend(), [](const unsigned char lchar, const unsigned char rchar) {
 					return tolower(lchar) == tolower(rchar);
@@ -143,41 +141,38 @@ namespace pingpong {
 		});
 	}
 
-	channel::operator std::string() const {
-		return serv->id + "/" + name;
+	Channel::operator std::string() const {
+		return server->id + "/" + name;
 	}
 
-	std::shared_ptr<user> channel::operator[](const std::string &name) {
-		for (std::shared_ptr<user> user: users) {
+	std::shared_ptr<User> Channel::operator[](const std::string &name) {
+		for (std::shared_ptr<User> user: users)
 			if (user->name == name)
 				return user;
-		}
-
 		return nullptr;
 	}
 
-	bool channel::operator==(const std::string &str) const {
+	bool Channel::operator==(const std::string &str) const {
 		return name == str;
 	}
 
-	bool channel::operator!=(const std::string &str) const {
+	bool Channel::operator!=(const std::string &str) const {
 		return name != str;
 	}
 
-	bool channel::operator==(const channel &chan) const {
-		return name == chan.name && serv == chan.serv;
+	bool Channel::operator==(const Channel &channel) const {
+		return name == channel.name && server == channel.server;
 	}
 
-	bool channel::operator!=(const channel &chan) const {
-		return name != chan.name || serv != chan.serv;
+	bool Channel::operator!=(const Channel &channel) const {
+		return name != channel.name || server != channel.server;
 	}
 
-	bool channel::operator<(const channel &chan) const {
-		return name < chan.name;
+	bool Channel::operator<(const Channel &channel) const {
+		return name < channel.name;
 	}
 
-	std::ostream & operator<<(std::ostream &os, const channel &chan) {
-		os << std::string(chan);
-		return os;
+	std::ostream & operator<<(std::ostream &os, const Channel &channel) {
+		return os << std::string(channel);
 	}
 }

@@ -1,10 +1,10 @@
 #ifndef PINGPONG_EVENTS_LOG_H_
 #define PINGPONG_EVENTS_LOG_H_
 
-#include "pingpong/core/channel.h"
-#include "pingpong/events/event.h"
+#include "pingpong/core/Channel.h"
+#include "pingpong/events/Event.h"
 
-namespace pingpong {
+namespace PingPong {
 	/**
 	 * Dispatched when a debug message should be logged.
 	 */

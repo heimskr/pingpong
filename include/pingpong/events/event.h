@@ -7,52 +7,52 @@
 #include <stdexcept>
 #include <vector>
 
-#include "pingpong/core/channel.h"
-#include "pingpong/core/debug.h"
-#include "pingpong/core/local.h"
-#include "pingpong/core/util.h"
-#include "pingpong/core/server.h"
-#include "pingpong/core/user.h"
+#include "pingpong/core/Channel.h"
+#include "pingpong/core/Debug.h"
+#include "pingpong/core/Local.h"
+#include "pingpong/core/Util.h"
+#include "pingpong/core/Server.h"
+#include "pingpong/core/User.h"
 
-namespace pingpong {
-	class event {
+namespace PingPong {
+	class Event {
 		protected:
-			bool is_empty = false;
-			event(bool empty, const std::string &content_): is_empty(empty), content(content_) {}
+			bool isEmpty = false;
+			Event(bool empty, const std::string &content_): isEmpty(empty), content(content_) {}
 
 		public:
-			long stamp = util::timestamp();
+			long stamp = Util::timestamp();
 			std::string content;
 
-			virtual ~event() = default;
-			event(): is_empty(true) {}
+			virtual ~Event() = default;
+			Event(): isEmpty(true) {}
 
-			operator bool() const { return !is_empty; }
+			operator bool() const { return !isEmpty; }
 	};
 
-	using listener_fn = std::function<void(event *)>;
+	using Listener_f = std::function<void(Event *)>;
 
-	class fake_event: public event { public: fake_event(): event() {} };
+	class FakeEvent: public Event { public: FakeEvent(): Event() {} };
 
-	class events {
+	class Events {
 		private:
-			static std::multimap<std::string, std::pair<std::string, listener_fn>> listeners;
-			static size_t listeners_added;
+			static std::multimap<std::string, std::pair<std::string, Listener_f>> listeners;
+			static size_t listenersAdded;
 
 		public:
 			template <typename T>
 			static void listen(const std::string &name, std::function<void(T *)> fn) {
 				listeners.insert({std::string(typeid(T).name()), {
 					name,
-					[=](event *ev) {
-						fn(dynamic_cast<T *>(ev));
+					[=](Event *event) {
+						fn(dynamic_cast<T *>(event));
 					}
 				}});
 			}
 
 			template <typename T>
 			static std::string listen(std::function<void(T *)> fn) {
-				std::string name = "_" + std::to_string(++listeners_added);
+				std::string name = "_" + std::to_string(++listenersAdded);
 				listen(name, fn);
 				return name;
 			}
@@ -60,12 +60,11 @@ namespace pingpong {
 			template <typename T>
 			static bool unlisten(const std::string &name) {
 				auto range = listeners.equal_range(typeid(T).name());
-				for (auto iter = range.first; iter != range.second; ++iter) {
+				for (auto iter = range.first; iter != range.second; ++iter)
 					if (iter->second.first == name) {
 						listeners.erase(iter);
 						return true;
 					}
-				}
 
 				return false;
 			}
@@ -89,49 +88,49 @@ namespace pingpong {
 	};
 
 	/** For events local to one server. */
-	struct server_event: public event {
-		server *serv;
+	struct ServerEvent: public Event {
+		Server *server;
 
-		server_event(server *serv_, const std::string &content_ = ""): event(false, content_), serv(serv_) {}
+		ServerEvent(Server *server_, const std::string &content_ = ""): Event(false, content_), server(server_) {}
 	};
 
 	/** For events local to one channel on one server. */
-	struct channel_event: public server_event {
-		std::shared_ptr<channel> chan;
+	struct ChannelEvent: public ServerEvent {
+		std::shared_ptr<Channel> channel;
 
-		channel_event(const std::shared_ptr<channel> &, server *, const std::string & = "");
-		channel_event(const std::shared_ptr<channel> &chan_, const std::string &content_ = ""):
-			channel_event(chan_, chan_? chan_->serv : nullptr, content_) {}
+		ChannelEvent(const std::shared_ptr<Channel> &, Server *, const std::string & = "");
+		ChannelEvent(const std::shared_ptr<Channel> &channel_, const std::string &content_ = ""):
+			ChannelEvent(channel_, channel_? channel_->server : nullptr, content_) {}
 	};
 
 	/** For events local to one user in one channel on one server, such as joins.
 	 *  This can also be used for things like quits, which are specific to a user and server but not to a channel, by
 	 *  leaving the channel pointer null. */
-	struct user_event: public channel_event {
-		std::shared_ptr<user> who;
+	struct UserEvent: public ChannelEvent {
+		std::shared_ptr<User> who;
 
-		user_event(const std::shared_ptr<user> &, const std::shared_ptr<channel> &, const std::string & = "");
-		user_event(const std::shared_ptr<user> &who_, const std::string &content_ = ""):
-			user_event(who_, nullptr, content_) {}
+		UserEvent(const std::shared_ptr<User> &, const std::shared_ptr<Channel> &, const std::string & = "");
+		UserEvent(const std::shared_ptr<User> &who_, const std::string &content_ = ""):
+			UserEvent(who_, nullptr, content_) {}
 	};
 
 	/** For events local on one server to either a user or a channel, such as privmsgs. */
-	struct local_event: public server_event, public local {
+	struct LocalEvent: public ServerEvent, public Local {
 		template <typename T>
-		local_event(server *serv_, const T &where_, const std::string &content_ = ""):
-			server_event(serv_, content_), local(where_) {}
+		LocalEvent(Server *server_, const T &where_, const std::string &content_ = ""):
+			ServerEvent(server_, content_), Local(where_) {}
 	};
 
 	/** For events local to two users in one channel on one server, such as kicks. */
-	struct targeted_event: public user_event {
-		std::shared_ptr<user> whom;
+	struct TargetedEvent: public UserEvent {
+		std::shared_ptr<User> whom;
 
-		targeted_event(const std::shared_ptr<user> &, const std::shared_ptr<user> &,
-			const std::shared_ptr<channel> &, const std::string & = "");
+		TargetedEvent(const std::shared_ptr<User> &, const std::shared_ptr<User> &, const std::shared_ptr<Channel> &,
+			const std::string & = "");
 
-		targeted_event(std::shared_ptr<user> who_, const std::shared_ptr<user> &whom_, server *serv_,
+		TargetedEvent(const std::shared_ptr<User> &who_, const std::shared_ptr<User> &whom_, Server *server_,
 		const std::string &content_ = ""):
-			targeted_event(who_, whom_, static_cast<std::shared_ptr<channel>>(nullptr), content_) { serv = serv_; }
+			TargetedEvent(who_, whom_, std::shared_ptr<Channel>(), content_) { server = server_; }
 	};
 }
 

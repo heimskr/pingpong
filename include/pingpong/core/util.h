@@ -7,23 +7,23 @@
 #include <chrono>
 #include <string>
 
-namespace pingpong {
+namespace PingPong {
 	/**
 	 * Contains miscellaneous utility functions for pingpong.
 	 */
-	struct util {
+	struct Util {
 
-		static constexpr const char *nick_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+		static constexpr const char *nickChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 			"-_[]{}\\`|";
-		static constexpr const char *flag_chars = "+-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-		static std::array<std::string, 100> irc_colors;
+		static constexpr const char *flagChars = "+-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		static std::array<std::string, 100> ircColors;
 
 		using timetype = std::chrono::microseconds;
 
 		static timetype now();
 		static std::chrono::system_clock::duration system_now();
 
-		static constexpr long precision = 1e6;
+		static constexpr long precision = 1'000'000;
 
 		static long timestamp();
 		static long seconds();
@@ -31,10 +31,10 @@ namespace pingpong {
 		static long microstamp();
 		static long nanostamp();
 
-		static timetype from_seconds(long);
+		static timetype fromSeconds(long);
 
 		template <size_t Size = 64>
-		static std::string format_time(timetype when, const char *format) {
+		static std::string formatTime(timetype when, const char *format) {
 			std::chrono::system_clock::time_point tpoint {when};
 			std::time_t time = std::chrono::system_clock::to_time_t(tpoint);
 			char str[Size];
@@ -43,18 +43,18 @@ namespace pingpong {
 		}
 
 		template <size_t Size = 64>
-		static std::string format_time(long stamp, const char *format) {
-			return format_time(timetype(stamp), format);
+		static std::string formatTime(long stamp, const char *format) {
+			return formatTime(timetype(stamp), format);
 		}
 
-		static std::string get_date(timetype);
-		static std::string get_date(long);
+		static std::string getDate(timetype);
+		static std::string getDate(long);
 
-		static std::string get_time(timetype);
-		static std::string get_time(long);
+		static std::string getTime(timetype);
+		static std::string getTime(long);
 
 		/** Returns true if all the characters in a string are valid for nicknames. */
-		static bool is_valid_nick(const std::string &);
+		static bool isValidNick(const std::string &);
 
 		/** Trims whitespace from the end of a string. */
 		static std::string & rtrim(std::string &);
@@ -64,7 +64,7 @@ namespace pingpong {
 		static std::string irc2ansi(std::string);
 
 		template <typename T, typename Iter, typename Pred>
-		static std::deque<T> take_while(Iter begin, Iter end, Pred predicate) {
+		static std::deque<T> takeWhile(Iter begin, Iter end, Pred predicate) {
 			std::deque<T> out {};
 			while (begin != end && predicate(*begin))
 				out.push_back(*begin);
@@ -72,7 +72,7 @@ namespace pingpong {
 		}
 
 		template <typename Pred>
-		static std::string take_while(const std::string &str, Pred predicate) {
+		static std::string takeWhile(const std::string &str, Pred predicate) {
 			std::string out {};
 			for (char ch: str) {
 				if (!predicate(ch))

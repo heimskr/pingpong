@@ -1,17 +1,17 @@
 #ifndef PINGPONG_EVENTS_NICK_H_
 #define PINGPONG_EVENTS_NICK_H_
 
-#include "pingpong/core/channel.h"
-#include "pingpong/events/event.h"
+#include "pingpong/core/Channel.h"
+#include "pingpong/events/Event.h"
 
-namespace pingpong {
+namespace PingPong {
 	/**
 	 * Represents a nick change. In this event, the user pointer points to the user after their nick has been updated,
 	 * while the content contains the old nickname.
 	 */
-	class nick_event: public user_event {
+	class NickEvent: public UserEvent {
 		public:
-			using user_event::user_event;
+			using UserEvent::UserEvent;
 	};
 }
 

@@ -1,17 +1,17 @@
 #ifndef PINGPONG_MESSAGES_ERROR_H_
 #define PINGPONG_MESSAGES_ERROR_H_
 
-#include "basic.h"
+#include "Basic.h"
 
-namespace pingpong {
-	class error_message: public basic_message {
+namespace PingPong {
+	class ErrorMessage: public BasicMessage {
 		public:
-			error_message(pingpong::line line_): basic_message(line_) {}
+			ErrorMessage(PingPong::Line line_): BasicMessage(line_) {}
 
-			static constexpr auto get_name = []() -> std::string { return "ERROR"; };
+			static constexpr auto getName = []() -> std::string { return "ERROR"; };
 
 			operator std::string() const override;
-			bool operator()(server *) override;
+			bool operator()(Server *) override;
 	};
 }
 

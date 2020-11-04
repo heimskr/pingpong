@@ -1,29 +1,29 @@
 #include <string>
 
-#include "pingpong/events/part.h"
-#include "pingpong/events/names_updated.h"
+#include "pingpong/events/Part.h"
+#include "pingpong/events/NamesUpdated.h"
 
-#include "pingpong/messages/part.h"
+#include "pingpong/messages/Part.h"
 
-namespace pingpong {
-	part_message::operator std::string() const {
+namespace PingPong {
+	PartMessage::operator std::string() const {
 		return who->name + " left " + where + (content.empty()? "" : " [" + content + "]");
 	}
 
-	bool part_message::operator()(server *serv) {
+	bool PartMessage::operator()(Server *server) {
 		if (where.empty() || where.front() != '#')
-			throw std::runtime_error("Invalid channel for part_message");
+			throw std::runtime_error("Invalid channel for PartMessage");
 		
-		std::shared_ptr<channel> chan = serv->get_channel(where, true);
+		std::shared_ptr<Channel> chan = server->getChannel(where, true);
 
-		if (who->is_self()) {
-			serv->remove_channel(where);
+		if (who->isSelf()) {
+			server->removeChannel(where);
 		} else {
-			chan->remove_user(who);
-			events::dispatch<names_updated_event>(chan);
+			chan->removeUser(who);
+			Events::dispatch<NamesUpdatedEvent>(chan);
 		}
 
-		events::dispatch<part_event>(who, chan, content);
+		Events::dispatch<PartEvent>(who, chan, content);
 		return true;
 	}
 }

@@ -1,31 +1,31 @@
-#include "pingpong/commands/notice.h"
+#include "pingpong/commands/Notice.h"
 
-#include "pingpong/events/error.h"
-#include "pingpong/events/notice.h"
+#include "pingpong/events/Error.h"
+#include "pingpong/events/Notice.h"
 
-namespace pingpong {
-	notice_command::notice_command(server *serv_, std::string where_, std::string message_, bool hidden_):
-	command(serv_), local(where_), message(message_), hidden(hidden_) {
+namespace PingPong {
+	NoticeCommand::NoticeCommand(Server *server_, std::string where_, std::string message_, bool hidden_):
+	Command(server_), Local(where_), message(message_), hidden(hidden_) {
 		if (where.empty())
-			throw std::runtime_error("Destination is empty in notice_command");
+			throw std::runtime_error("Destination is empty in NoticeCommand");
 	}
 
-	notice_command::operator std::string() const {
+	NoticeCommand::operator std::string() const {
 		return "NOTICE " + where + " :" + message;
 	}
 
-	bool notice_command::send() {
-		if (command::send()) {
-			if (is_channel()) {
-				std::shared_ptr<channel> chan = get_channel(serv);
-				if (chan) {
+	bool NoticeCommand::send() {
+		if (Command::send()) {
+			if (isChannel()) {
+				std::shared_ptr<Channel> channel = getChannel(server);
+				if (channel) {
 					if (!hidden)
-						events::dispatch<notice_event>(serv->get_self(), chan, message, hidden);
+						Events::dispatch<NoticeEvent>(server->getSelf(), channel, message, hidden);
 				} else {
-					events::dispatch<error_event>("Can't send notice: channel is null", false);
+					Events::dispatch<ErrorEvent>("Can't send notice: channel is null", false);
 				}
 			} else if (!hidden) {
-				events::dispatch<notice_event>(serv->get_self(), get_user(serv, false), message, hidden);
+				Events::dispatch<NoticeEvent>(server->getSelf(), getUser(server, false), message, hidden);
 			}
 
 			return true;

@@ -1,21 +1,21 @@
-#include "pingpong/core/modeset.h"
+#include "pingpong/core/ModeSet.h"
 
 #include "lib/formicine/ansi.h"
 
-namespace pingpong {
-	modeset::modeset(mode_type type_, const std::string &modes_, const std::string &extra_):
+namespace PingPong {
+	ModeSet::ModeSet(ModeType type_, const std::string &modes_, const std::string &extra_):
 	type(type_), modes(modes_), extra(extra_) {
 		if (modes.empty())
-			throw std::invalid_argument("Mode string is empty in modeset");
+			throw std::invalid_argument("Mode string is empty in ModeSet");
 
-		// It's possible to have a modeset with no additions or removals—it will be simply "+".
+		// It's possible to have a ModeSet with no additions or removals—it will be simply "+".
 		if (modes == "+")
 			return;
 
 		// The first character has to be a plus or a minus.
 		const char front = modes.front();
 		if (front != '-' && front != '+')
-			throw std::invalid_argument("Mode string doesn't start with a plus or minus in modeset");
+			throw std::invalid_argument("Mode string doesn't start with a plus or minus in ModeSet");
 
 		// Next, check the string to see whether it never has a plus/minus immediately following another plus/minus
 		// and contains nothing other than pluses/minuses and letters (uppercase or lowercase).
@@ -29,13 +29,13 @@ namespace pingpong {
 
 			if (c == '+' || c == '-') {
 				if (was_pm) // Can't have multiple pluses/minuses in a row.
-					throw std::invalid_argument("Adjacent pluses/minuses in modeset");
+					throw std::invalid_argument("Adjacent pluses/minuses in ModeSet");
 				was_pm = true;
 				last_mode = c;
 				continue;
 			} else if (c < 'A' || 'z' < c || ('Z' < c && c < 'a')) {
 				// Letters only, please.
-				throw std::invalid_argument("Invalid character encountered in modeset");
+				throw std::invalid_argument("Invalid character encountered in ModeSet");
 			}
 
 			was_pm = false;
@@ -49,20 +49,20 @@ namespace pingpong {
 				removed.insert(c);
 			} else {
 				// Shouldn't ever happen.
-				throw std::invalid_argument("Unknown problem with modeset");
+				throw std::invalid_argument("Unknown problem with ModeSet");
 			}
 		}
 
 		// The last character can't be a plus or a minus; it has to be a letter.
 		if (was_pm)
-			throw std::invalid_argument("Last character in modeset was a plus or minus");
+			throw std::invalid_argument("Last character in ModeSet was a plus or minus");
 	}
 
-	bool modeset::is_type_valid() const noexcept {
-		return type == mode_type::self || type == mode_type::channel;
+	bool ModeSet::isTypeValid() const noexcept {
+		return type == ModeType::Self || type == ModeType::Channel;
 	}
 
-	std::string modeset::mode_str() const {
+	std::string ModeSet::modeString() const {
 		std::string out;
 		out.reserve(2 + added.size() + removed.size());
 
@@ -76,8 +76,8 @@ namespace pingpong {
 		return out;
 	}
 
-	modeset::operator std::string() const {
-		std::string out {mode_str()};
+	ModeSet::operator std::string() const {
+		std::string out = modeString();
 
 		if (!extra.empty()) {
 			if (!out.empty())

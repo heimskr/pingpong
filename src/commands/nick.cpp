@@ -1,9 +1,9 @@
 #include <string>
 
-#include "pingpong/commands/nick.h"
+#include "pingpong/commands/Nick.h"
 
-namespace pingpong {
-	nick_command::operator std::string() const {
+namespace PingPong {
+	NickCommand::operator std::string() const {
 		return "NICK :" + nickname;
 	}
 }

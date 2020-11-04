@@ -5,26 +5,26 @@
 #include <unordered_set>
 #include <string>
 
-namespace pingpong {
-	struct features {
-		enum class type {
-			away_notify,       // Unimplemented
-			batch,             // Unimplemented
-			cap_notify,        // Unimplemented
-			chghost,           // Unimplemented
-			echo_message,      // Unimplemented
-			extended_join,
-			invite_notify,     // Unimplemented
-			labeled_response,  // Unimplemented
-			message_ids,       // Unimplemented
-			multi_prefix,
-			server_time,       // Unimplemented
-			userhost_in_names,
+namespace PingPong {
+	struct Features {
+		enum class Type {
+			AwayNotify,       // Unimplemented
+			Batch,            // Unimplemented
+			CapNotify,        // Unimplemented
+			ChgHost,          // Unimplemented
+			EchoMessage,      // Unimplemented
+			ExtendedJoin,
+			InviteNotify,     // Unimplemented
+			LabeledResponse,  // Unimplemented
+			MessageIDs,       // Unimplemented
+			MultiPrefix,
+			ServerTime,       // Unimplemented
+			UserhostInNames,
 		};
 
-		static std::unordered_set<type> implemented;
-		static std::unordered_map<type, const char *> names;
-		static std::unordered_map<std::string, type> types;
+		static std::unordered_set<Type> implemented;
+		static std::unordered_map<Type, const char *> names;
+		static std::unordered_map<std::string, Type> types;
 	};
 }
 

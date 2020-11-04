@@ -1,15 +1,15 @@
 #ifndef PINGPONG_EVENTS_QUIT_H_
 #define PINGPONG_EVENTS_QUIT_H_
 
-#include "pingpong/events/event.h"
+#include "pingpong/events/Event.h"
 
-namespace pingpong {
+namespace PingPong {
 	/**
 	 * Occurs whenever a user quits (QUIT).
 	 */
-	class quit_event: public user_event {
+	class QuitEvent: public UserEvent {
 		public:
-			using user_event::user_event;
+			using UserEvent::UserEvent;
 	};
 }
 

@@ -1,9 +1,9 @@
-#include "pingpong/messages/numeric.h"
+#include "pingpong/messages/Numeric.h"
 
 #include "lib/formicine/futil.h"
 
-namespace pingpong {
-	bool numeric_message::handle_whois_server(server *serv) {
+namespace PingPong {
+	bool NumericMessage::handleWhoisServer(Server *server) {
 		std::vector<std::string> split = formicine::util::split(line.parameters, " ");
 
 		if (split.size() < 4)
@@ -17,8 +17,8 @@ namespace pingpong {
 		const std::string &server_name = split[2];
 		const std::string &description = line.parameters.substr(colon + 1);
 
-		serv->get_user(nick, true, true)->server_name = server_name;
-		serv->server_descriptions.insert({server_name, description});
+		server->getUser(nick, true, true)->serverName = server_name;
+		server->serverDescriptions.insert({server_name, description});
 		return true;
 	}
 }

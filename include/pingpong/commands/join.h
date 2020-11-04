@@ -4,25 +4,25 @@
 #include <string>
 #include <vector>
 
-#include "command.h"
+#include "Command.h"
 
-namespace pingpong {
-	using join_pair = std::pair<std::string, std::string>;
+namespace PingPong {
+	using JoinPair = std::pair<std::string, std::string>;
 
-	class join_command: public command {
+	class JoinCommand: public Command {
 		public:
-			std::vector<join_pair> pairs;
+			std::vector<JoinPair> pairs;
 
-			join_command(server *serv_, const std::vector<join_pair> &pairs_):
-				command(serv_), pairs(pairs_) {}
+			JoinCommand(Server *server_, const std::vector<JoinPair> &pairs_):
+				Command(server_), pairs(pairs_) {}
 
-			join_command(server *serv_, const std::string &chan):
-				join_command(serv_, {join_pair(chan, "")}) {}
+			JoinCommand(Server *server_, const std::string &chan):
+				JoinCommand(server_, {JoinPair(chan, "")}) {}
 
-			join_command(const channel &chan);
+			JoinCommand(const Channel &chan);
 
-			join_command(server *, const std::vector<std::string> &);
-			join_command(server *, const std::vector<channel> &);
+			JoinCommand(Server *, const std::vector<std::string> &);
+			JoinCommand(Server *, const std::vector<Channel> &);
 
 			operator std::string() const override;
 			bool send() override;

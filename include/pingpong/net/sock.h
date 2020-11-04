@@ -5,30 +5,30 @@
 
 #include <netdb.h>
 
-namespace pingpong::net {
-	class sock {
-		friend class socket_buffer;
+namespace PingPong::Net {
+	class Sock {
+		friend class SocketBuffer;
 
 		private:
-			static int sock_count;
+			static int sockCount;
 			struct addrinfo *info;
-			int net_fd = -1, control_read = -1, control_write = -1;
+			int netFD = -1, controlRead = -1, controlWrite = -1;
 			bool connected = false;
 			fd_set fds = {0};
 
-			enum class control_message: char {close='C'};
+			enum class ControlMessage: char {Close='C'};
 
 		public:
 			const std::string hostname;
 			int port;
 
-			sock(const std::string &hostname_, int port_);
+			Sock(const std::string &hostname_, int port_);
 
-			sock() = delete;
-			sock(const sock &) = delete;
-			sock & operator=(const sock &) = delete;
+			Sock() = delete;
+			Sock(const Sock &) = delete;
+			Sock & operator=(const Sock &) = delete;
 
-			~sock();
+			~Sock();
 
 			/** Connects to the socket. */
 			void connect();

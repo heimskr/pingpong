@@ -4,16 +4,16 @@
 #include <memory>
 #include <string>
 
-#include "pingpong/core/server.h"
-#include "pingpong/events/event.h"
-#include "pingpong/messages/message.h"
+#include "pingpong/core/Server.h"
+#include "pingpong/events/Event.h"
+#include "pingpong/messages/Message.h"
 
-namespace pingpong {
-	class message_event: public server_event {
+namespace PingPong {
+	class MessageEvent: public ServerEvent {
 		public:
-			std::shared_ptr<message> msg;
+			std::shared_ptr<Message> msg;
 
-			message_event(server *serv_, std::shared_ptr<message> msg_): server_event(serv_), msg(msg_) {}
+			MessageEvent(Server *server_, std::shared_ptr<Message> msg_): ServerEvent(server_), msg(msg_) {}
 	};
 }
 

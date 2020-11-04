@@ -1,18 +1,18 @@
 #ifndef PINGPONG_MESSAGES_NICK_H_
 #define PINGPONG_MESSAGES_NICK_H_
 
-#include "pingpong/messages/message.h"
-#include "pingpong/messages/sourced.h"
+#include "pingpong/messages/Message.h"
+#include "pingpong/messages/Sourced.h"
 
-namespace pingpong {
-	class nick_message: public sourced_message {
+namespace PingPong {
+	class NickMessage: public SourcedMessage {
 		public:
-			using sourced_message::sourced_message;
+			using SourcedMessage::SourcedMessage;
 
-			static constexpr auto get_name = []() -> std::string { return "NICK"; };
+			static constexpr auto getName = []() -> std::string { return "NICK"; };
 
 			operator std::string() const override;
-			bool operator()(server *) override;
+			bool operator()(Server *) override;
 	};
 }
 

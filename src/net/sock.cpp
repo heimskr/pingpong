@@ -6,9 +6,9 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-#include "pingpong/net/sock.h"
-#include "pingpong/net/net_error.h"
-#include "pingpong/net/resolution_error.h"
+#include "pingpong/net/Sock.h"
+#include "pingpong/net/NetError.h"
+#include "pingpong/net/ResolutionError.h"
 
 #include "lib/formicine/ansi.h"
 
@@ -18,10 +18,10 @@ namespace std { void * memset(void *, int, size_t); }
 char * strerror(int);
 #endif
 
-namespace pingpong::net {
-	int sock::sock_count = 0;
+namespace PingPong::Net {
+	int Sock::sockCount = 0;
 
-	sock::sock(const std::string &hostname_, int port_): hostname(hostname_), port(port_) {
+	Sock::Sock(const std::string &hostname_, int port_): hostname(hostname_), port(port_) {
 		struct addrinfo hints = {};
 		std::memset(&hints, 0, sizeof(hints));
 		hints.ai_family   = AF_UNSPEC;
@@ -29,16 +29,16 @@ namespace pingpong::net {
 
 		int status = getaddrinfo(hostname.c_str(), std::to_string(port).c_str(), &hints, &info);
 		if (status != 0)
-			throw resolution_error(errno);
+			throw ResolutionError(errno);
 	}
 	
-	sock::~sock() {
+	Sock::~Sock() {
 		freeaddrinfo(info);
 	}
 
-	void sock::connect() {
-		net_fd = socket(info->ai_family, info->ai_socktype, info->ai_protocol);
-		int status = ::connect(net_fd, info->ai_addr, info->ai_addrlen);
+	void Sock::connect() {
+		netFD = socket(info->ai_family, info->ai_socktype, info->ai_protocol);
+		int status = ::connect(netFD, info->ai_addr, info->ai_addrlen);
 		if (status != 0) {
 			DBG("connect(): " << strerror(errno));
 			throw net_error(errno);
@@ -51,31 +51,31 @@ namespace pingpong::net {
 			throw net_error(errno);
 		}
 
-		control_read = control_pipe[0];
-		control_write = control_pipe[1];
+		controlRead  = control_pipe[0];
+		controlWrite = control_pipe[1];
 
 		FD_ZERO(&fds);
-		FD_SET(net_fd, &fds);
-		FD_SET(control_read, &fds);
+		FD_SET(netFD, &fds);
+		FD_SET(controlRead, &fds);
 
 		connected = true;
 	}
 
-	void sock::close() {
+	void Sock::close() {
 		if (connected) {
-			control_message message = control_message::close;
-			::write(control_write, &message, 1);
+			ControlMessage message = ControlMessage::Close;
+			::write(controlWrite, &message, 1);
 			connected = false;
 		}
 	}
 
-	ssize_t sock::send(const void *data, size_t bytes) {
+	ssize_t Sock::send(const void *data, size_t bytes) {
 		if (!connected)
 			throw std::invalid_argument("Socket not connected");
-		return ::send(net_fd, data, bytes, 0);
+		return ::send(netFD, data, bytes, 0);
 	}
 
-	ssize_t sock::recv(void *data, size_t bytes) {
+	ssize_t Sock::recv(void *data, size_t bytes) {
 		if (!connected)
 			throw std::invalid_argument("Socket not connected");
 
@@ -86,21 +86,21 @@ namespace pingpong::net {
 			throw net_error(errno);
 		}
 			
-		if (FD_ISSET(net_fd, &fds_copy)) {
-			ssize_t bytes_read = ::recv(net_fd, data, bytes, 0);
+		if (FD_ISSET(netFD, &fds_copy)) {
+			ssize_t bytes_read = ::recv(netFD, data, bytes, 0);
 			if (bytes_read == 0)
 				close();
 
 			return bytes_read;
-		} else if (FD_ISSET(control_read, &fds_copy)) {
-			control_message message;
-			status = ::read(control_read, &message, 1);
+		} else if (FD_ISSET(controlRead, &fds_copy)) {
+			ControlMessage message;
+			status = ::read(controlRead, &message, 1);
 			if (status < 0) {
 				DBG("control_fd status: " << strerror(status));
 				throw net_error(errno);
 			}
 
-			if (message != control_message::close) {
+			if (message != ControlMessage::Close) {
 				DBG("Unknown control message: '" << static_cast<char>(message) << "'");
 			}
 

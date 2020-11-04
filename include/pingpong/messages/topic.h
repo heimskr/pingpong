@@ -1,16 +1,16 @@
 #ifndef PINGPONG_MESSAGES_TOPIC_H_
 #define PINGPONG_MESSAGES_TOPIC_H_
 
-#include "pingpong/messages/sourced.h"
+#include "pingpong/messages/Sourced.h"
 
-namespace pingpong {
-	class topic_message: public sourced_message {
+namespace PingPong {
+	class TopicMessage: public SourcedMessage {
 		public:
-			using sourced_message::sourced_message;
-			static constexpr auto get_name = []() -> std::string { return "TOPIC"; };
+			using SourcedMessage::SourcedMessage;
+			static constexpr auto getName = []() -> std::string { return "TOPIC"; };
 
 			operator std::string() const override;
-			bool operator()(server *) override;
+			bool operator()(Server *) override;
 	};
 }
 

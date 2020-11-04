@@ -1,9 +1,9 @@
-#include "pingpong/commands/part.h"
+#include "pingpong/commands/Part.h"
 
-namespace pingpong {
-	part_command::operator std::string() const {
+namespace PingPong {
+	PartCommand::operator std::string() const {
 		if (reason.empty())
-			return "PART " + chans;
-		return "PART " + chans + " :" + reason;
+			return "PART " + channels;
+		return "PART " + channels + " :" + reason;
 	}
 }

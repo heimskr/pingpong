@@ -1,27 +1,27 @@
 #include <stdexcept>
 #include <string>
 
-#include "pingpong/commands/join.h"
-#include "pingpong/commands/mode.h"
-#include "pingpong/core/channel.h"
+#include "pingpong/commands/Join.h"
+#include "pingpong/commands/Mode.h"
+#include "pingpong/core/Channel.h"
 
-namespace pingpong {
-	join_command::join_command(const channel &chan): join_command(chan.serv, {join_pair(chan, "")}) {}
+namespace PingPong {
+	JoinCommand::JoinCommand(const Channel &channel): JoinCommand(channel.server, {JoinPair(channel, "")}) {}
 
-	join_command::join_command(server *serv_, const std::vector<std::string> &chans): command(serv_) {
-		for (const std::string &chan: chans)
-			pairs.push_back({chan, ""});
+	JoinCommand::JoinCommand(Server *server_, const std::vector<std::string> &channels): Command(server_) {
+		for (const std::string &channel: channels)
+			pairs.push_back({channel, ""});
 	}
 
-	join_command::join_command(server *serv_, const std::vector<channel> &chans): command(serv_) {
-		for (const channel &chan: chans) {
-			if (chan.serv != serv_)
+	JoinCommand::JoinCommand(Server *server_, const std::vector<Channel> &channels): Command(server_) {
+		for (const Channel &channel: channels) {
+			if (channel.server != server_)
 				throw std::runtime_error("Can't join channels on multiple servers simultaneously");
-			pairs.push_back({chan, ""});
+			pairs.push_back({channel, ""});
 		}
 	}
 
-	join_command::operator std::string() const {
+	JoinCommand::operator std::string() const {
 		if (pairs.size() > 0) {
 			std::string chans = pairs.at(0).first;
 			std::string keys = pairs.at(0).second;
@@ -45,10 +45,10 @@ namespace pingpong {
 		throw std::runtime_error("Invalid join command");
 	}
 
-	bool join_command::send() {
-		if (command::send()) {
-			for (const join_pair &pair: pairs)
-				mode_command(pair.first, serv).send();
+	bool JoinCommand::send() {
+		if (Command::send()) {
+			for (const JoinPair &pair: pairs)
+				ModeCommand(pair.first, server).send();
 			return true;
 		}
 

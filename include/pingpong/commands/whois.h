@@ -1,17 +1,17 @@
 #ifndef PINGPONG_COMMANDS_WHOIS_H_
 #define PINGPONG_COMMANDS_WHOIS_H_
 
-#include "pingpong/commands/command.h"
+#include "pingpong/commands/Command.h"
 
-namespace pingpong {
-	class user;
+namespace PingPong {
+	class User;
 
-	class whois_command: public command {
+	class WhoisCommand: public Command {
 		public:
 			std::string whom;
 
-			whois_command(server *serv_, const std::string &whom_): command(serv_), whom(whom_) {}
-			whois_command(server *serv_, std::shared_ptr<user> whom_);
+			WhoisCommand(Server *server_, const std::string &whom_): Command(server_), whom(whom_) {}
+			WhoisCommand(Server *server_, std::shared_ptr<User> whom_);
 
 			operator std::string() const override;
 	};
