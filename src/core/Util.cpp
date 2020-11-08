@@ -90,7 +90,7 @@ namespace PingPong {
 		const size_t length = str.length();
 		str += "\0\0\0\0\0"; // 🤫
 
-		bool bold = false, underline = false, italics = false, inverse = false;
+		bool bold = false, underline = false, italics = false, inverse = false, strikethrough = false;
 
 		for (size_t i = 0; i < length; ++i) {
 			char ch = str[i];
@@ -135,6 +135,10 @@ namespace PingPong {
 				out << (italics? ansi::style_resets.at(ansi::style::italic) :
 				                 ansi::style_codes.at(ansi::style::italic));
 				italics = !italics;
+			} else if (ch == '\x1e') {
+				out << (strikethrough? ansi::style_resets.at(ansi::style::strikethrough) :
+				                       ansi::style_codes.at(ansi::style::strikethrough));
+				strikethrough = !strikethrough;
 			} else if (ch == '\x1f') {
 				out << (underline? ansi::style_resets.at(ansi::style::underline) :
 				                   ansi::style_codes.at(ansi::style::underline));
