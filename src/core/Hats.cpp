@@ -113,7 +113,7 @@ namespace PingPong {
 	}
 
 	HatSet HatSet::operator&(Hat h) const {
-		return *this % h? HatSet(h) : HatSet();
+		return (*this % h)? HatSet(h) : HatSet();
 	}
 
 

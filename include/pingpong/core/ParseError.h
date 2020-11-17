@@ -11,7 +11,7 @@ namespace PingPong {
 		std::string text;
 		const char *explanation;
 		ParseError(const std::string &text_, const char *explanation_ = "Parsing failed"):
-			text(text_), explanation(explanation_) { DBG("ParseError: \"" << text_ << "\""); }
+			text(text_), explanation(explanation_) {}
 		const char * what() const throw() { return explanation; }
 	};
 }
