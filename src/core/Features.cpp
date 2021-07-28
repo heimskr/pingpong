@@ -35,5 +35,7 @@ namespace PingPong {
 		Features::Type::ExtendedJoin,
 		Features::Type::MultiPrefix,
 		Features::Type::UserhostInNames,
+		Features::Type::LabeledResponse,
+		Features::Type::EchoMessage,
 	};
 }

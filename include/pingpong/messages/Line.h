@@ -1,5 +1,8 @@
-#ifndef PINGPONG_MESSAGES_LINE_H_
-#define PINGPONG_MESSAGES_LINE_H_
+#pragma once
+
+#include <map>
+#include <ostream>
+#include <string>
 
 #include "pingpong/core/Defs.h"
 #include "pingpong/core/Mask.h"
@@ -8,16 +11,18 @@ namespace PingPong {
 	struct Line {
 		const std::string original;
 		Server *server;
-		std::string tags, command, parameters;
+		std::string command, parameters;
 		Mask source;
+		std::map<std::string, std::string> tags;
 
-		Line(Server *server_ = nullptr, const std::string &original_ = "");
+		Line(Server *server_ = nullptr, std::string original_ = "");
 
 		operator std::string() const;
 		operator bool() const;
+
+		std::string stringifyTags() const;
+		static std::string stringifyTags(const std::map<std::string, std::string> &);
 	};
 
 	std::ostream & operator<<(std::ostream &, const Line &);
 }
-
-#endif

@@ -15,7 +15,7 @@ namespace PingPong {
 			EchoMessage,      // Unimplemented
 			ExtendedJoin,
 			InviteNotify,     // Unimplemented
-			LabeledResponse,  // Unimplemented
+			LabeledResponse,
 			MessageIDs,       // Unimplemented
 			MultiPrefix,
 			ServerTime,       // Unimplemented

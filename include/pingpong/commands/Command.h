@@ -16,17 +16,26 @@ namespace PingPong {
 
 			Server *server;
 			long sentTime = Util::timestamp();
+			std::string label;
 
-			Command() = delete;
-			Command(Server *server_): server(server_) {}
+
+			Command & setLabel(const std::string &);
+
+			/** Randomizes the command's label. */
+			Command & setLabel();
 
 			virtual operator std::string() const = 0;
 
-			/** Tries to send the command. Returns true if the command was sent. Implementations should run before_send
+			/** Tries to send the command. Returns true if the command was sent. Implementations should run beforeSend
 			 *  to check whether it's okay to send the command with the base class's implementation. */
 			virtual bool send();
 
 			virtual bool isSilent() const { return false; }
+
+		protected:
+			Command(Server *server_): server(server_) {
+				setLabel();
+			}
 	};
 }
 
