@@ -14,10 +14,19 @@ namespace PingPong::Net {
 	ssize_t SSLSock::send(const void *data, size_t bytes) {
 		if (!connected)
 			throw std::invalid_argument("Socket not connected");
-		size_t written;
+		size_t written = 0;
 		const int status = SSL_write_ex(ssl, data, bytes, &written);
-		if (status == 1)
+		if (status == 1) {
+			DBG("SSLSock::send(status == 1): bytes[" << bytes << "], written[" << written << "]");
+			std::string str = static_cast<const char *>(data);
+			while (!str.empty() && (str.back() == '\r' || str.back() == '\n'))
+				str.pop_back();
+			DBG("    \"" << str << "\"");
 			return static_cast<ssize_t>(written);
+		}
+
+		DBG("SSLSock::send(status == " << status << "): bytes[" << bytes << "], written[" << written << "], error["
+		    << SSL_get_error(ssl, status) << "], errno[" << errno << "]");
 		return -SSL_get_error(ssl, status);
 	}
 
@@ -77,6 +86,12 @@ namespace PingPong::Net {
 							close();
 							break;
 					}
+				else {
+					std::string read_str((const char *) data, bytes_read);
+					while (!read_str.empty() && (read_str.back() == '\r' || read_str.back() == '\n'))
+						read_str.pop_back();
+					DBG("SSLSock::recv(status == 1): \"" << read_str << "\"");
+				}
 			} while (SSL_pending(ssl) && !read_blocked && 0 < bytes);
 
 			return total_bytes_read;
