@@ -19,6 +19,7 @@
 #include "pingpong/messages/Message.h"
 
 #include "pingpong/net/Sock.h"
+#include "pingpong/net/SSLSock.h"
 #include "pingpong/net/SocketBuffer.h"
 
 namespace Spjalla { class Client; }
@@ -67,6 +68,7 @@ namespace PingPong {
 			std::string id;
 			std::string hostname;
 			int port;
+			bool ssl = false;
 			std::list<std::shared_ptr<Channel>> channels {};
 			std::list<std::shared_ptr<User>>    users    {};
 			std::shared_ptr<Message> lastMessage;
@@ -78,10 +80,11 @@ namespace PingPong {
 			/** A map of the names of all servers in the network to their descriptions. */
 			std::map<std::string, std::string> serverDescriptions;
 
-			Server(IRC *parent_, const std::string &id_, const std::string &hostname_, int port_ = IRC::defaultPort);
+			Server(IRC *parent_, bool ssl_, const std::string &id_, const std::string &hostname_,
+			       int port_ = IRC::defaultPort);
 
-			Server(IRC *parent_, const std::string &hostname_, int port_ = IRC::defaultPort):
-				Server(parent_, parent_->createID(hostname_), hostname_, port_) {}
+			Server(IRC *parent_, bool ssl_, const std::string &hostname_, int port_ = IRC::defaultPort):
+				Server(parent_, ssl_, parent_->createID(hostname_), hostname_, port_) {}
 
 			/** Sends a raw string to the server. */
 			void quote(const std::string &);

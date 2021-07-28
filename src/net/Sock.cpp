@@ -41,14 +41,14 @@ namespace PingPong::Net {
 		int status = ::connect(netFD, info->ai_addr, info->ai_addrlen);
 		if (status != 0) {
 			DBG("connect(): " << strerror(errno));
-			throw net_error(errno);
+			throw NetError(errno);
 		}
 
 		int control_pipe[2];
 		status = pipe(control_pipe);
 		if (status != 0) {
 			DBG("pipe(): " << strerror(errno));
-			throw net_error(errno);
+			throw NetError(errno);
 		}
 
 		controlRead  = control_pipe[0];
@@ -64,7 +64,7 @@ namespace PingPong::Net {
 	void Sock::close() {
 		if (connected) {
 			ControlMessage message = ControlMessage::Close;
-			::write(controlWrite, &message, 1);
+			::write(controlWrite, &message, sizeof(message));
 			connected = false;
 		}
 	}
@@ -83,7 +83,7 @@ namespace PingPong::Net {
 		int status = select(FD_SETSIZE, &fds_copy, NULL, NULL, NULL);
 		if (status < 0) {
 			DBG("select status: " << strerror(status));
-			throw net_error(errno);
+			throw NetError(errno);
 		}
 			
 		if (FD_ISSET(netFD, &fds_copy)) {
@@ -97,7 +97,7 @@ namespace PingPong::Net {
 			status = ::read(controlRead, &message, 1);
 			if (status < 0) {
 				DBG("control_fd status: " << strerror(status));
-				throw net_error(errno);
+				throw NetError(errno);
 			}
 
 			if (message != ControlMessage::Close) {

@@ -64,7 +64,7 @@ namespace PingPong {
 	}
 
 	std::pair<std::string, long>
-	IRC::connect(const std::string &where, const std::string &nick, long port, IRC::ConnectWrapper wrapper) {
+	IRC::connect(const std::string &where, const std::string &nick, long port, bool ssl, IRC::ConnectWrapper wrapper) {
 		if (where.empty())
 			throw std::invalid_argument("Server location can't be blank");
 
@@ -98,7 +98,7 @@ namespace PingPong {
 		// while it waits for connect() to time out.
 		std::thread([=, this]() {
 			wrapper([=, this]() {
-				PingPong::Server *server = new PingPong::Server(this, hostname, port);
+				PingPong::Server *server = new PingPong::Server(this, ssl, hostname, port);
 				try {
 					server->start();
 					server->setNick(nick);

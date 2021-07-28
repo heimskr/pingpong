@@ -4,7 +4,7 @@
 #include "pingpong/net/NetError.h"
 
 namespace PingPong::Net {
-	const char * net_error::what() const throw() {
-		return strerror(status_code);
+	const char * NetError::what() const throw() {
+		return strerror(statusCode);
 	}
 }

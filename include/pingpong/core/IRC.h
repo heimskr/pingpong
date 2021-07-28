@@ -1,5 +1,4 @@
-#ifndef PINGPONG_CORE_IRC_H_
-#define PINGPONG_CORE_IRC_H_
+#pragma once
 
 #include <functional>
 #include <list>
@@ -36,7 +35,7 @@ namespace PingPong {
 			/** Represents the client's version. */
 			std::string version = "pingpong " PINGPONG_VERSION_NUMBER;
 
-			IRC(std::string user, std::string real): username(user), realname(real) {}
+			IRC(const std::string &username_, const std::string &realname_): username(username_), realname(realname_) {}
 			IRC(): IRC(defaultUser, defaultRealname) {}
 			~IRC();
 
@@ -54,7 +53,7 @@ namespace PingPong {
 			std::string getKey(Server *) const;
 
 			std::pair<std::string, long> connect(const std::string &where, const std::string &nick, long port = 6667,
-			                                     ConnectWrapper wrapper = {});
+			                                     bool ssl = false, ConnectWrapper wrapper = {});
 
 			void init();
 			void initMessages();
@@ -72,5 +71,3 @@ namespace PingPong {
 			IRC & operator-=(Server *);
 	};
 }
-
-#endif

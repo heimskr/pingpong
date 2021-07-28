@@ -63,7 +63,7 @@ namespace tests {
 
 int main(int, char **) {
 	IRC *instance = new IRC();
-	Server server(instance, "localhost");
+	Server server(instance, false, "localhost");
 
 	// tests::test_network(serv);
 	tests::test_events(server);

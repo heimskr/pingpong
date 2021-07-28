@@ -4,11 +4,11 @@
 #include <stdexcept>
 
 namespace PingPong::Net {
-	class net_error: public std::runtime_error {
+	class NetError: public std::runtime_error {
 		public:
-			int status_code;
+			int statusCode;
 
-			net_error(int status_code_): std::runtime_error("Network operation failed"), status_code(status_code_) {}
+			NetError(int status_code): std::runtime_error("Network operation failed"), statusCode(status_code) {}
 
 			virtual const char * what() const throw() override;
 	};

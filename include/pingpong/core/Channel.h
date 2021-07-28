@@ -1,5 +1,4 @@
-#ifndef PINGPONG_CORE_CHANNEL_H_
-#define PINGPONG_CORE_CHANNEL_H_
+#pragma once
 
 #include <list>
 #include <map>
@@ -83,5 +82,3 @@ namespace PingPong {
 			friend std::ostream & operator<<(std::ostream &, const Channel &);
 	};
 }
-
-#endif

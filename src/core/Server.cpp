@@ -24,11 +24,13 @@
 #include "pingpong/events/ServerStatus.h"
 #include "pingpong/events/UserAppeared.h"
 
+#include "pingpong/net/SSLSock.h"
+
 #include "lib/formicine/futil.h"
 
 namespace PingPong {
-	Server::Server(IRC *parent_, const std::string &id_, const std::string &hostname_, int port_):
-	parent(parent_), id(id_), hostname(hostname_), port(port_) {
+	Server::Server(IRC *parent_, bool ssl_, const std::string &id_, const std::string &hostname_, int port_):
+	parent(parent_), id(id_), hostname(hostname_), port(port_), ssl(ssl_) {
 		getlineMutex.lock();
 	}
 
@@ -116,7 +118,10 @@ namespace PingPong {
 		if (status != Stage::Unconnected)
 			throw std::runtime_error("Can't connect: server not unconnected");
 
-		sock   = std::make_shared<Net::Sock>(hostname, port);
+		if (ssl)
+			sock = std::make_shared<Net::SSLSock>(hostname, port);
+		else
+			sock = std::make_shared<Net::Sock>(hostname, port);
 		sock->connect();
 		buffer = std::make_shared<Net::SocketBuffer>(sock.get());
 		stream = std::make_shared<std::iostream>(buffer.get());

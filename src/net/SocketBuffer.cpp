@@ -29,7 +29,7 @@ namespace PingPong::Net {
 		if (!traits_type::eq_int_type(byte, traits_type::eof())) {
 			try {
 				source->send(&byte, 1);
-			} catch (const net_error &err) {
+			} catch (const NetError &err) {
 				DBG("Network error in overflow(): " << err.what());
 				return EOF;
 			}
@@ -41,7 +41,7 @@ namespace PingPong::Net {
 	std::streamsize SocketBuffer::xsputn(const char *src, std::streamsize size) {
 		try {
 			return source->send(src, size);
-		} catch (const net_error &err) {
+		} catch (const NetError &err) {
 			DBG("Network error in xsputn(): " << err.what());
 			return EOF;
 		}
@@ -57,7 +57,7 @@ namespace PingPong::Net {
 		ssize_t bytes_read;
 		try {
 			bytes_read = source->recv(buffer + putbackSize, bufferSize - putbackSize);
-		} catch (const net_error &err) {
+		} catch (const NetError &err) {
 			DBG("Network error in underflow(): " << err.what());
 			return EOF;
 		}
