@@ -1,3 +1,4 @@
+#include <fcntl.h>
 #include <iostream>
 #include <stdexcept>
 
@@ -122,23 +123,32 @@ namespace PingPong::Net {
 		const SSL_METHOD *method = TLS_client_method();
 		sslContext = SSL_CTX_new(method);
 
-		if (!sslContext) {
-			ERR_print_errors_fp(stderr);
+		if (!sslContext)
 			throw std::runtime_error("SSLSock::connectSSL failed");
-		}
 
 		ssl = SSL_new(sslContext);
 		if (!ssl)
 			throw std::runtime_error("SSLSock::connectSSL: SSL_new failed");
 
+		int status;
+
 		SSL_set_fd(ssl, netFD);
 
-		const int status = SSL_connect(ssl);
+		status = SSL_connect(ssl);
 		if (status != 1) {
-			ERR_print_errors_fp(stderr);
-			throw std::runtime_error("SSLSock::connectSSL: SSL_connect failed ("
-				+ std::to_string(SSL_get_error(ssl, status)) + ")");
+			int error = SSL_get_error(ssl, status);
+			if (error != SSL_ERROR_WANT_READ)
+				throw std::runtime_error("SSLSock::connectSSL: SSL_connect failed ("
+					+ std::to_string(SSL_get_error(ssl, status)) + ")");
 		}
+
+		int flags = fcntl(netFD, F_GETFL, 0);
+		if (flags < 0)
+			throw std::runtime_error("fcntl(F_GETFL) returned " + std::to_string(flags));
+		flags |= O_NONBLOCK;
+		status = fcntl(netFD, F_SETFL, flags);
+		if (status < 0)
+			throw std::runtime_error("fcntl(F_SETFL) returned " + std::to_string(status));
 
 		DBG("Connected with " << SSL_get_cipher(ssl));
 
