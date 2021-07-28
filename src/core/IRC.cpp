@@ -36,8 +36,10 @@ namespace PingPong {
 	std::string IRC::defaultRealname = "PingPong IRC";
 
 	IRC::~IRC() {
-		for (const std::pair<std::string, Server *> &server_pair: servers)
-			delete server_pair.second;
+		while (!servers.empty()) {
+			auto iter = servers.begin();
+			delete iter->second;
+		}
 	}
 
 	Server * IRC::getServer(const std::string &id) const {
