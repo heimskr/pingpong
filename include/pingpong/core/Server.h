@@ -35,6 +35,7 @@ namespace PingPong {
 			std::shared_ptr<std::iostream> stream;
 			IRC *parent;
 			std::string nick;
+			bool negotiatingCapabilities = true;
 
 			/** Contains features requested and acknowledged by the server, not features supported by Spjalla. */
 			std::unordered_set<Features::Type> enabledFeatures;

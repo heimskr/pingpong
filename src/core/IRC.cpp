@@ -1,7 +1,8 @@
+#include <cstring>
 #include <string>
 #include <thread>
 
-#include <cstring>
+#include "pingpong/commands/User.h"
 
 #include "pingpong/core/IRC.h"
 #include "pingpong/core/Server.h"
@@ -103,6 +104,7 @@ namespace PingPong {
 				try {
 					server->start();
 					server->setNick(nick);
+					UserCommand(server, username, realname).send();
 					*this += server;
 				} catch (PingPong::Net::ResolutionError &err) {
 					delete server;

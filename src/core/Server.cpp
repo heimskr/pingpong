@@ -93,12 +93,9 @@ namespace PingPong {
 	}
 
 	void Server::negotiateCapabilities() {
-		if (Features::implemented.empty()) {
-			status = Stage::SetUser;
-			UserCommand(this, parent->username, parent->realname).send();
-		} else {
+		if (!Features::implemented.empty())
 			CapCommand(this, {}, CapCommand::Action::Ls).send();
-		}
+		negotiatingCapabilities = true;
 	}
 
 
@@ -420,10 +417,14 @@ namespace PingPong {
 	}
 
 	void Server::capAnswered(size_t count) {
-		capsRequested -= count;
-		if (status == Stage::CapNeg && capsRequested == 0) {
+		if (count < capsRequested)
+			capsRequested -= count;
+		else
+			capsRequested = 0;
+
+		if (negotiatingCapabilities && capsRequested == 0) {
+			negotiatingCapabilities = false;
 			CapCommand(this, CapCommand::Action::End).send();
-			UserCommand(this, parent->username, parent->realname).send();
 		}
 	}
 }
