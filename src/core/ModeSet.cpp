@@ -87,4 +87,8 @@ namespace PingPong {
 
 		return out;
 	}
+
+	size_t ModeSet::count() const {
+		return added.size() + removed.size();
+	}
 }

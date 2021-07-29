@@ -1,5 +1,4 @@
-#ifndef PINGPONG_CORE_MODESET_H_
-#define PINGPONG_CORE_MODESET_H_
+#pragma once
 
 #include <stdexcept>
 #include <string>
@@ -20,10 +19,10 @@ namespace PingPong {
 			std::string extra;
 
 			/** A set of all modes indicated as added by the message. */
-			std::unordered_set<char> added {};
+			std::unordered_set<char> added;
 
 			/** A set of all modes indicated as removed by the message. */
-			std::unordered_set<char> removed {};
+			std::unordered_set<char> removed;
 
 			ModeSet() = default;
 
@@ -39,7 +38,8 @@ namespace PingPong {
 
 			/** Returns the modestring with any extra data appended. */
 			operator std::string() const;
+
+			/** Returns the sum of the number of added modes and the number of removed modes. */
+			size_t count() const;
 	};
 }
-
-#endif
