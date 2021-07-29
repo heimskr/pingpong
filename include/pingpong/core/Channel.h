@@ -20,7 +20,7 @@ namespace PingPong {
 
 	class Channel: public Moded {
 		private:
-			std::mutex usersMutex;
+			std::recursive_mutex usersMutex;
 
 		public:
 			enum class Visibility: char {Public='=', Private='*', Secret='@'};
@@ -51,11 +51,15 @@ namespace PingPong {
 			/** Determines whether there's any user in the channel with a given nick. */
 			bool hasUser(const std::string &) const;
 
+			std::shared_ptr<User> findUser(const std::string &) const;
+
 			/** Updates the hat information for a user. Returns true if any existing data was overwritten. */
 			bool setHats(std::shared_ptr<User>, const HatSet &);
 
 			/** Returns the hat corresponding to a user if it's known, or the default hat otherwise. */
-			HatSet & getHats(std::shared_ptr<User> user);
+			HatSet & getHats(std::shared_ptr<User>);
+
+			HatSet & getHats(const std::string &);
 
 			/** Should be called whenever a user speaks. Reorders the list of users to put the user at the front.
 			 *  Returns whether the user was found and sent to the front. */
@@ -68,6 +72,9 @@ namespace PingPong {
 			/** Sorts the user list case-insensitively by name. Ignores hats. */
 			void sortUsers();
 
+			/** Returns the name of the user prefixed with the user's highest hat. */
+			std::string withHat(std::shared_ptr<User>, bool include_space = true);
+
 			operator std::string() const;
 			std::shared_ptr<User> operator[](const std::string &);
 			bool operator==(const std::string &) const;
@@ -77,7 +84,9 @@ namespace PingPong {
 			bool operator<(const Channel &) const;
 
 			/** Returns a lock on the users list. */
-			std::unique_lock<std::mutex> lockUsers() { return std::unique_lock(usersMutex); }
+			std::unique_lock<std::recursive_mutex> lockUsers() const {
+				return std::unique_lock(const_cast<std::recursive_mutex &>(usersMutex)); // :-/
+			}
 
 			friend std::ostream & operator<<(std::ostream &, const Channel &);
 	};

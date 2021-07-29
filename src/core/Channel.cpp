@@ -59,13 +59,20 @@ namespace PingPong {
 		return user && user->server == server && std::find(users.begin(), users.end(), user) != users.end();
 	}
 
-	bool Channel::hasUser(const std::string &name) const {
-		for (std::shared_ptr<User> user: users) {
-			if (user->name == name)
+	bool Channel::hasUser(const std::string &user_name) const {
+		auto lock = lockUsers();
+		for (auto &user: users)
+			if (user->name == user_name)
 				return true;
-		}
-		
 		return false;
+	}
+
+	std::shared_ptr<User> Channel::findUser(const std::string &user_name) const {
+		auto lock = lockUsers();
+		for (auto &user: users)
+			if (user->name == user_name)
+				return user;
+		return nullptr;
 	}
 
 	bool Channel::setHats(std::shared_ptr<User> user, const HatSet &set) {
@@ -91,6 +98,7 @@ namespace PingPong {
 	}
 
 	HatSet & Channel::getHats(std::shared_ptr<User> user) {
+		auto lock = lockUsers();
 		auto iter = hats.find(user);
 		if (iter == hats.end()) {
 			hats.insert({user, HatSet()});
@@ -98,6 +106,12 @@ namespace PingPong {
 		}
 
 		return iter->second;
+	}
+
+	HatSet & Channel::getHats(const std::string &user_name) {
+		if (auto user = findUser(user_name))
+			return getHats(user);
+		throw std::runtime_error("Couldn't find user " + user_name + " in channel " + server->id + "/" + name);
 	}
 
 	bool Channel::sendToFront(std::shared_ptr<User> user) {
@@ -141,13 +155,21 @@ namespace PingPong {
 		});
 	}
 
+	std::string Channel::withHat(std::shared_ptr<User> user, bool include_space) {
+		auto lock = lockUsers();
+		Hat highest = getHats(user).highest();
+		if (highest == Hat::None)
+			return include_space? ' ' + user->name : user->name;
+		return static_cast<char>(highest) + user->name;
+	}
+
 	Channel::operator std::string() const {
 		return server->id + "/" + name;
 	}
 
-	std::shared_ptr<User> Channel::operator[](const std::string &name) {
+	std::shared_ptr<User> Channel::operator[](const std::string &user_name) {
 		for (std::shared_ptr<User> user: users)
-			if (user->name == name)
+			if (user->name == user_name)
 				return user;
 		return nullptr;
 	}
