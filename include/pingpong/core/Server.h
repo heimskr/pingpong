@@ -1,5 +1,4 @@
-#ifndef PINGPONG_CORE_SERVER_H_
-#define PINGPONG_CORE_SERVER_H_
+#pragma once
 
 #include <condition_variable>
 #include <list>
@@ -69,8 +68,8 @@ namespace PingPong {
 			std::string hostname;
 			int port;
 			bool ssl = false;
-			std::list<std::shared_ptr<Channel>> channels {};
-			std::list<std::shared_ptr<User>>    users    {};
+			std::list<std::shared_ptr<Channel>> channels;
+			std::list<std::shared_ptr<User>>    users;
 			std::shared_ptr<Message> lastMessage;
 
 			std::thread worker, reaper;
@@ -204,5 +203,3 @@ namespace PingPong {
 			}
 	};
 }
-
-#endif

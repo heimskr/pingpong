@@ -37,8 +37,7 @@ namespace PingPong {
 
 	IRC::~IRC() {
 		while (!servers.empty()) {
-			auto iter = servers.begin();
-			delete iter->second;
+			servers.begin()->second->reap();
 		}
 	}
 
