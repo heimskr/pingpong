@@ -7,7 +7,7 @@ namespace PingPong {
 	CapCommand::operator std::string() const {
 		if (type == Action::End) {
 			if (server->getStatus() == Server::Stage::CapNeg)
-				server->setStatus(Server::Stage::SetUser);
+				server->setStatus(Server::Stage::Ready);
 			return "CAP END";
 		}
 
