@@ -45,6 +45,7 @@ namespace PingPong {
 
 			std::condition_variable death;
 			std::mutex deathMutex, getlineMutex;
+			std::mutex *ircDestructorMutex = nullptr;
 
 			void workRead();
 			void workReap();
@@ -163,6 +164,8 @@ namespace PingPong {
 
 			/** Starts the process of removing a server. */
 			void reap();
+
+			void reap(std::mutex &irc_destructor_mutex);
 
 			/** If the server's not already counted as dead, set its status to dead and dispatch an event. */
 			void setDead();

@@ -37,9 +37,17 @@ namespace PingPong {
 	std::string IRC::defaultRealname = "PingPong IRC";
 
 	IRC::~IRC() {
+		std::cout << "<~IRC@(" << this << ")>\n";
+		std::vector<std::mutex *> mutexen;
 		while (!servers.empty()) {
-			servers.begin()->second->reap();
+			std::mutex &mutex = *mutexen.emplace_back(new std::mutex());
+			servers.begin()->second->reap(mutex);
 		}
+		for (std::mutex *mutex: mutexen) {
+			mutex->lock();
+			delete mutex;
+		}
+		std::cout << "</~IRC@(" << this << ")>\n";
 	}
 
 	Server * IRC::getServer(const std::string &id) const {
@@ -165,6 +173,9 @@ namespace PingPong {
 	}
 
 	IRC & IRC::operator-=(Server *server) {
+		auto lock = lockServers();
+
+		std::cout << "IRC@(" << this << ")::operator-=(" << server << ")\n";
 		if (hasServer(server)) {
 			servers.erase(getKey(server));
 			serverOrder.remove(server);

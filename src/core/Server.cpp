@@ -70,6 +70,8 @@ namespace PingPong {
 		getlineMutex.lock();
 		getlineMutex.unlock();
 		*parent -= this;
+		if (ircDestructorMutex)
+			ircDestructorMutex->unlock();
 	}
 
 	void Server::handleLine(const PingPong::Line &line) {
@@ -376,6 +378,11 @@ namespace PingPong {
 	}
 
 	void Server::reap() {
+		death.notify_all();
+	}
+
+	void Server::reap(std::mutex &irc_destructor_mutex) {
+		ircDestructorMutex = &irc_destructor_mutex;
 		death.notify_all();
 	}
 
