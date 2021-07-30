@@ -378,12 +378,10 @@ namespace PingPong {
 	}
 
 	void Server::reap() {
-		std::cout << "\e[33mServer@(" << this << ")::reap()\e[39m\n";
 		death.notify_all();
 	}
 
 	void Server::reap(std::mutex &irc_destructor_mutex) {
-		std::cout << "\e[33mServer@(" << this << ")::reap(mutex)\e[39m\n";
 		ircDestructorMutex = &irc_destructor_mutex;
 		death.notify_all();
 	}
