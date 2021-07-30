@@ -15,7 +15,7 @@ namespace PingPong {
 	}
 
 	bool PrivmsgCommand::send() {
-		if (Command::send()) {
+		if (Command::send() && !server->featureEnabled(PingPong::Features::Type::EchoMessage)) {
 			if (isChannel()) {
 				std::shared_ptr<Channel> channel = getChannel(server);
 				if (channel)
