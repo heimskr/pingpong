@@ -43,14 +43,14 @@ namespace PingPong {
 		perish.lock();
 		while (!servers.empty()) {
 			// std::mutex &mutex = *mutexen.emplace_back(new std::mutex());
-			servers.begin()->second->reap();
+			servers.begin()->second->reap(perish);
 			perish.lock();
 		}
 		// for (std::mutex *mutex: mutexen) {
 		// 	mutex->lock();
 		// 	delete mutex;
 		// }
-		std::cout << "\e[31;4m</~IRC@(" << this << ")>\e[39m\n";
+		std::cout << "\e[31;4m</~IRC@(" << this << ")>\e[39;24m\n";
 	}
 
 	Server * IRC::getServer(const std::string &id) const {
