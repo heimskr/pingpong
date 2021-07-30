@@ -66,6 +66,8 @@ namespace PingPong {
 				Dead         // After the server has disconnected.
 			};
 
+			~Server() { std::cout << "\e[31m~Server@(" << this << ")\e[39m\n"; }
+
 			std::string id;
 			std::string hostname;
 			int port;
