@@ -66,8 +66,7 @@ namespace PingPong {
 				Dead         // After the server has disconnected.
 			};
 
-			std::string id;
-			std::string hostname;
+			std::string id, hostname, password;
 			int port;
 			bool ssl = false;
 			std::list<std::shared_ptr<Channel>> channels;
@@ -82,10 +81,11 @@ namespace PingPong {
 			std::map<std::string, std::string> serverDescriptions;
 
 			Server(IRC *parent_, bool ssl_, const std::string &id_, const std::string &hostname_,
-			       int port_ = IRC::defaultPort);
+			       int port_ = IRC::defaultPort, const std::string &password_ = "");
 
-			Server(IRC *parent_, bool ssl_, const std::string &hostname_, int port_ = IRC::defaultPort):
-				Server(parent_, ssl_, parent_->createID(hostname_), hostname_, port_) {}
+			Server(IRC *parent_, bool ssl_, const std::string &hostname_, int port_ = IRC::defaultPort,
+			       const std::string &password_ = ""):
+				Server(parent_, ssl_, parent_->createID(hostname_), hostname_, port_, password_) {}
 
 			/** Sends a raw string to the server. */
 			void quote(const std::string &);

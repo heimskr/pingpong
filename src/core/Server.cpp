@@ -12,11 +12,13 @@
 
 #include "pingpong/commands/Cap.h"
 #include "pingpong/commands/Nick.h"
+#include "pingpong/commands/Pass.h"
 #include "pingpong/commands/Pong.h"
 #include "pingpong/commands/Quit.h"
 #include "pingpong/commands/User.h"
 
 #include "pingpong/events/BadLine.h"
+#include "pingpong/events/Join.h"
 #include "pingpong/events/Message.h"
 #include "pingpong/events/NamesUpdated.h"
 #include "pingpong/events/NickUpdated.h"
@@ -29,8 +31,9 @@
 #include "lib/formicine/futil.h"
 
 namespace PingPong {
-	Server::Server(IRC *parent_, bool ssl_, const std::string &id_, const std::string &hostname_, int port_):
-	parent(parent_), id(id_), hostname(hostname_), port(port_), ssl(ssl_) {
+	Server::Server(IRC *parent_, bool ssl_, const std::string &id_, const std::string &hostname_, int port_,
+	               const std::string &password_):
+	parent(parent_), id(id_), hostname(hostname_), password(password_), port(port_), ssl(ssl_) {
 		getlineMutex.lock();
 	}
 
@@ -40,6 +43,8 @@ namespace PingPong {
 
 	void Server::workRead() {
 		signal(SIGPIPE, SIG_IGN);
+		if (!password.empty())
+			PassCommand(this, password).send();
 		negotiateCapabilities();
 
 		std::string line;
@@ -112,7 +117,7 @@ namespace PingPong {
 	}
 
 	bool Server::start() {
-		auto lock(lockStatus());
+		auto lock = lockStatus();
 
 		if (status != Stage::Unconnected)
 			throw std::runtime_error("Can't connect: server not unconnected");
@@ -273,15 +278,21 @@ namespace PingPong {
 	}
 
 	std::shared_ptr<Channel> Server::getChannel(const std::string &chanstr, bool create) {
+		bool created = false;
+
 		if (!hasChannel(chanstr)) {
 			if (!create)
 				return nullptr;
+			created = true;
 			addChannel(chanstr);
 		}
 
 		for (std::shared_ptr<Channel> chan: channels) {
-			if (chan->name == chanstr)
+			if (chan->name == chanstr) {
+				if (created)
+					Events::dispatch<JoinEvent>(getSelf(), chan);
 				return chan;
+			}
 		}
 
 		return nullptr;

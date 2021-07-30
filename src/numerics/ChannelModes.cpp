@@ -9,8 +9,8 @@ namespace PingPong {
 		std::tie(std::ignore, chan_name, mode_str) = parseSS(line);
 
 		try {
-			ModeSet modeset {ModeSet::ModeType::Channel, Util::rtrim(mode_str)};
-			std::shared_ptr<Channel> channel {server->getChannel(chan_name, true)};
+			ModeSet modeset(ModeSet::ModeType::Channel, Util::rtrim(mode_str));
+			std::shared_ptr<Channel> channel = server->getChannel(chan_name, true);
 
 			// TODO: dispatch an event instead of just silently updating?
 			channel->modes = modeset.added;

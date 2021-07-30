@@ -53,7 +53,8 @@ namespace PingPong {
 			std::string getKey(Server *) const;
 
 			std::pair<std::string, long> connect(const std::string &where, const std::string &nick, long port = 6667,
-			                                     bool ssl = false, ConnectWrapper wrapper = {});
+			                                     bool ssl = false, const std::string &password = "",
+			                                     ConnectWrapper wrapper = {});
 
 			void init();
 			void initMessages();
