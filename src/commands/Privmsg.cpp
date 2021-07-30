@@ -4,7 +4,7 @@
 #include "pingpong/events/Privmsg.h"
 
 namespace PingPong {
-	PrivmsgCommand::PrivmsgCommand(Server *server_, std::string where_, std::string message_):
+	PrivmsgCommand::PrivmsgCommand(Server *server_, const std::string &where_, const std::string &message_):
 	Command(server_), Local(where_), message(message_) {
 		if (where.empty())
 			throw std::runtime_error("Destination is empty in PrivmsgCommand");
