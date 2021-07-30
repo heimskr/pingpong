@@ -4,7 +4,7 @@
 namespace PingPong {
 	bool NumericMessage::handleWelcome(Server *server) {
 		if (server->status == Server::Stage::SetNick || server->status == Server::Stage::CapNeg) {
-			server->status = Server::Stage::Ready;
+			server->setStatus(Server::Stage::Ready);
 			Events::dispatch<ServerStatusEvent>(server);
 		}
 
