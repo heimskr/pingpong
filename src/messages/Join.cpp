@@ -22,7 +22,8 @@ namespace PingPong {
 			chan = params.substr(1);
 		} else if (front == '#' || front == '&') { // extended-join
 			if (std::count(params.begin(), params.end(), ' ') < 2)
-				throw std::invalid_argument("Parameters for a extended JOIN message must contain at least three words");
+				throw std::invalid_argument("Parameters for an extended JOIN message must contain at least three "
+					"words");
 
 			chan = formicine::util::nth_word(params, 0, false);
 			accountName = formicine::util::nth_word(params, 1, false);
