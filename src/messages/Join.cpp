@@ -49,6 +49,8 @@ namespace PingPong {
 		std::shared_ptr<User> userptr = server->getUser(who, true, true);
 		std::shared_ptr<Channel> chanptr = server->getChannel(chan, true);
 
+		*userptr += chanptr;
+
 		if (accountName == "*") {
 			// If the accountname in an extended JOIN message is '*', the user isn't identified.
 			userptr->accountName.clear();
@@ -61,7 +63,7 @@ namespace PingPong {
 			Events::dispatch<NamesUpdatedEvent>(chanptr);
 		}
 
-		chanptr->announced = true;
+		Events::dispatch<JoinEvent>(userptr, chanptr);
 		return true;
 	}
 }

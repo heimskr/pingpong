@@ -30,7 +30,6 @@ namespace PingPong {
 			std::list<std::shared_ptr<User>> users;
 			std::map<std::shared_ptr<User>, HatSet> hats;
 			TopicSet topic;
-			bool announced = false;
 
 			Channel(const std::string &, Server * = nullptr);
 
