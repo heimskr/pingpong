@@ -151,4 +151,24 @@ namespace PingPong {
 		out << "\e[0m";
 		return out.str();
 	}
+
+	// Credit: https://stackoverflow.com/a/38839725
+	date::sys_time<std::chrono::milliseconds> Util::parse8601(std::istream &&is) {
+		std::string save;
+		is >> save;
+		std::istringstream in {save};
+		date::sys_time<std::chrono::milliseconds> tp;
+		in >> date::parse("%FT%TZ", tp);
+		if (in.fail()) {
+			in.clear();
+			in.exceptions(std::ios::failbit);
+			in.str(save);
+			in >> date::parse("%FT%T%Ez", tp);
+		}
+		return tp;
+	}
+
+	date::sys_time<std::chrono::milliseconds> Util::parse8601(const std::string &str) {
+		return parse8601(std::istringstream(str));
+	}
 }

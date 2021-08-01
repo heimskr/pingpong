@@ -30,6 +30,11 @@ namespace PingPong {
 		index      = in.find(' ');
 		command    = in.substr(0, index);
 		parameters = in.substr(index + 1);
+
+		if (tags.count("time") == 0)
+			time = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
+		else
+			time = Util::parse8601(tags.at("time"));
 	}
 	
 	Line::operator std::string() const {
@@ -46,6 +51,9 @@ namespace PingPong {
 	}
 
 	std::string Line::stringifyTags(const std::map<std::string, std::string> &tags) {
+		if (tags.empty())
+			return "";
+
 		std::stringstream out;
 		out << '@';
 		bool first = true;

@@ -1,5 +1,5 @@
 COMPILER		 = g++
-CFLAGS			:= -std=c++2a -g -ggdb -O0 -Wall -Wextra $(shell pkg-config --cflags openssl)
+CFLAGS			:= -std=c++2a -g -ggdb -O0 -Wall -Wextra $(shell pkg-config --cflags openssl) -Idate/include
 LDFLAGS			:= -pthread $(shell pkg-config --libs openssl)
 CC				 = $(COMPILER) $(strip $(CFLAGS) $(CHECKFLAGS))
 CHECKFLAGS		:=

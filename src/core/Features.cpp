@@ -37,5 +37,6 @@ namespace PingPong {
 		Features::Type::UserhostInNames,
 		Features::Type::LabeledResponse,
 		Features::Type::EchoMessage,
+		Features::Type::ServerTime,
 	};
 }

@@ -1,3 +1,6 @@
 [submodule "formicine"]
 	path = formicine
 	url = https://github.com/heimskr/formicine
+[submodule "date"]
+	path = date
+	url = https://github.com/HowardHinnant/date.git

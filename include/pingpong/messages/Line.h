@@ -6,6 +6,7 @@
 
 #include "pingpong/core/Defs.h"
 #include "pingpong/core/Mask.h"
+#include "pingpong/core/Util.h"
 
 namespace PingPong {
 	struct Line {
@@ -14,6 +15,7 @@ namespace PingPong {
 		std::string command, parameters;
 		Mask source;
 		std::map<std::string, std::string> tags;
+		date::sys_time<std::chrono::milliseconds> time;
 
 		Line(Server *server_ = nullptr, std::string original_ = "");
 

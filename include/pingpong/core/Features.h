@@ -18,7 +18,7 @@ namespace PingPong {
 			LabeledResponse,
 			MessageIDs,       // Unimplemented
 			MultiPrefix,
-			ServerTime,       // Unimplemented
+			ServerTime,
 			UserhostInNames,
 		};
 

@@ -1,5 +1,4 @@
-#ifndef PINGPONG_CORE_UTIL_H_
-#define PINGPONG_CORE_UTIL_H_
+#pragma once
 
 #include <array>
 #include <deque>
@@ -7,11 +6,32 @@
 #include <chrono>
 #include <string>
 
+#include "date/date.h"
+
 namespace PingPong {
 	/**
 	 * Contains miscellaneous utility functions for pingpong.
 	 */
 	struct Util {
+		struct Time {
+			date::hh_mm_ss<std::chrono::nanoseconds> time;
+
+			Time(date::sys_time<std::chrono::nanoseconds> time_): time(date::make_time(time_.time_since_epoch())) {}
+			Time(date::sys_time<std::chrono::milliseconds> time_):
+				time(date::make_time(std::chrono::duration_cast<std::chrono::nanoseconds>(time_.time_since_epoch()))) {}
+
+			int hours() const {
+				return time.hours().count();
+			}
+
+			int minutes() const {
+				return time.minutes().count();
+			}
+
+			int seconds() const {
+				return time.seconds().count();
+			}
+		};
 
 		static constexpr const char *nickChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 			"-_[]{}\\`|";
@@ -63,6 +83,9 @@ namespace PingPong {
 		/** Converts mIRC colors to ANSI escapes. */
 		static std::string irc2ansi(std::string);
 
+		static date::sys_time<std::chrono::milliseconds> parse8601(std::istream &&);
+		static date::sys_time<std::chrono::milliseconds> parse8601(const std::string &);
+
 		template <typename T, typename Iter, typename Pred>
 		static std::deque<T> takeWhile(Iter begin, Iter end, Pred predicate) {
 			std::deque<T> out {};
@@ -99,5 +122,3 @@ namespace PingPong {
 		}
 	};
 }
-
-#endif
