@@ -26,7 +26,7 @@ namespace Spjalla { class Client; }
 namespace PingPong {
 	class Message;
 
-	class Server {
+	class Server: public std::enable_shared_from_this<Server> {
 		friend class Spjalla::Client;
 
 		private:

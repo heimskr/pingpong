@@ -13,7 +13,7 @@
 #include "pingpong/core/Util.h"
 
 namespace PingPong {
-	class User: public Moded {
+	class User: public Moded, public std::enable_shared_from_this<User> {
 		public:
 			std::string name;
 			Mask info {};

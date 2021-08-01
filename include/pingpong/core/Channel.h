@@ -18,7 +18,7 @@ namespace PingPong {
 	class User;
 	class Server;
 
-	class Channel: public Moded {
+	class Channel: public Moded, public std::enable_shared_from_this<Channel> {
 		private:
 			std::recursive_mutex usersMutex;
 
