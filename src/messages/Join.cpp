@@ -63,7 +63,10 @@ namespace PingPong {
 			Events::dispatch<NamesUpdatedEvent>(chanptr);
 		}
 
-		Events::dispatch<JoinEvent>(userptr, chanptr);
+		if (!chanptr->announced) {
+			Events::dispatch<JoinEvent>(userptr, chanptr);
+			chanptr->announced = true;
+		}
 		return true;
 	}
 }

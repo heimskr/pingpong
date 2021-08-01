@@ -278,15 +278,23 @@ namespace PingPong {
 	}
 
 	std::shared_ptr<Channel> Server::getChannel(const std::string &chanstr, bool create) {
+		bool created = false;
+
 		if (!hasChannel(chanstr)) {
 			if (!create)
 				return nullptr;
+			created = true;
 			addChannel(chanstr);
 		}
 
 		for (std::shared_ptr<Channel> chan: channels)
-			if (chan->name == chanstr)
+			if (chan->name == chanstr) {
+				if (created && !chan->announced) {
+					chan->announced = true;
+					Events::dispatch<JoinEvent>(getSelf(), chan);
+				}
 				return chan;
+			}
 
 		return nullptr;
 	}
