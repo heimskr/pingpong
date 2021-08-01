@@ -14,8 +14,9 @@ namespace PingPong {
 		std::shared_ptr<User> speaker;
 
 		template <typename T>
-		PrivmsgEvent(const std::shared_ptr<User> &speaker_, const T &where_, const std::string &message_):
-			LocalEvent(speaker_->server, where_, message_), speaker(speaker_) {}
+		PrivmsgEvent(const std::shared_ptr<User> &speaker_, const T &where_, const std::string &message_,
+		             const Line &line_):
+			LocalEvent(speaker_->server, where_, message_, line_), speaker(speaker_) {}
 	};
 }
 

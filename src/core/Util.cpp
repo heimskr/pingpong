@@ -7,6 +7,16 @@
 #include "lib/formicine/ansi.h"
 
 namespace PingPong {
+	Util::Time::Time():
+		Util::Time(std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now())) {}
+
+	Util::Time::Time(date::sys_time<std::chrono::nanoseconds> time_):
+		time(time_ - std::chrono::floor<std::chrono::days>(time_)) {}
+
+	Util::Time::Time(date::sys_time<std::chrono::milliseconds> time_):
+		time(std::chrono::duration_cast<std::chrono::nanoseconds>(
+			time_ - std::chrono::floor<std::chrono::days>(time_))) {}
+
 	std::array<std::string, 100> Util::ircColors = { // Nabbed straight from irssi.
 		"97", "30", "34", "32", "91", "31", "35", "33", "93", "92", "36", "96", "94", "95", "90", "37", "38;5;52",
 		"38;5;94",  "38;5;100", "38;5;58",  "38;5;22", "38;5;29", "38;5;23", "38;5;24", "38;5;17", "38;5;54", "38;5;53",

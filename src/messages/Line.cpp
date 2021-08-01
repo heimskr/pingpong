@@ -7,7 +7,7 @@
 #include "lib/formicine/futil.h"
 
 namespace PingPong {
-	Line::Line(Server *server_, std::string in): original(in), server(server_), source(Mask("", "", "")) {
+	Line::Line(Server *server_, std::string in): original(in), server(server_), source("", "", "") {
 		size_t index = 0;
 
 		if (in[0] == '@') {
@@ -31,9 +31,7 @@ namespace PingPong {
 		command    = in.substr(0, index);
 		parameters = in.substr(index + 1);
 
-		if (tags.count("time") == 0)
-			time = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
-		else
+		if (tags.count("time") != 0)
 			time = Util::parse8601(tags.at("time"));
 	}
 	

@@ -114,11 +114,19 @@ namespace PingPong {
 			UserEvent(who_, nullptr, content_) {}
 	};
 
+	/** For events containing a corresponding Line. */
+	struct LineEvent: public ServerEvent {
+		Line line;
+
+		LineEvent(Server *server_, const std::string &content_, const Line &line_):
+			ServerEvent(server_, content_), line(line_) {}
+	};
+
 	/** For events local on one server to either a user or a channel, such as privmsgs. */
-	struct LocalEvent: public ServerEvent, public Local {
+	struct LocalEvent: public LineEvent, public Local {
 		template <typename T>
-		LocalEvent(Server *server_, const T &where_, const std::string &content_ = ""):
-			ServerEvent(server_, content_), Local(where_) {}
+		LocalEvent(Server *server_, const T &where_, const std::string &content_ = "", Line line_ = {}):
+			LineEvent(server_, content_, line_), Local(where_) {}
 	};
 
 	/** For events local to two users in one channel on one server, such as kicks. */

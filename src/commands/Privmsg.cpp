@@ -19,11 +19,11 @@ namespace PingPong {
 			if (isChannel()) {
 				std::shared_ptr<Channel> channel = getChannel(server);
 				if (channel)
-					Events::dispatch<PrivmsgEvent>(server->getSelf(), channel, message);
+					Events::dispatch<PrivmsgEvent>(server->getSelf(), channel, message, Line());
 				else
 					Events::dispatch<ErrorEvent>("Can't send message: channel is null", false);
 			} else {
-				Events::dispatch<PrivmsgEvent>(server->getSelf(), getUser(server, false), message);
+				Events::dispatch<PrivmsgEvent>(server->getSelf(), getUser(server, false), message, Line());
 			}
 
 			return true;

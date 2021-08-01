@@ -16,9 +16,9 @@ namespace PingPong {
 		struct Time {
 			date::hh_mm_ss<std::chrono::nanoseconds> time;
 
-			Time(date::sys_time<std::chrono::nanoseconds> time_): time(date::make_time(time_.time_since_epoch())) {}
-			Time(date::sys_time<std::chrono::milliseconds> time_):
-				time(date::make_time(std::chrono::duration_cast<std::chrono::nanoseconds>(time_.time_since_epoch()))) {}
+			Time();
+			Time(date::sys_time<std::chrono::nanoseconds>);
+			Time(date::sys_time<std::chrono::milliseconds>);
 
 			int hours() const {
 				return time.hours().count();

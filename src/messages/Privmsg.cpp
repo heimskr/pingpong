@@ -13,7 +13,7 @@ namespace PingPong {
 		if (formicine::util::upper(content) == "\x01VERSION\x01") {
 			Events::dispatch<VersionRequestedEvent>(who, where, content);
 		} else {
-			Events::dispatch<PrivmsgEvent>(who, where, content);
+			Events::dispatch<PrivmsgEvent>(who, where, content, line);
 		}
 
 		return true;

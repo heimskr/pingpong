@@ -15,7 +15,7 @@ namespace PingPong {
 		std::string command, parameters;
 		Mask source;
 		std::map<std::string, std::string> tags;
-		date::sys_time<std::chrono::milliseconds> time;
+		Util::Time time;
 
 		Line(Server *server_ = nullptr, std::string original_ = "");
 
