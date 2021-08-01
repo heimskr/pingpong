@@ -8,8 +8,7 @@
 
 namespace PingPong {
 	Util::Time::Time():
-		Util::Time(date::make_zoned(date::current_zone(),
-			std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now()))) {}
+		Util::Time(date::make_zoned(date::current_zone(), std::chrono::system_clock::now())) {}
 
 	std::array<std::string, 100> Util::ircColors = { // Nabbed straight from irssi.
 		"97", "30", "34", "32", "91", "31", "35", "33", "93", "92", "36", "96", "94", "95", "90", "37", "38;5;52",

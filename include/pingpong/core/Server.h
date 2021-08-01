@@ -47,7 +47,7 @@ namespace PingPong {
 			std::mutex deathMutex, getlineMutex;
 			std::mutex *ircDestructorMutex = nullptr;
 
-			void workRead();
+			void workRead(const std::string &nick_, const std::string &username, const std::string &realname);
 			void workReap();
 			void handleLine(const PingPong::Line &);
 			void negotiateCapabilities();
@@ -157,7 +157,7 @@ namespace PingPong {
 			void quit(const std::string &message = "");
 
 			/** Connects to the server. */
-			bool start();
+			bool start(const std::string &nick_, const std::string &username, const std::string &realname);
 
 			/** Disconnects the server. */
 			void kill();

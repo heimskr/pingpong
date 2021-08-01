@@ -4,6 +4,6 @@
 
 namespace PingPong {
 	NickCommand::operator std::string() const {
-		return "NICK :" + nickname;
+		return "NICK " + nickname;
 	}
 }

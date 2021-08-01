@@ -41,11 +41,13 @@ namespace PingPong {
 // Private instance methods
 
 
-	void Server::workRead() {
+	void Server::workRead(const std::string &nick_, const std::string &username, const std::string &realname) {
 		signal(SIGPIPE, SIG_IGN);
+		negotiateCapabilities();
 		if (!password.empty())
 			PassCommand(this, password).send();
-		negotiateCapabilities();
+		setNick(nick_);
+		UserCommand(this, username, realname).send();
 
 		std::string line;
 		while (std::getline(*stream, line)) {
@@ -116,7 +118,7 @@ namespace PingPong {
 			PingPong::QuitCommand(this, message).send();
 	}
 
-	bool Server::start() {
+	bool Server::start(const std::string &nick_, const std::string &username, const std::string &realname) {
 		auto lock = lockStatus();
 
 		if (status != Stage::Unconnected)
@@ -130,12 +132,9 @@ namespace PingPong {
 		buffer = std::make_shared<Net::SocketBuffer>(sock.get());
 		stream = std::make_shared<std::iostream>(buffer.get());
 
-		const Stage old_status = status;
-		status = Stage::CapNeg;
-		if (status != old_status)
-			Events::dispatch<ServerStatusEvent>(this);
+		setStatus(Stage::CapNeg);
 
-		worker = std::thread(&Server::workRead, this);
+		worker = std::thread(&Server::workRead, this, nick_, username, realname);
 		worker.detach();
 		
 		reaper = std::thread(&Server::workReap, this);

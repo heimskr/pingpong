@@ -107,9 +107,7 @@ namespace PingPong {
 			wrapper([=, this]() {
 				PingPong::Server *server = new PingPong::Server(this, ssl, hostname, port, password);
 				try {
-					server->start();
-					server->setNick(nick);
-					UserCommand(server, username, realname).send();
+					server->start(nick, username, realname);
 					*this += server;
 				} catch (PingPong::Net::ResolutionError &err) {
 					delete server;

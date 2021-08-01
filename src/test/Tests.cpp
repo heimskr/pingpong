@@ -31,8 +31,7 @@ namespace tests {
 	}
 
 	void test_network(Server &server) {
-		server.start();
-		server.setNick("pingpong");
+		server.start("pingpong", "username", "realname");
 		server.worker.join();
 	}
 
