@@ -8,14 +8,8 @@
 
 namespace PingPong {
 	Util::Time::Time():
-		Util::Time(std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now())) {}
-
-	Util::Time::Time(date::sys_time<std::chrono::nanoseconds> time_):
-		time(time_ - std::chrono::floor<std::chrono::days>(time_)) {}
-
-	Util::Time::Time(date::sys_time<std::chrono::milliseconds> time_):
-		time(std::chrono::duration_cast<std::chrono::nanoseconds>(
-			time_ - std::chrono::floor<std::chrono::days>(time_))) {}
+		Util::Time(date::make_zoned(date::current_zone(),
+			std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now()))) {}
 
 	std::array<std::string, 100> Util::ircColors = { // Nabbed straight from irssi.
 		"97", "30", "34", "32", "91", "31", "35", "33", "93", "92", "36", "96", "94", "95", "90", "37", "38;5;52",
@@ -163,7 +157,7 @@ namespace PingPong {
 	}
 
 	// Credit: https://stackoverflow.com/a/38839725
-	date::sys_time<std::chrono::milliseconds> Util::parse8601(std::istream &&is) {
+	date::zoned_time<std::chrono::milliseconds> Util::parse8601(std::istream &&is) {
 		std::string save;
 		is >> save;
 		std::istringstream in {save};
@@ -175,10 +169,10 @@ namespace PingPong {
 			in.str(save);
 			in >> date::parse("%FT%T%Ez", tp);
 		}
-		return tp;
+		return date::make_zoned(date::current_zone(), tp);
 	}
 
-	date::sys_time<std::chrono::milliseconds> Util::parse8601(const std::string &str) {
+	date::zoned_time<std::chrono::milliseconds> Util::parse8601(const std::string &str) {
 		return parse8601(std::istringstream(str));
 	}
 }

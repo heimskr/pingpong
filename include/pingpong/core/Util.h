@@ -7,6 +7,7 @@
 #include <string>
 
 #include "date/date.h"
+#include "date/tz.h"
 
 namespace PingPong {
 	/**
@@ -17,8 +18,11 @@ namespace PingPong {
 			date::hh_mm_ss<std::chrono::nanoseconds> time;
 
 			Time();
-			Time(date::sys_time<std::chrono::nanoseconds>);
-			Time(date::sys_time<std::chrono::milliseconds>);
+
+			template <typename D>
+			Time(date::zoned_time<D> time_):
+				time(time_.get_local_time().time_since_epoch() -
+					std::chrono::floor<std::chrono::days>(time_.get_local_time()).time_since_epoch()) {}
 
 			int hours() const {
 				return time.hours().count();
@@ -83,8 +87,8 @@ namespace PingPong {
 		/** Converts mIRC colors to ANSI escapes. */
 		static std::string irc2ansi(std::string);
 
-		static date::sys_time<std::chrono::milliseconds> parse8601(std::istream &&);
-		static date::sys_time<std::chrono::milliseconds> parse8601(const std::string &);
+		static date::zoned_time<std::chrono::milliseconds> parse8601(std::istream &&);
+		static date::zoned_time<std::chrono::milliseconds> parse8601(const std::string &);
 
 		template <typename T, typename Iter, typename Pred>
 		static std::deque<T> takeWhile(Iter begin, Iter end, Pred predicate) {
