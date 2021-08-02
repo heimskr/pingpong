@@ -47,10 +47,7 @@ namespace PingPong {
 	}
 
 	Server * IRC::getServer(const std::string &id) const {
-		if (servers.count(id) == 0)
-			return nullptr;
-
-		return servers.at(id);
+		return servers.count(id) == 0? nullptr : servers.at(id);
 	}
 
 	bool IRC::hasServer(const std::string &id) const {
@@ -62,10 +59,9 @@ namespace PingPong {
 	}
 
 	std::string IRC::getKey(Server *serv) const {
-		for (const std::pair<std::string, Server *> &server_pair: servers)
-			if (server_pair.second == serv)
-				return server_pair.first;
-
+		for (const auto &[name, server]: servers)
+			if (server == serv)
+				return name;
 		return "";
 	}
 
