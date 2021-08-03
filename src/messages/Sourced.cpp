@@ -4,6 +4,13 @@ namespace PingPong {
 	SourcedMessage::SourcedMessage(const PingPong::Line &line_):
 	Message(line_), Local(""), who(line_.server->getUser(line_.source, true, true)) {
 		server = line_.server;
+
+		// On the UnrealIRCd server I'm running for testing purposes, self-nickchanges include a mask with just a nick.
+		// Server::getUser interprets this as a server message, but if it's our nick, it's definitely not the server.
+		// Not that a server would ever tell us that it changed its nick anyway. Servers don't have nicks.
+		if (!who && line_.source.nick == server->getNick())
+			who = server->getSelf();
+
 		const std::string &raw = line_.parameters;
 
 		if (raw.empty())
