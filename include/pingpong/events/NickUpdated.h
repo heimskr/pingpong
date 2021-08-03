@@ -1,13 +1,10 @@
-#ifndef PINGPONG_EVENTS_NICK_UPDATED_H_
-#define PINGPONG_EVENTS_NICK_UPDATED_H_
+#pragma once
 
 #include "pingpong/events/Event.h"
 
 namespace PingPong {
-	/**
-	 * Dispatched whenever a user's nickname is updated by any means other than a NICK message.
-	 * For example, this should be used when the case of a user's name is corrected.
-	 */
+	/** Dispatched whenever a user's nickname is updated by any means other than a NICK message.
+	 *  For example, this should be used when the case of a user's name is corrected. */
 	struct NickUpdatedEvent: public Event {
 		std::shared_ptr<User> who;
 		std::string oldNick, newNick;
@@ -17,5 +14,3 @@ namespace PingPong {
 			who(who_), oldNick(old_nick), newNick(new_nick) {}
 	};
 }
-
-#endif
